@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core", "Metrics.Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.OctopusEnergy.Api", "Metrics.OctopusEnergy.Api\Metrics.OctopusEnergy.Api.csproj", "{39949F15-CC50-4C65-918D-B74186A8EFE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrics.OctopusEnergy.Api.Tests", "Metrics.OctopusEnergy.Api.Tests\Metrics.OctopusEnergy.Api.Tests.csproj", "{4661444A-5E65-4915-8E9E-7C2306A570A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.OctopusEnergy.Api.Tests", "Metrics.OctopusEnergy.Api.Tests\Metrics.OctopusEnergy.Api.Tests.csproj", "{4661444A-5E65-4915-8E9E-7C2306A570A2}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1F66F682-3C37-4D55-9A05-D0E264F178D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4661444A-5E65-4915-8E9E-7C2306A570A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4661444A-5E65-4915-8E9E-7C2306A570A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4661444A-5E65-4915-8E9E-7C2306A570A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F66F682-3C37-4D55-9A05-D0E264F178D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F66F682-3C37-4D55-9A05-D0E264F178D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F66F682-3C37-4D55-9A05-D0E264F178D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F66F682-3C37-4D55-9A05-D0E264F178D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
