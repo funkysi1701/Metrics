@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image : mongo
+    container_name: Metricsmongodb
+    volumes:
+      - Mmongovol:/data/db
+    networks:
+      - my-network
+    ports:
+      - 27018:27017
+    restart: unless-stopped
+
+  mongo-express:
+    image: mongo-express
+    container_name: Metricsmongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=Metricsmongodb
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=admin123
+    depends_on:
+      - mongodb
+    networks:
+      - my-network
+    ports:
+      - 8082:8081
+
+
+
+volumes:
+  Mmongovol:
+  Func:
+  
+networks:
+  my-network:
+    external: true  

@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Metrics.TimerFunction": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "httpPort": 31712,
+      "useSSL": false
+    }
+  }
+}
