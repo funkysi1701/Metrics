@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Octokit;
 using System;
 using System.Collections.Generic;
@@ -14,10 +13,10 @@ namespace Metrics.TimerFunction.Services
         private IConfiguration Configuration { get; set; }
         private readonly List<string> users;
 
-        public GithubService(IConfiguration configuration, CosmosClient cosmosClient, MongoService mongoService)
+        public GithubService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(cosmosClient, configuration, mongoService);
+            Chart = new Chart(mongoService);
             users = new List<string>
             {
                 Configuration.GetValue<string>("Username1")
@@ -79,7 +78,7 @@ namespace Metrics.TimerFunction.Services
             {
                 var events = await github.Activity.Events.GetAllUserPerformed(username);
                 var today = events.Where(x => x.Type == "PushEvent" && x.CreatedAt > DateTime.Now.Date).ToList();
-                var sofar = Chart.GetAll();
+                var sofar = await Chart.GetAll();
                 sofar = sofar.Where(x => x.Date != null && x.Type == 8 && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
                 if (sofar.Count == 0)
                 {

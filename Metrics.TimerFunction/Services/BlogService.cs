@@ -1,5 +1,4 @@
 ﻿using Metrics.Core;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -14,10 +13,10 @@ namespace Metrics.TimerFunction.Services
         private readonly Chart Chart;
         private IConfiguration Configuration { get; set; }
 
-        public BlogService(IConfiguration Configuration, CosmosClient cosmosClient, MongoService mongoService)
+        public BlogService(IConfiguration Configuration, MongoService mongoService)
         {
             this.Configuration = Configuration;
-            Chart = new Chart(cosmosClient, Configuration, mongoService);
+            Chart = new Chart(mongoService);
         }
 
         public async Task GetBlogCount(ILogger log)

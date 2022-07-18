@@ -1,5 +1,4 @@
 ﻿using Metrics.Core;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +12,10 @@ namespace Metrics.TimerFunction.Services
         private IConfiguration Configuration { get; set; }
         private readonly List<string> users;
 
-        public DevToService(IConfiguration configuration, CosmosClient cosmosClient, MongoService mongoService)
+        public DevToService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(cosmosClient, configuration, mongoService);
+            Chart = new Chart(mongoService);
             users = new List<string>
             {
                 Configuration.GetValue<string>("Username1")

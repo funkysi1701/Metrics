@@ -1,15 +1,6 @@
 version: '3.4'
 
 services:
-  timerfunction:
-    image: ${DOCKER_REGISTRY-}metricstimerfunction
-    container_name: timerfunction
-    build:
-      context: .
-      dockerfile: Metrics.TimerFunction/Dockerfile
-    depends_on:
-        - mongodb
-
   mongodb:
     image : mongo
     container_name: Metricsmongodb

@@ -1,7 +1,6 @@
-﻿using Metrics.TimerFunction;
+﻿using Metrics.OctopusEnergy.Api;
+using Metrics.TimerFunction;
 using Metrics.TimerFunction.Services;
-using Metrics.OctopusEnergy.Api;
-using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,14 +20,6 @@ namespace Metrics.TimerFunction
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
-            builder.Services.AddSingleton((s) =>
-            {
-                CosmosClientBuilder cosmosClientBuilder = new(config.GetValue<string>("CosmosDBString"));
-
-                return cosmosClientBuilder.WithConnectionModeDirect()
-                    .WithApplicationRegion("UK South")
-                    .Build();
-            });
             builder.Services.AddScoped<GithubService>();
             builder.Services.AddScoped<TwitterService>();
             builder.Services.AddScoped<DevToService>();

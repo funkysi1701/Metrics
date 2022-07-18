@@ -1,5 +1,4 @@
-﻿using Microsoft.Azure.Cosmos;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,10 +16,10 @@ namespace Metrics.TimerFunction.Services
 
         private readonly List<string> users;
 
-        public TwitterService(IConfiguration configuration, CosmosClient cosmosClient, MongoService mongoService)
+        public TwitterService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(cosmosClient, configuration, mongoService);
+            Chart = new Chart(mongoService);
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
             users = new List<string>
             {

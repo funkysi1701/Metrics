@@ -1,5 +1,4 @@
 ﻿using Metrics.OctopusEnergy.Api;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -16,10 +15,10 @@ namespace Metrics.TimerFunction.Services
         private readonly string Key;
         private readonly IOctopusEnergyClient Client;
 
-        public PowerService(IConfiguration configuration, CosmosClient cosmosClient, IOctopusEnergyClient client, MongoService mongoService)
+        public PowerService(IConfiguration configuration, IOctopusEnergyClient client, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(cosmosClient, configuration, mongoService);
+            Chart = new Chart(mongoService);
             Client = client;
             Key = Configuration.GetValue<string>("OctopusKey");
         }
@@ -44,7 +43,7 @@ namespace Metrics.TimerFunction.Services
 
         public async Task CheckConsumption(int Id, IEnumerable<Consumption> consumption)
         {
-            var exist = Chart.Get(Id);
+            var exist = await Chart.Get(Id);
             foreach (var item in consumption)
             {
                 if (exist.Any(x => x.Date.Value == item.Start.UtcDateTime.Date))
