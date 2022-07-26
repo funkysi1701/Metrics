@@ -10,7 +10,7 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
-            var resourceGroup = new ResourceGroup("blog-pulumi", new ResourceGroupArgs
+            var resourceGroup = new ResourceGroup("metrics-pulumi", new ResourceGroupArgs
             {
                 Name = "metrics-function-pulumi",
             });
