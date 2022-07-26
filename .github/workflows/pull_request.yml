@@ -13,7 +13,7 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: preview
-          stack-name: dev
+          stack-name: funkysi1701/metrics-pulumi/dev
           comment-on-pr: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
