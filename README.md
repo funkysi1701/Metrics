@@ -12,7 +12,7 @@ v1 is currently running at [metrics.funkysi1701.com](https://metrics.funkysi1701
 - Blazor webassembley front end running on Azure Static Web Apps (or do I want to try CloudFlare pages?)
 - Azure Function backend
 - If possible import existing data into new system
-- Pulumi to deploy and setup architecture
+- Pulumi to deploy and setup infrastructure
 - Signup/login system?
 
 ---
