@@ -1,8 +1,8 @@
-name: Pulumi-Push
+name: Pulumi-Push-test
 on:
   push:
     branches:
-      - main
+      - develop
 jobs:
   update:
     name: Update
@@ -15,7 +15,8 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: funkysi1701/metrics-pulumi/dev
+          stack-name: funkysi1701/metrics-pulumi/test
+          upsert: true
           comment-on-pr: true
           work-dir: Metrics.Pulumi
           github-token: ${{ secrets.GITHUB_TOKEN }}
