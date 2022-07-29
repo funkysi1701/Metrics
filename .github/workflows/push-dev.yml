@@ -1,8 +1,8 @@
-name: Pulumi-Push
+name: Pulumi-Push-dev
 on:
   push:
     branches:
-      - main
+      - feature/*
 jobs:
   update:
     name: Update
