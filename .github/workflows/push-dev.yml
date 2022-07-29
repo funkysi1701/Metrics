@@ -16,6 +16,7 @@ jobs:
         with:
           command: up
           stack-name: funkysi1701/metrics-pulumi/dev
+          upsert: true
           comment-on-pr: true
           work-dir: Metrics.Pulumi
           github-token: ${{ secrets.GITHUB_TOKEN }}
