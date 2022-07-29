@@ -13,27 +13,18 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
-            var resourceGroupDev = new ResourceGroup("metrics-function-pulumi-dev", new ResourceGroupArgs
-            {
-                ResourceGroupName = "metrics-function-pulumi-dev",
-                Location = "UKSouth"
-            });
+            var config = new Config();
+            var name = $"metrics-function-pulumi-{config.Require("env")}";
 
-            var resourceGroupTest = new ResourceGroup("metrics-function-pulumi-test", new ResourceGroupArgs
+            var resourceGroup = new ResourceGroup(name, new ResourceGroupArgs
             {
-                ResourceGroupName = "metrics-function-pulumi-test",
-                Location = "UKSouth"
-            });
-
-            var resourceGroupProd = new ResourceGroup("metrics-function-pulumi-prod", new ResourceGroupArgs
-            {
-                ResourceGroupName = "metrics-function-pulumi-prod",
+                ResourceGroupName = name,
                 Location = "UKSouth"
             });
 
             var storageAccount = new StorageAccount("sa", new StorageAccountArgs
             {
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
                 Sku = new SkuArgs
                 {
                     Name = SkuName.Standard_LRS,
@@ -43,7 +34,7 @@ namespace Metrics.Pulumi
 
             var appServicePlan = new AppServicePlan("functions-linux-asp", new AppServicePlanArgs
             {
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
 
                 Kind = "Linux",
 
@@ -60,56 +51,56 @@ namespace Metrics.Pulumi
             {
                 AccountName = storageAccount.Name,
                 PublicAccess = PublicAccess.None,
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
             });
 
             var blob = new Blob("zip", new BlobArgs
             {
                 AccountName = storageAccount.Name,
                 ContainerName = container.Name,
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
                 Type = BlobType.Block
             });
 
-            var codeBlobUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroupDev);
+            var codeBlobUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
 
             var appInsights = new Component("appInsights", new ComponentArgs
             {
                 ApplicationType = ApplicationType.Web,
                 Kind = "web",
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
             });
 
             var app = new WebApp("app", new WebAppArgs
             {
                 Kind = "FunctionApp",
-                ResourceGroupName = resourceGroupDev.Name,
+                ResourceGroupName = resourceGroup.Name,
                 ServerFarmId = appServicePlan.Id,
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-        {
-                    new NameValuePairArgs{
-                        Name = "AzureWebJobsStorage",
-                        Value = GetConnectionString(resourceGroupDev.Name, storageAccount.Name),
+                    {
+                        new NameValuePairArgs{
+                            Name = "AzureWebJobsStorage",
+                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
+                        },
+                        new NameValuePairArgs{
+                            Name = "runtime",
+                            Value = "python",
+                        },
+                        new NameValuePairArgs{
+                            Name = "FUNCTIONS_WORKER_RUNTIME",
+                            Value = "python",
+                        },
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_RUN_FROM_PACKAGE",
+                            Value = codeBlobUrl,
+                        },
+                        new NameValuePairArgs{
+                            Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
+                        },
                     },
-                    new NameValuePairArgs{
-                        Name = "runtime",
-                        Value = "python",
-                    },
-                    new NameValuePairArgs{
-                        Name = "FUNCTIONS_WORKER_RUNTIME",
-                        Value = "python",
-                    },
-                    new NameValuePairArgs{
-                        Name = "WEBSITE_RUN_FROM_PACKAGE",
-                        Value = codeBlobUrl,
-                    },
-                    new NameValuePairArgs{
-                        Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                        Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
-                    },
-                },
                 },
             });
         }
