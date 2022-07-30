@@ -32,7 +32,7 @@ namespace Metrics.Pulumi
                 Kind = Kind.StorageV2,
             });
 
-            var appServicePlan = new AppServicePlan("functions-linux-asp", new AppServicePlanArgs
+            var appServicePlan = new AppServicePlan("functions-win-asp", new AppServicePlanArgs
             {
                 ResourceGroupName = resourceGroup.Name,
 
