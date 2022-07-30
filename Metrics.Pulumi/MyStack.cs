@@ -90,11 +90,11 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
-                            Value = "Metrics",
+                            Value = $"Metrics{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "DatabaseName",
-                            Value = "Metrics",
+                            Value = $"Metrics{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
