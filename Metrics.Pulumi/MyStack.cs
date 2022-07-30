@@ -14,7 +14,7 @@ namespace Metrics.Pulumi
         public MyStack()
         {
             var config = new Config();
-            var name = $"metrics-function-pulumi-{config.Require("env")}";
+            var name = $"metrics-pulumi-{config.Require("env")}";
 
             var resourceGroup = new ResourceGroup(name, new ResourceGroupArgs
             {
