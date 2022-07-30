@@ -60,8 +60,6 @@ namespace Metrics.Pulumi
                 Type = BlobType.Block
             });
 
-            var codeBlobUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
-
             var appInsights = new Component("appInsights", new ComponentArgs
             {
                 ApplicationType = ApplicationType.Web,
@@ -91,6 +89,18 @@ namespace Metrics.Pulumi
                             Value = "dotnet",
                         },
                         new NameValuePairArgs{
+                            Name = "CollectionName",
+                            Value = "Metrics",
+                        },
+                        new NameValuePairArgs{
+                            Name = "DatabaseName",
+                            Value = "Metrics",
+                        },
+                        new NameValuePairArgs{
+                            Name = "ConnectionString",
+                            Value = "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
+                        },
+                        new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
                             Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
                         },
@@ -115,27 +125,6 @@ namespace Metrics.Pulumi
                 // Build the connection string to the storage account.
                 return Output.Format($"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={primaryStorageKey}");
             });
-        }
-
-        private static Output<string> SignedBlobReadUrl(Blob blob, BlobContainer container, StorageAccount account, ResourceGroup resourceGroup)
-        {
-            var serviceSasToken = ListStorageAccountServiceSAS.Invoke(new ListStorageAccountServiceSASInvokeArgs
-            {
-                AccountName = account.Name,
-                Protocols = HttpProtocol.Https,
-                SharedAccessStartTime = "2021-01-01",
-                SharedAccessExpiryTime = "2030-01-01",
-                Resource = SignedResource.C,
-                ResourceGroupName = resourceGroup.Name,
-                Permissions = Permissions.R,
-                CanonicalizedResource = Output.Format($"/blob/{account.Name}/{container.Name}"),
-                ContentType = "application/json",
-                CacheControl = "max-age=5",
-                ContentDisposition = "inline",
-                ContentEncoding = "deflate",
-            }).Apply(blobSAS => blobSAS.ServiceSasToken);
-
-            return Output.Format($"https://{account.Name}.blob.core.windows.net/{container.Name}/{blob.Name}?{serviceSasToken}");
         }
     }
 }
