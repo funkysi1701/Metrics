@@ -36,7 +36,7 @@ namespace Metrics.Pulumi
             {
                 ResourceGroupName = resourceGroup.Name,
 
-                Kind = "Windows",
+                Kind = "FunctionApp",
 
                 Sku = new SkuDescriptionArgs
                 {
