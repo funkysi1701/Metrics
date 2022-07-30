@@ -42,9 +42,7 @@ namespace Metrics.Pulumi
                 {
                     Tier = "Dynamic",
                     Name = "Y1"
-                },
-
-                Reserved = true
+                }
             });
 
             var container = new BlobContainer("zips-container", new BlobContainerArgs
