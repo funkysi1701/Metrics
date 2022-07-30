@@ -91,10 +91,6 @@ namespace Metrics.Pulumi
                             Value = "dotnet",
                         },
                         new NameValuePairArgs{
-                            Name = "WEBSITE_RUN_FROM_PACKAGE",
-                            Value = codeBlobUrl,
-                        },
-                        new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
                             Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
                         },
