@@ -36,7 +36,7 @@ namespace Metrics.Pulumi
             {
                 ResourceGroupName = resourceGroup.Name,
 
-                Kind = "Linux",
+                Kind = "Windows",
 
                 Sku = new SkuDescriptionArgs
                 {
