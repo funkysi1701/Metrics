@@ -4,7 +4,7 @@ on:
   [push]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: app9e351b09  # set this to your application's name
+  AZURE_FUNCTIONAPP_NAME: app2cee0332  # set this to your application's name
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'    # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.x'              # set this to the dotnet version to use
 permissions:
