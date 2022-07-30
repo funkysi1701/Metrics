@@ -86,11 +86,11 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "runtime",
-                            Value = "python",
+                            Value = "dotnet",
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_WORKER_RUNTIME",
-                            Value = "python",
+                            Value = "dotnet",
                         },
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
