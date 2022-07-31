@@ -1,7 +1,6 @@
 ﻿using Metrics.TimerFunction.Services;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
