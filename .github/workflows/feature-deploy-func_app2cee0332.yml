@@ -6,7 +6,7 @@ name: Build and deploy dotnet core app to Azure Function App - app2cee0332
 on:
   push:
     branches:
-      - feature/deploy-func
+      - feature/*
   workflow_dispatch:
 
 env:
