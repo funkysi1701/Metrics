@@ -26,7 +26,7 @@ namespace Metrics.TimerFunction
             builder.Services.AddScoped<PowerService>();
             builder.Services.AddScoped<BlogService>();
             builder.Services.Configure<MyMongoDatabaseSettings>(
-                config.GetSection("Values"));
+                config);
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddHttpClient<IOctopusEnergyClient, OctopusEnergyClient>()
                 .ConfigurePrimaryHttpMessageHandler(h => new HttpClientHandler
