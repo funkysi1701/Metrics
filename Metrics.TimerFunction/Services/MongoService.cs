@@ -1,7 +1,6 @@
 ﻿using Metrics.Core;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

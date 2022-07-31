@@ -14,16 +14,14 @@ namespace Metrics.TimerFunction
         private readonly GithubService githubService;
         private readonly DevToService devToService;
         private readonly BlogService blogService;
-        private readonly IOptions<MyMongoDatabaseSettings> DatabaseSettings;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IOptions<MyMongoDatabaseSettings> DatabaseSettings)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService)
         {
             this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
             this.devToService = devToService;
             this.blogService = blogService;
-            this.DatabaseSettings = DatabaseSettings;
         }
 
         [FunctionName("SaveTwitterFav")]
@@ -51,9 +49,6 @@ namespace Metrics.TimerFunction
         public async Task Run4([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            log.LogInformation(DatabaseSettings.Value.DatabaseName);
-            log.LogInformation(DatabaseSettings.Value.CollectionName);
-            log.LogInformation(DatabaseSettings.Value.ConnectionString);
             await twitterService.GetNumberOfTweets(log);
         }
 
