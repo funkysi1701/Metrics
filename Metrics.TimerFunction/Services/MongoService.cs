@@ -18,7 +18,7 @@ namespace Metrics.TimerFunction.Services
                 throw new ArgumentNullException(nameof(DatabaseSettings));
             }
             var mongoClient = new MongoClient(
-                DatabaseSettings.Value.ConnectionString);
+                DatabaseSettings.Value.ConnectionString ?? "boo");
 
             var mongoDatabase = mongoClient.GetDatabase(
                 DatabaseSettings.Value.DatabaseName);
