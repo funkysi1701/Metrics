@@ -13,10 +13,6 @@ namespace Metrics.TimerFunction.Services
 
         public MongoService(IOptions<MyMongoDatabaseSettings> DatabaseSettings)
         {
-            if (DatabaseSettings.Value.ConnectionString == null)
-            {
-                throw new ArgumentNullException("ConnectionString");
-            }
             var mongoClient = new MongoClient(
                 DatabaseSettings.Value.ConnectionString);
 
