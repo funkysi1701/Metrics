@@ -58,7 +58,7 @@ namespace Metrics.Pulumi
                 ContainerName = container.Name,
                 ResourceGroupName = resourceGroup.Name,
                 Type = BlobType.Block,
-                Source = new FileArchive("./Metrics.TimerFunction")
+                Source = new FileArchive("../../Metrics.TimerFunction")
             });
 
             var codeBlobUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
@@ -92,8 +92,8 @@ namespace Metrics.Pulumi
                             Value = "dotnet",
                         },
                         new NameValuePairArgs{
-                        Name = "WEBSITE_RUN_FROM_PACKAGE",
-                        Value = codeBlobUrl,
+                            Name = "WEBSITE_RUN_FROM_PACKAGE",
+                            Value = codeBlobUrl,
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
