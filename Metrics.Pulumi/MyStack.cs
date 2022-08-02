@@ -57,8 +57,7 @@ namespace Metrics.Pulumi
                 AccountName = storageAccount.Name,
                 ContainerName = container.Name,
                 ResourceGroupName = resourceGroup.Name,
-                Type = BlobType.Block,
-                Source = new FileArchive("../../Metrics.TimerFunction")
+                Type = BlobType.Block
             });
 
             var codeBlobUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
