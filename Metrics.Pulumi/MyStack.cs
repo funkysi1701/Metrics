@@ -98,6 +98,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
+                            Value = "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
