@@ -104,6 +104,10 @@ namespace Metrics.Pulumi
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
                             Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
                         },
+                        new NameValuePairArgs{
+                            Name = "FUNCTIONS_EXTENSION_VERSION",
+                            Value = "~4",
+                        },
                     },
                 },
             });
