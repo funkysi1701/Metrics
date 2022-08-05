@@ -32,7 +32,7 @@ namespace Metrics.TimerFunction
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkResult();
+                return new OkObjectResult("OK");
             }
             catch (Exception e)
             {
