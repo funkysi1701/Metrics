@@ -121,6 +121,10 @@ namespace Metrics.Pulumi
                             Value = "funkysi1701",
                         },
                         new NameValuePairArgs{
+                            Name = "SimonFoster",
+                            Value = "unsecure",
+                        },
+                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
                         },
