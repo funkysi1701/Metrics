@@ -2,7 +2,7 @@ name: Pulumi-Push-dev
 on:
   push:
     branches:
-      - feature/*
+      - develop
 jobs:
   update:
     name: Update
