@@ -116,6 +116,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveOldBlog")]
+        public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             var result = await blogService.GetOldBlogCount(log);
