@@ -1,3 +1,13 @@
 config:
   azure:location: UKSouth
+  metrics-pulumi:GitHubToken:
+    secure: AAABAGzm8CLcYaS4LfK8kPFe9cyeajYGJvrcwNicr4lPxhzEDJEomztRvpXVfHjqDWBCRIHIvp3vPdRDmTaXRNu2IIxYGQI9
+  metrics-pulumi:TWAccessSecret:
+    secure: AAABAPNLr2dBVYKuNBNAhLcIs4P9SUF/hR7zHIsS9gFmysKfj+pfgO+Ei9i67kenXuS+0xo1svnB7K6xgnRgtv/Zq+NFCXhc9AV6p8U=
+  metrics-pulumi:TWAccessToken:
+    secure: AAABAKNTLs5najbTcVvoWO/JhAIbjCc6aOR36ShrIdJlBFVZUI+I93bwTzU92im3SvGTBx3GV5TB+rz0o+K0NaBXKkoRU8MeYiwsA5EZM7DJ4w==
+  metrics-pulumi:TWConsumerKey:
+    secure: AAABABdDyksZc8Csh6Z3mF/yR045PJFe6JhgN7+qIXyMWFRagvz/CZP+k6fIhOltDurL4xazq/YY
+  metrics-pulumi:TWConsumerSecret:
+    secure: AAABABueD/cCixd7moYeheiBqdu9aJHllN2pumIeAI/A2NtANajhVjUFy/bOFTfv+k3bZ4IQv9qsLixY3ig1RZJvGzxXCyoDuWcIilLfBk0n2w==
   metrics-pulumi:env: dev

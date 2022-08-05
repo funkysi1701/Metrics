@@ -121,16 +121,32 @@ namespace Metrics.Pulumi
                             Value = "funkysi1701",
                         },
                         new NameValuePairArgs{
-                            Name = "SimonFoster",
-                            Value = config.RequireSecret("test"),
-                        },
-                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
                         },
                         new NameValuePairArgs{
                             Name = "OPSURL",
                             Value = "https://community.ops.io/api/",
+                        },
+                        new NameValuePairArgs{
+                            Name = "TWConsumerKey",
+                            Value = config.RequireSecret("TWConsumerKey"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "TWConsumerSecret",
+                            Value = config.RequireSecret("TWConsumerSecret"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "TWAccessToken",
+                            Value = config.RequireSecret("TWAccessToken"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "TWAccessSecret",
+                            Value = config.RequireSecret("TWAccessSecret"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "GitHubToken",
+                            Value = config.RequireSecret("GitHubToken"),
                         },
                     },
                 },
