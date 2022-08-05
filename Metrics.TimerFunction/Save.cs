@@ -1,4 +1,5 @@
 ﻿using Metrics.TimerFunction.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
@@ -118,7 +119,18 @@ namespace Metrics.TimerFunction
         public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await blogService.GetOldBlogCount(log);
+            var result = await blogService.GetOldBlogCount(log);
+            try
+            {
+                var okMessage = (OkObjectResult)result;
+                log.LogInformation(okMessage.StatusCode.ToString());
+            }
+            catch (Exception e)
+            {
+                log.LogInformation(e.Message);
+                var badMessage = (BadRequestObjectResult)result;
+                log.LogInformation(badMessage.StatusCode.ToString());
+            }
         }
     }
 }
