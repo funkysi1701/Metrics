@@ -122,7 +122,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "SimonFoster",
-                            Value = "unsecure",
+                            Value = config.RequireSecret("test"),
                         },
                         new NameValuePairArgs{
                             Name = "DEVTOURL",
