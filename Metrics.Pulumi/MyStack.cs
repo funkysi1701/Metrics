@@ -13,6 +13,7 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
+            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
 
@@ -180,6 +181,9 @@ namespace Metrics.Pulumi
                 },
             });
         }
+
+        [Output]
+        public Output<string> Readme { get; set; }
 
         private static Output<string> GetConnectionString(Input<string> resourceGroupName, Input<string> accountName)
         {
