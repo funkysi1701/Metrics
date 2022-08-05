@@ -123,13 +123,13 @@ namespace Metrics.TimerFunction
             try
             {
                 var okMessage = (OkObjectResult)result;
-                log.LogInformation(okMessage.StatusCode.ToString());
+                log.LogInformation(okMessage.Value.ToString());
             }
             catch (Exception e)
             {
                 log.LogInformation(e.Message);
                 var badMessage = (BadRequestObjectResult)result;
-                log.LogInformation(badMessage.StatusCode.ToString());
+                log.LogInformation(badMessage.Value.ToString());
             }
         }
     }
