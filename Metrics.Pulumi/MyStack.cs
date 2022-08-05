@@ -108,6 +108,26 @@ namespace Metrics.Pulumi
                             Name = "FUNCTIONS_EXTENSION_VERSION",
                             Value = "~4",
                         },
+                        new NameValuePairArgs{
+                            Name = "OldRSSFeed",
+                            Value = "https://www.pwnedpass.com/feed/",
+                        },
+                        new NameValuePairArgs{
+                            Name = "RSSFeed",
+                            Value = "https://www.funkysi1701.com/index.xml",
+                        },
+                        new NameValuePairArgs{
+                            Name = "Username1",
+                            Value = "funkysi1701",
+                        },
+                        new NameValuePairArgs{
+                            Name = "DEVTOURL",
+                            Value = "https://dev.to/api/",
+                        },
+                        new NameValuePairArgs{
+                            Name = "OPSURL",
+                            Value = "https://community.ops.io/api/",
+                        },
                     },
                 },
             });
