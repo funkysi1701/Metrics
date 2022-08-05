@@ -116,20 +116,19 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveOldBlog")]
-        public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             var result = await blogService.GetOldBlogCount(log);
             try
             {
                 var okMessage = (OkObjectResult)result;
-                log.LogInformation(okMessage.StatusCode.ToString());
+                log.LogInformation(okMessage.Value.ToString());
             }
             catch (Exception e)
             {
                 log.LogInformation(e.Message);
                 var badMessage = (BadRequestObjectResult)result;
-                log.LogInformation(badMessage.StatusCode.ToString());
+                log.LogInformation(badMessage.Value.ToString());
             }
         }
     }
