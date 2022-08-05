@@ -2,7 +2,7 @@ name: Pulumi-Push-test
 on:
   push:
     branches:
-      - develop
+      - test
 jobs:
   update:
     name: Update
