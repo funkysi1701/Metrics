@@ -170,8 +170,12 @@ namespace Metrics.Pulumi
                             Value = "dotnet",
                         },
                         new NameValuePairArgs{
+                            Name = "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            Value = appInsights.InstrumentationKey,
+                        },
+                        new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
+                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://uksouth-0.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/"),
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
