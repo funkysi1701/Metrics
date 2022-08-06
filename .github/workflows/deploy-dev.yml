@@ -39,4 +39,4 @@ jobs:
           app-name: 'metrics-pulumi-function-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8494E3C2716242BD99C1D9C562383E1D }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BF1913976A924AF9AF2913003FA00124 }}
