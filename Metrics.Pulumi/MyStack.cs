@@ -63,6 +63,7 @@ namespace Metrics.Pulumi
 
             var appInsights = new Component("appInsights", new ComponentArgs
             {
+                ResourceName = $"metrics-pulumi-appInsights-{config.Require("env")}",
                 ApplicationType = ApplicationType.Web,
                 Kind = "web",
                 ResourceGroupName = resourceGroup.Name,
@@ -70,6 +71,7 @@ namespace Metrics.Pulumi
 
             var app = new WebApp("app", new WebAppArgs
             {
+                Name = $"metrics-pulumi-function-{config.Require("env")}",
                 Kind = "FunctionApp",
                 ResourceGroupName = resourceGroup.Name,
                 ServerFarmId = appServicePlan.Id,
