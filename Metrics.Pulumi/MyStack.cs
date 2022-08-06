@@ -13,6 +13,7 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
+            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
 
@@ -81,57 +82,112 @@ namespace Metrics.Pulumi
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
                         },
                         new NameValuePairArgs{
-                            Name = "runtime",
-                            Value = "dotnet",
-                        },
-                        new NameValuePairArgs{
                             Name = "FUNCTIONS_WORKER_RUNTIME",
                             Value = "dotnet",
                         },
                         new NameValuePairArgs{
-                            Name = "CollectionName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Name = "TWConsumerKey",
+                            Value = config.RequireSecret("TWConsumerKey"),
                         },
                         new NameValuePairArgs{
-                            Name = "DatabaseName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Name = "TWConsumerSecret",
+                            Value = config.RequireSecret("TWConsumerSecret"),
                         },
                         new NameValuePairArgs{
-                            Name = "ConnectionString",
-                            Value = "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
+                            Name = "TWAccessToken",
+                            Value = config.RequireSecret("TWAccessToken"),
                         },
                         new NameValuePairArgs{
-                            Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey}"),
+                            Name = "TWAccessSecret",
+                            Value = config.RequireSecret("TWAccessSecret"),
                         },
                         new NameValuePairArgs{
-                            Name = "FUNCTIONS_EXTENSION_VERSION",
-                            Value = "~4",
-                        },
-                        new NameValuePairArgs{
-                            Name = "OldRSSFeed",
-                            Value = "https://www.pwnedpass.com/feed/",
-                        },
-                        new NameValuePairArgs{
-                            Name = "RSSFeed",
-                            Value = "https://www.funkysi1701.com/index.xml",
+                            Name = "GitHubToken",
+                            Value = config.RequireSecret("GitHubToken"),
                         },
                         new NameValuePairArgs{
                             Name = "Username1",
                             Value = "funkysi1701",
                         },
                         new NameValuePairArgs{
+                            Name = "DEVTOAPI",
+                            Value = config.RequireSecret("DEVTOAPI"),
+                        },
+                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
+                        },
+                        new NameValuePairArgs{
+                            Name = "RSSFeed",
+                            Value = "https://www.funkysi1701.com/index.xml",
+                        },
+                        new NameValuePairArgs{
+                            Name = "OPSAPI",
+                            Value = config.RequireSecret("OPSAPI"),
                         },
                         new NameValuePairArgs{
                             Name = "OPSURL",
                             Value = "https://community.ops.io/api/",
                         },
+                        new NameValuePairArgs{
+                            Name = "OctopusKey",
+                            Value = config.RequireSecret("OctopusKey"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "OctopusElecMPAN",
+                            Value = config.RequireSecret("OctopusElecMPAN"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "OctopusElecSerial",
+                            Value = config.RequireSecret("OctopusElecSerial"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "OctopusGasMPAN",
+                            Value = config.RequireSecret("OctopusGasMPAN"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "OctopusGasSerial",
+                            Value = config.RequireSecret("OctopusGasSerial"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "DatabaseName",
+                            Value = $"Metrics{config.Require("env")}",
+                        },
+                        new NameValuePairArgs{
+                            Name = "OldRSSFeed",
+                            Value = "https://www.pwnedpass.com/feed/",
+                        },
+                        new NameValuePairArgs{
+                            Name = "ConnectionString",
+                            Value = config.RequireSecret("ConnectionString"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "CollectionName",
+                            Value = $"Metrics{config.Require("env")}",
+                        },
+                        new NameValuePairArgs{
+                            Name = "runtime",
+                            Value = "dotnet",
+                        },
+                        new NameValuePairArgs{
+                            Name = "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            Value = appInsights.InstrumentationKey,
+                        },
+                        new NameValuePairArgs{
+                            Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://uksouth-0.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "FUNCTIONS_EXTENSION_VERSION",
+                            Value = "~4",
+                        },
                     },
                 },
             });
         }
+
+        [Output]
+        public Output<string> Readme { get; set; }
 
         private static Output<string> GetConnectionString(Input<string> resourceGroupName, Input<string> accountName)
         {

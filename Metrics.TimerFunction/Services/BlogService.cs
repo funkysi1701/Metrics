@@ -1,4 +1,5 @@
 ﻿using Metrics.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Metrics.TimerFunction.Services
             await Chart.SaveData(count, (int)MetricType.Blog, Configuration.GetValue<string>("Username1"));
         }
 
-        public async Task GetOldBlogCount(ILogger log)
+        public async Task<IActionResult> GetOldBlogCount(ILogger log)
         {
             var url = Configuration.GetValue<string>("OldRSSFeed");
 
@@ -40,7 +41,7 @@ namespace Metrics.TimerFunction.Services
                 .XPathSelectElements("//item")
                 .Count();
             log.LogInformation($"{count} posts found");
-            await Chart.SaveData(count, (int)MetricType.OldBlog, Configuration.GetValue<string>("Username1"));
+            return await Chart.SaveData(count, (int)MetricType.OldBlog, Configuration.GetValue<string>("Username1"));
         }
     }
 }
