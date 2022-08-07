@@ -18,14 +18,21 @@ namespace Metrics.TimerFunction
         private readonly DevToService devToService;
         private readonly BlogService blogService;
         private readonly IConfiguration Configuration;
-        private readonly List<string> users;
+        private readonly List<string> ghusers;
+        private readonly List<string> twusers;
 
         public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration)
         {
             this.Configuration = Configuration;
-            users = new List<string>
+            ghusers = new List<string>
             {
                 Configuration.GetValue<string>("Username1")
+            };
+            twusers = new List<string>
+            {
+                Configuration.GetValue<string>("Username1"),
+                "zogface",
+                "juliankay"
             };
             this.twitterService = twitterService;
             this.powerService = powerService;
@@ -38,28 +45,88 @@ namespace Metrics.TimerFunction
         public async Task Run1([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await twitterService.GetTwitterFav(log);
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFav(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveTwitterFollowers")]
         public async Task Run2([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await twitterService.GetTwitterFollowers(log);
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowers(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveTwitterFollowing")]
         public async Task Run3([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await twitterService.GetTwitterFollowing(log);
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowing(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveNumberOfTweets")]
         public async Task Run4([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await twitterService.GetNumberOfTweets(log);
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetNumberOfTweets(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveGas")]
@@ -80,18 +147,18 @@ namespace Metrics.TimerFunction
         public async Task Run7([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await githubService.GetCommits(username);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
@@ -102,18 +169,18 @@ namespace Metrics.TimerFunction
         public async Task Run8([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await githubService.GetGitHubFollowers(username);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
@@ -124,18 +191,18 @@ namespace Metrics.TimerFunction
         public async Task Run9([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await githubService.GetGitHubFollowing(username);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
@@ -146,18 +213,18 @@ namespace Metrics.TimerFunction
         public async Task Run10([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await githubService.GetGitHubRepo(username);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
@@ -168,18 +235,18 @@ namespace Metrics.TimerFunction
         public async Task Run11([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await githubService.GetGitHubStars(username);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
@@ -190,7 +257,7 @@ namespace Metrics.TimerFunction
         public async Task Run12([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in users)
+            foreach (var username in ghusers)
             {
                 var result = await devToService.GetDevTo(username);
                 try
