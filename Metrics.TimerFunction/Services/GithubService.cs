@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Octokit;
 using System;
 using System.Collections.Generic;
@@ -61,14 +62,24 @@ namespace Metrics.TimerFunction.Services
             }
         }
 
-        public async Task GetGitHubStars()
+        public async Task<IActionResult> GetGitHubStars()
         {
             var github = GitHub();
+            IActionResult result = null;
             foreach (var username in users)
             {
                 var stars = await github.Activity.Starring.GetAllForUser(username);
-                await Chart.SaveData(stars.Count, 7, username);
+                result = await Chart.SaveData(stars.Count, 7, username);
+                try
+                {
+                    var ok = result as OkObjectResult;
+                }
+                catch
+                {
+                    return result;
+                }
             }
+            return result;
         }
 
         public async Task GetCommits()

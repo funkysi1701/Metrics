@@ -34,7 +34,7 @@ namespace Metrics.TimerFunction.Services
         public async Task<List<Metric>> GetAsync() =>
             await _collection.Find(_ => true).ToListAsync();
 
-        public async Task<Metric?> GetAsync(string id) =>
+        public async Task<Metric> GetAsync(string id) =>
             await _collection.Find(x => x.id == id).FirstOrDefaultAsync();
     }
 }
