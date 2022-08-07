@@ -106,6 +106,32 @@ namespace Metrics.TimerFunction
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             await devToService.GetDevTo();
+            var result = await devToService.GetDevTo();
+            try
+            {
+                var okMessage = (OkObjectResult)result;
+                log.LogInformation(okMessage.Value.ToString());
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                var badMessage = (BadRequestObjectResult)result;
+                log.LogError(badMessage.Value.ToString());
+                throw;
+            }
+            result = await devToService.GetOps();
+            try
+            {
+                var okMessage = (OkObjectResult)result;
+                log.LogInformation(okMessage.Value.ToString());
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                var badMessage = (BadRequestObjectResult)result;
+                log.LogError(badMessage.Value.ToString());
+                throw;
+            }
         }
 
         [FunctionName("SaveBlog")]
@@ -113,6 +139,19 @@ namespace Metrics.TimerFunction
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             await blogService.GetBlogCount(log);
+            var result = await blogService.GetBlogCount(log);
+            try
+            {
+                var okMessage = (OkObjectResult)result;
+                log.LogInformation(okMessage.Value.ToString());
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                var badMessage = (BadRequestObjectResult)result;
+                log.LogError(badMessage.Value.ToString());
+                throw;
+            }
         }
 
         [FunctionName("SaveOldBlog")]
@@ -127,9 +166,10 @@ namespace Metrics.TimerFunction
             }
             catch (Exception e)
             {
-                log.LogInformation(e.Message);
+                log.LogError(e.Message);
                 var badMessage = (BadRequestObjectResult)result;
-                log.LogInformation(badMessage.Value.ToString());
+                log.LogError(badMessage.Value.ToString());
+                throw;
             }
         }
     }

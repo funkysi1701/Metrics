@@ -20,28 +20,30 @@ namespace Metrics.TimerFunction.Services
             Chart = new Chart(mongoService);
         }
 
-        public async Task GetBlogCount(ILogger log)
+        public async Task<IActionResult> GetBlogCount(ILogger log)
         {
             var url = Configuration.GetValue<string>("RSSFeed");
+            var count = DOXML(url, log);
 
-            var count = XDocument
-                .Load(url)
-                .XPathSelectElements("//item")
-                .Count();
-            log.LogInformation($"{count} posts found");
-            await Chart.SaveData(count, (int)MetricType.Blog, Configuration.GetValue<string>("Username1"));
+            return await Chart.SaveData(count, (int)MetricType.Blog, Configuration.GetValue<string>("Username1"));
         }
 
         public async Task<IActionResult> GetOldBlogCount(ILogger log)
         {
             var url = Configuration.GetValue<string>("OldRSSFeed");
 
+            var count = DOXML(url, log);
+            return await Chart.SaveData(count, (int)MetricType.OldBlog, Configuration.GetValue<string>("Username1"));
+        }
+
+        private static int DOXML(string url, ILogger log)
+        {
             var count = XDocument
                 .Load(url)
                 .XPathSelectElements("//item")
                 .Count();
             log.LogInformation($"{count} posts found");
-            return await Chart.SaveData(count, (int)MetricType.OldBlog, Configuration.GetValue<string>("Username1"));
+            return count;
         }
     }
 }
