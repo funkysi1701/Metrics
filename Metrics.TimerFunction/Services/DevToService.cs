@@ -11,16 +11,11 @@ namespace Metrics.TimerFunction.Services
     {
         private readonly Chart Chart;
         private IConfiguration Configuration { get; set; }
-        private readonly List<string> users;
 
         public DevToService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
             Chart = new Chart(mongoService);
-            users = new List<string>
-            {
-                Configuration.GetValue<string>("Username1")
-            };
         }
 
         public async Task<IActionResult> GetOps(string username)

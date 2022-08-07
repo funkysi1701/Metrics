@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Octokit;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,16 +11,11 @@ namespace Metrics.TimerFunction.Services
     {
         private readonly Chart Chart;
         private IConfiguration Configuration { get; set; }
-        private readonly List<string> users;
 
         public GithubService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
             Chart = new Chart(mongoService);
-            users = new List<string>
-            {
-                Configuration.GetValue<string>("Username1")
-            };
         }
 
         public GitHubClient GitHub()
@@ -32,44 +26,85 @@ namespace Metrics.TimerFunction.Services
             return github;
         }
 
-        public async Task GetGitHubFollowers()
+        public async Task<IActionResult> GetGitHubFollowers(string username)
         {
             var github = GitHub();
-            foreach (var username in users)
+            var user = await github.User.Get(username);
+            IActionResult result = await Chart.SaveData(user.Followers, 4, username);
+            try
             {
-                var user = await github.User.Get(username);
-                await Chart.SaveData(user.Followers, 4, username);
+                var ok = result as OkObjectResult;
             }
+            catch
+            {
+                return result;
+            }
+
+            return result;
         }
 
-        public async Task GetGitHubFollowing()
+        public async Task<IActionResult> GetGitHubFollowing(string username)
         {
             var github = GitHub();
-            foreach (var username in users)
+            var user = await github.User.Get(username);
+            IActionResult result = await Chart.SaveData(user.Following, 5, username);
+            try
             {
-                var user = await github.User.Get(username);
-                await Chart.SaveData(user.Following, 5, username);
+                var ok = result as OkObjectResult;
             }
+            catch
+            {
+                return result;
+            }
+
+            return result;
         }
 
-        public async Task GetGitHubRepo()
+        public async Task<IActionResult> GetGitHubRepo(string username)
         {
             var github = GitHub();
-            foreach (var username in users)
+            var user = await github.User.Get(username);
+            IActionResult result = await Chart.SaveData(user.PublicRepos, 6, username);
+            try
             {
-                var user = await github.User.Get(username);
-                await Chart.SaveData(user.PublicRepos, 6, username);
+                var ok = result as OkObjectResult;
             }
+            catch
+            {
+                return result;
+            }
+
+            return result;
         }
 
-        public async Task<IActionResult> GetGitHubStars()
+        public async Task<IActionResult> GetGitHubStars(string username)
         {
             var github = GitHub();
-            IActionResult result = null;
-            foreach (var username in users)
+            var stars = await github.Activity.Starring.GetAllForUser(username);
+            IActionResult result = await Chart.SaveData(stars.Count, 7, username);
+            try
             {
-                var stars = await github.Activity.Starring.GetAllForUser(username);
-                result = await Chart.SaveData(stars.Count, 7, username);
+                var ok = result as OkObjectResult;
+            }
+            catch
+            {
+                return result;
+            }
+
+            return result;
+        }
+
+        public async Task<IActionResult> GetCommits(string username)
+        {
+            var github = GitHub();
+            IActionResult result;
+            var events = await github.Activity.Events.GetAllUserPerformed(username);
+            var today = events.Where(x => x.Type == "PushEvent" && x.CreatedAt > DateTime.Now.Date).ToList();
+            var sofar = await Chart.GetAll();
+            sofar = sofar.Where(x => x.Date != null && x.Type == 8 && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
+            if (sofar.Count == 0)
+            {
+                result = await Chart.SaveData(today.Count, 8, username);
                 try
                 {
                     var ok = result as OkObjectResult;
@@ -79,24 +114,17 @@ namespace Metrics.TimerFunction.Services
                     return result;
                 }
             }
-            return result;
-        }
-
-        public async Task GetCommits()
-        {
-            var github = GitHub();
-            foreach (var username in users)
+            else result = await Chart.SaveData(today.Count + sofar.Last().Value.Value, 8, username);
+            try
             {
-                var events = await github.Activity.Events.GetAllUserPerformed(username);
-                var today = events.Where(x => x.Type == "PushEvent" && x.CreatedAt > DateTime.Now.Date).ToList();
-                var sofar = await Chart.GetAll();
-                sofar = sofar.Where(x => x.Date != null && x.Type == 8 && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
-                if (sofar.Count == 0)
-                {
-                    await Chart.SaveData(today.Count, 8, username);
-                }
-                else await Chart.SaveData(today.Count + sofar.Last().Value.Value, 8, username);
+                var ok = result as OkObjectResult;
             }
+            catch
+            {
+                return result;
+            }
+
+            return result;
         }
     }
 }

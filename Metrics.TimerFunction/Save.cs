@@ -80,46 +80,109 @@ namespace Metrics.TimerFunction
         public async Task Run7([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await githubService.GetCommits();
+            foreach (var username in users)
+            {
+                var result = await githubService.GetCommits(username);
+                try
+                {
+                    var okMessage = (OkObjectResult)result;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = (BadRequestObjectResult)result;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveGitHubFollowers")]
         public async Task Run8([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await githubService.GetGitHubFollowers();
+            foreach (var username in users)
+            {
+                var result = await githubService.GetGitHubFollowers(username);
+                try
+                {
+                    var okMessage = (OkObjectResult)result;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = (BadRequestObjectResult)result;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveGitHubFollowing")]
         public async Task Run9([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await githubService.GetGitHubFollowing();
+            foreach (var username in users)
+            {
+                var result = await githubService.GetGitHubFollowing(username);
+                try
+                {
+                    var okMessage = (OkObjectResult)result;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = (BadRequestObjectResult)result;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveGitHubRepo")]
         public async Task Run10([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await githubService.GetGitHubRepo();
+            foreach (var username in users)
+            {
+                var result = await githubService.GetGitHubRepo(username);
+                try
+                {
+                    var okMessage = (OkObjectResult)result;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = (BadRequestObjectResult)result;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         [FunctionName("SaveGitHubStars")]
         public async Task Run11([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var result = await githubService.GetGitHubStars();
-            try
+            foreach (var username in users)
             {
-                var okMessage = (OkObjectResult)result;
-                log.LogInformation(okMessage.Value.ToString());
-            }
-            catch (Exception e)
-            {
-                log.LogError(e.Message);
-                var badMessage = (BadRequestObjectResult)result;
-                log.LogError(badMessage.Value.ToString());
-                throw;
+                var result = await githubService.GetGitHubStars(username);
+                try
+                {
+                    var okMessage = (OkObjectResult)result;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = (BadRequestObjectResult)result;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
             }
         }
 
