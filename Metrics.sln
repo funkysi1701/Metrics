@@ -21,7 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\deploy-dev.yml = .github\workflows\deploy-dev.yml
 		.github\workflows\deploy-test.yml = .github\workflows\deploy-test.yml
 		.github\workflows\pull_request.yml = .github\workflows\pull_request.yml
-		.github\workflows\push-dev.yml = .github\workflows\push-dev.yml
 		.github\workflows\push-prod.yml = .github\workflows\push-prod.yml
 		.github\workflows\push-test.yml = .github\workflows\push-test.yml
 	EndProjectSection
