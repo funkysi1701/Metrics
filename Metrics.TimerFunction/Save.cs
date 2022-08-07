@@ -18,10 +18,15 @@ namespace Metrics.TimerFunction
         private readonly DevToService devToService;
         private readonly BlogService blogService;
         private readonly IConfiguration Configuration;
+        private readonly List<string> users;
 
         public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration)
         {
             this.Configuration = Configuration;
+            users = new List<string>
+            {
+                Configuration.GetValue<string>("Username1")
+            };
             this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
@@ -122,31 +127,34 @@ namespace Metrics.TimerFunction
         public async Task Run12([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var result = await devToService.GetDevTo();
-            try
+            foreach (var username in users)
             {
-                var okMessage = (OkObjectResult)result;
-                log.LogInformation(okMessage.Value.ToString());
-            }
-            catch (Exception e)
-            {
-                log.LogError(e.Message);
-                var badMessage = (BadRequestObjectResult)result;
-                log.LogError(badMessage.Value.ToString());
-                throw;
-            }
-            result = await devToService.GetOps();
-            try
-            {
-                var okMessage = (OkObjectResult)result;
-                log.LogInformation(okMessage.Value.ToString());
-            }
-            catch (Exception e)
-            {
-                log.LogError(e.Message);
-                var badMessage = (BadRequestObjectResult)result;
-                log.LogError(badMessage.Value.ToString());
-                throw;
+                var result = await devToService.GetDevTo(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+                result = await devToService.GetOps(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
             }
         }
 
@@ -165,13 +173,13 @@ namespace Metrics.TimerFunction
                 var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
                 try
                 {
-                    var okMessage = (OkObjectResult)result;
+                    var okMessage = result as OkObjectResult;
                     log.LogInformation(okMessage.Value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = (BadRequestObjectResult)result;
+                    var badMessage = result as BadRequestObjectResult;
                     log.LogError(badMessage.Value.ToString());
                     throw;
                 }
