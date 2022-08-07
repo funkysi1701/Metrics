@@ -17,9 +17,11 @@ namespace Metrics.TimerFunction
         private readonly GithubService githubService;
         private readonly DevToService devToService;
         private readonly BlogService blogService;
+        private readonly IConfiguration Configuration;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration)
         {
+            this.Configuration = Configuration;
             this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
@@ -149,7 +151,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveBlog")]
-        public async Task Run13([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context, IConfiguration Configuration)
+        public async Task Run13([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             var feedList = new List<SaveBlog>
