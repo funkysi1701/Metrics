@@ -1,3 +1,29 @@
 config:
   azure:location: UKSouth
+  metrics-pulumi:ConnectionString:
+    secure: AAABAB7tfvhMRujY0faYo4tD10yoHBSAYzwQzgrHW27KERjE60KY3uzS/YVEjRRbFpoAx+eNz5PNgT/qNfWeWsk9dBVn/sbcT8jrHh7p+aUIDiiKf0uKeG7bNk1ycAhHPfMHsUZcBeNbo0UBdmnK4zngYxLAIkVS9hVeohx2KEWeLRaYSK0sqr4=
+  metrics-pulumi:DEVTOAPI:
+    secure: AAABAPYnoCtqrEu6T77k+AGxzBRW9xH3pAbJrUYS3PR6up5hH5OJwgIe355iVJbo3gBSZ443Y+g=
+  metrics-pulumi:GitHubToken:
+    secure: AAABACiL/uzgn2wYAV0xHotJXONEjqfJkixsiEABa2I6aXO4WAHXfsGyRAd2yMS3hGr8BgIvndyNa6P8RC2w5aWlCvg6DhCw
+  metrics-pulumi:OPSAPI:
+    secure: AAABAGldrgTPKc3aIOQfplaZ4W8I5xs/d1nesNsevq8psc4IarExY74EwTy7FR3mmgFDU6fhoCc=
+  metrics-pulumi:OctopusElecMPAN:
+    secure: AAABAJounA0J8WPnGTthFofrFjQEYceeSZut1+Sna0t+mr9vhFqT3Uie5DpN
+  metrics-pulumi:OctopusElecSerial:
+    secure: AAABAIOVUfgEpzzshrISnByHCYNJihcIEANjLNjkK1d8runwmHbkWiQz
+  metrics-pulumi:OctopusGasMPAN:
+    secure: AAABAI8Bc8u1qGLciplnD98ss6Jv2Y2asZo6hD+edUKdWEq5rVtanaQB
+  metrics-pulumi:OctopusGasSerial:
+    secure: AAABANsWRuE7WOB2A3z8QLqjfJY2jHyDB0qKk9gpz9KZQsjBDDkmh4hTfa0SgA==
+  metrics-pulumi:OctopusKey:
+    secure: AAABAJwFVbj1hCzqls8fBcD4+cZudlFvl00tg8THTOiLNHPfnkN85KeQtLSrjPBIuFqxdsYzyxSoDlukKh+Cqg==
+  metrics-pulumi:TWAccessSecret:
+    secure: AAABAIngWxgzqxudUgR4PhkabYrmbAjDyYxeimm2pnRBBhkaNg9KIYcyGulcjj/VxSICzkpDspsaT8uDdHmb+uBwNMj58UW5jCP6Bv8=
+  metrics-pulumi:TWAccessToken:
+    secure: AAABAKMZ3okaivt5IX8EkKPs2AuzycJVOzaEIEb0eQ1qUsdQq7T6VVUw9XaPUBUKcNnHu0YWAxsZwr4/lxfAFntPT2vQ2HuHmNyMAFbdElnh0g==
+  metrics-pulumi:TWConsumerKey:
+    secure: AAABAIXf8dKA+/bjb9RI0/7wJlO2+XRED/i5uG6yu2A+8EQVcfRuQLaptod6Rhns+wj3CBVBnwpj
+  metrics-pulumi:TWConsumerSecret:
+    secure: AAABANesd/MM45Q7/TeoVgvarCf0SVfeCUqAA1qUX8QEbd0FcYmKyGx/uEsZeZWNIQM9puiNtMXWKQtxajpM6W6nHTX6jiaIkT/PAzq7w1w0dg==
   metrics-pulumi:env: test

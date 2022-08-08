@@ -32,7 +32,7 @@ namespace Metrics.TimerFunction
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkResult();
+                return new OkObjectResult("OK");
             }
             catch (Exception e)
             {
@@ -52,8 +52,15 @@ namespace Metrics.TimerFunction
                 PartitionKey = "1",
                 Username = username
             };
-            await _mongoService.CreateAsync(m);
-            return new OkResult();
+            try
+            {
+                await _mongoService.CreateAsync(m);
+                return new OkObjectResult("OK");
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
         }
 
         public async Task Delete(int type, DateTime dt)
