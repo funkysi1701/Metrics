@@ -8,7 +8,9 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+    pull_request:
+    branches:
+      - main
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.x' # set this to the dotnet version to use
