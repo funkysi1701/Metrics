@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Deploy Function - Test
+name: Deploy Function - Prod
 
 on:
   push:
     branches:
-      - test
+      - main
   workflow_dispatch:
 
 env:
@@ -25,7 +25,7 @@ jobs:
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: funkysi1701/metrics-pulumi/test
+          stack-name: funkysi1701/metrics-pulumi/prod
           upsert: true
           comment-on-pr: true
           work-dir: Metrics.Pulumi
@@ -58,7 +58,7 @@ jobs:
         uses: Azure/functions-action@v1
         id: fa
         with:
-          app-name: 'metrics-pulumi-function-test'
+          app-name: 'metrics-pulumi-function-prod'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A270D66EFEC4500A5E41018E024DEB1 }}
