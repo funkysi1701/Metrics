@@ -37,6 +37,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
   build-and-deploy:
+    needs: update
     runs-on: windows-latest
     steps:
       - name: 'Checkout GitHub Action'
