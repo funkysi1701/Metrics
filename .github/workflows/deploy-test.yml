@@ -55,7 +55,8 @@ jobs:
           dotnet build Metrics.sln --configuration Release --output ./output
           popd
 
-      - name: 'Run Azure Functions Action'
+      - name: 'Deploy Azure Functions Action'
+        if: github.ref == 'refs/heads/test'
         uses: Azure/functions-action@v1
         id: fa
         with:
