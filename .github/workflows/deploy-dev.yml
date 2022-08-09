@@ -8,11 +8,6 @@ on:
     branches:
       - develop
   workflow_dispatch:
-  pull_request:
-    types:
-      - opened
-    branches:
-      - develop
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
