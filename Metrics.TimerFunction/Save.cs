@@ -116,14 +116,31 @@ namespace Metrics.TimerFunction
                 var result = await twitterService.GetNumberOfTweets(log, user);
                 try
                 {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
+                    if (result is OkObjectResult okMessage)
+                    {
+                        log.LogInformation(okMessage.Value.ToString());
+                    }
+                    else if (result is BadRequestObjectResult badMessage)
+                    {
+                        log.LogError(badMessage.Value.ToString());
+                    }
+                    else
+                    {
+                        log.LogError("Unknown result");
+                    }
                 }
                 catch (Exception e)
                 {
                     log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
+                    if (result is BadRequestObjectResult badMessage)
+                    {
+                        log.LogError(badMessage.Value.ToString());
+                    }
+                    else
+                    {
+                        log.LogError("BadRequestObjectResult is null");
+                    }
+
                     throw;
                 }
             }

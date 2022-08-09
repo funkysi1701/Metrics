@@ -8,9 +8,6 @@ on:
     branches:
       - develop
   workflow_dispatch:
-  pull_request:
-    branches:
-      - develop
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
@@ -58,7 +55,8 @@ jobs:
           dotnet build Metrics.sln --configuration Release --output ./output
           popd
 
-      - name: 'Run Azure Functions Action'
+      - name: 'Deploy Azure Functions Action'
+        if: github.ref == 'refs/heads/develop'
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -66,3 +64,13 @@ jobs:
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BF1913976A924AF9AF2913003FA00124 }}
+      - name: Application Insights Annotations
+        if: github.ref == 'refs/heads/develop'
+        uses: wictorwilen/application-insights-action@v1
+        with:
+          applicationId: ${{ secrets.APPLICATION_ID }}
+          apiKey: ${{secrets.API_KEY}}
+          releaseName: ${{ github.event_name }}
+          message: ${{ github.event.head_commit.message }}
+          actor: ${{ github.actor }}
+   
