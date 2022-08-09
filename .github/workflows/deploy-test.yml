@@ -9,6 +9,8 @@ on:
       - test
   workflow_dispatch:
   pull_request:
+    types:
+      - opened
     branches:
       - test
 env:
