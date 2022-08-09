@@ -20,7 +20,7 @@ namespace Metrics.Pulumi
             var resourceGroup = new ResourceGroup(name, new ResourceGroupArgs
             {
                 ResourceGroupName = name,
-                Location = "UKSouth"
+                Location = "westeurope"
             });
 
             var storageAccount = new StorageAccount("sa", new StorageAccountArgs
@@ -169,6 +169,27 @@ namespace Metrics.Pulumi
                             Value = "~4",
                         },
                     },
+                },
+            });
+
+            var staticSite = new StaticSite("staticSite", new StaticSiteArgs
+            {
+                Branch = $"{config.Require("branch")}",
+                BuildProperties = new StaticSiteBuildPropertiesArgs
+                {
+                    ApiLocation = "api",
+                    AppArtifactLocation = "build",
+                    AppLocation = "app",
+                },
+                Location = "westeurope",
+                Name = $"metrics-pulumi-static-{config.Require("env")}",
+                RepositoryToken = "repoToken123",
+                RepositoryUrl = "https://github.com/funkysi1701/Metrics",
+                ResourceGroupName = resourceGroup.Name,
+                Sku = new SkuDescriptionArgs
+                {
+                    Name = "Basic",
+                    Tier = "Basic",
                 },
             });
         }
