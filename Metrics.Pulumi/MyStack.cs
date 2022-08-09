@@ -46,21 +46,6 @@ namespace Metrics.Pulumi
                 }
             });
 
-            var container = new BlobContainer("zips-container", new BlobContainerArgs
-            {
-                AccountName = storageAccount.Name,
-                PublicAccess = PublicAccess.None,
-                ResourceGroupName = resourceGroup.Name,
-            });
-
-            var blob = new Blob("zip", new BlobArgs
-            {
-                AccountName = storageAccount.Name,
-                ContainerName = container.Name,
-                ResourceGroupName = resourceGroup.Name,
-                Type = BlobType.Block
-            });
-
             var appInsights = new Component("appInsights", new ComponentArgs
             {
                 ResourceName = $"metrics-pulumi-appInsights-{config.Require("env")}",
