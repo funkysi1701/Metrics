@@ -174,7 +174,7 @@ namespace Metrics.Pulumi
 
             var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             {
-                Branch = $"{config.Require("branch")}",
+                Branch = config.Require("branch"),
                 BuildProperties = new StaticSiteBuildPropertiesArgs
                 {
                     ApiLocation = "api",
@@ -183,7 +183,7 @@ namespace Metrics.Pulumi
                 },
                 Location = "westeurope",
                 Name = $"metrics-pulumi-static-{config.Require("env")}",
-                RepositoryToken = "repoToken123",
+                RepositoryToken = config.RequireSecret("GitHubToken"),
                 RepositoryUrl = "https://github.com/funkysi1701/Metrics",
                 ResourceGroupName = resourceGroup.Name,
                 Sku = new SkuDescriptionArgs
