@@ -65,6 +65,7 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A270D66EFEC4500A5E41018E024DEB1 }}
           
       - name: Application Insights Annotations
+        if: github.ref == 'refs/heads/test'
         uses: wictorwilen/application-insights-action@v1
         with:
           applicationId: ${{ secrets.TEST_APPLICATION_ID }}

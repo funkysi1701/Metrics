@@ -64,6 +64,7 @@ jobs:
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BF1913976A924AF9AF2913003FA00124 }}
       - name: Application Insights Annotations
+        if: github.ref == 'refs/heads/develop'
         uses: wictorwilen/application-insights-action@v1
         with:
           applicationId: ${{ secrets.APPLICATION_ID }}
