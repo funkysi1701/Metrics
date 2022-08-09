@@ -65,3 +65,12 @@ jobs:
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24925D070E584D66A0E595F2B535A6D8 }}
+          
+      - name: Application Insights Annotations
+        uses: wictorwilen/application-insights-action@v1
+        with:
+          applicationId: ${{ secrets.PROD_APPLICATION_ID }}
+          apiKey: ${{secrets.PROD_API_KEY}}
+          releaseName: ${{ github.event_name }}
+          message: ${{ github.event.head_commit.message }}
+          actor: ${{ github.actor }}          
