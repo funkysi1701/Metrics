@@ -188,8 +188,8 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
                 Sku = new SkuDescriptionArgs
                 {
-                    Name = "Basic",
-                    Tier = "Basic",
+                    Name = "Free",
+                    Tier = "Free",
                 },
             });
         }
