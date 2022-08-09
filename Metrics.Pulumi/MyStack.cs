@@ -179,7 +179,7 @@ namespace Metrics.Pulumi
                 {
                     ApiLocation = "api",
                     AppArtifactLocation = "build",
-                    AppLocation = "app",
+                    AppLocation = "Metrics.Static",
                 },
                 Location = "westeurope",
                 Name = $"metrics-pulumi-static-{config.Require("env")}",
