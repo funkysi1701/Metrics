@@ -63,7 +63,7 @@ jobs:
           app-name: 'metrics-pulumi-function-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BF1913976A924AF9AF2913003FA00124 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_47691130B9854FEF8F04A8977DE0EE70 }}
       - name: Application Insights Annotations
         if: github.ref == 'refs/heads/develop'
         uses: wictorwilen/application-insights-action@v1
