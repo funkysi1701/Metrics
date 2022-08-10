@@ -177,8 +177,8 @@ namespace Metrics.Pulumi
                 Branch = config.Require("branch"),
                 BuildProperties = new StaticSiteBuildPropertiesArgs
                 {
-                    ApiLocation = "api",
-                    AppArtifactLocation = "build",
+                    ApiLocation = "Metrics.Function",
+                    AppArtifactLocation = "wwwroot",
                     AppLocation = "Metrics.Static",
                 },
                 Location = "westeurope",
