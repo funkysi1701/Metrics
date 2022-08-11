@@ -1,5 +1,5 @@
 config:
-  azure:location: UKSouth
+  azure:location: westeurope
   metrics-pulumi:ConnectionString:
     secure: AAABACekKaCNFl3jNb0+idKaZYdIrbdMDReO4aFQ7FXKKGrHn4bePgHNkl9DI6Y+rrHaEjZUxVOTw+YbhG+D0IS1bCq7vA2/HuzrjjVrYoJiwZm6v7McUds7Vip0pQQG98rpAzKGOnjoovwnHGQptSnREyPmYYoaBmttYrHOCRvSn9+dF+LuEuE=
   metrics-pulumi:DEVTOAPI:
@@ -27,3 +27,4 @@ config:
   metrics-pulumi:TWConsumerSecret:
     secure: AAABABKEk+Pw6KnxnbsO068CgNvZFv/75p7kGtc4Tm2q5hntEISMyJheg8C+V5ESrucXIaGHoLmytBp8xQgl4IHI0l6olUWH63kGyNzvEYP9pQ==
   metrics-pulumi:env: prod
+  metrics-pulumi:branch: main

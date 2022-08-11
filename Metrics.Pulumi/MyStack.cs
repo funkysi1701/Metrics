@@ -20,7 +20,7 @@ namespace Metrics.Pulumi
             var resourceGroup = new ResourceGroup(name, new ResourceGroupArgs
             {
                 ResourceGroupName = name,
-                Location = "UKSouth"
+                Location = "westeurope"
             });
 
             var storageAccount = new StorageAccount("sa", new StorageAccountArgs
@@ -44,21 +44,6 @@ namespace Metrics.Pulumi
                     Tier = "Dynamic",
                     Name = "Y1"
                 }
-            });
-
-            var container = new BlobContainer("zips-container", new BlobContainerArgs
-            {
-                AccountName = storageAccount.Name,
-                PublicAccess = PublicAccess.None,
-                ResourceGroupName = resourceGroup.Name,
-            });
-
-            var blob = new Blob("zip", new BlobArgs
-            {
-                AccountName = storageAccount.Name,
-                ContainerName = container.Name,
-                ResourceGroupName = resourceGroup.Name,
-                Type = BlobType.Block
             });
 
             var appInsights = new Component("appInsights", new ComponentArgs
@@ -184,6 +169,27 @@ namespace Metrics.Pulumi
                             Value = "~4",
                         },
                     },
+                },
+            });
+
+            var staticSite = new StaticSite("staticSite", new StaticSiteArgs
+            {
+                Branch = config.Require("branch"),
+                BuildProperties = new StaticSiteBuildPropertiesArgs
+                {
+                    ApiLocation = "Metrics.Function",
+                    AppArtifactLocation = "wwwroot",
+                    AppLocation = "Metrics.Static",
+                },
+                Location = "westeurope",
+                Name = $"metrics-pulumi-static-{config.Require("env")}",
+                RepositoryToken = config.RequireSecret("GitHubToken"),
+                RepositoryUrl = "https://github.com/funkysi1701/Metrics",
+                ResourceGroupName = resourceGroup.Name,
+                Sku = new SkuDescriptionArgs
+                {
+                    Name = "Free",
+                    Tier = "Free",
                 },
             });
         }
