@@ -94,6 +94,7 @@ namespace Metrics.Pulumi
             });
 
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
+            this.WriteAnnotationsApplicationKey = writeAnnotations.Id;
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
@@ -366,6 +367,9 @@ namespace Metrics.Pulumi
 
         [Output("writeAnnotationsApiKey")]
         public Output<string> WriteAnnotationsApiKey { get; set; }
+
+        [Output]
+        public Output<string> WriteAnnotationsApplicationKey { get; set; }
 
         private static Output<string> GetConnectionString(Input<string> resourceGroupName, Input<string> accountName)
         {
