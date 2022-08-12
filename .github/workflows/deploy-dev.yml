@@ -63,6 +63,8 @@ jobs:
           app-name: 'metrics-pulumi-timerfunction-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          enable-oryx-build: true
+          scm-do-build-during-deployment: true
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E3B81F98A2FB484A8F6715B0A595D9A3  }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
