@@ -368,7 +368,7 @@ namespace Metrics.Pulumi
         [Output("writeAnnotationsApiKey")]
         public Output<string> WriteAnnotationsApiKey { get; set; }
 
-        [Output]
+        [Output("writeAnnotationsApplicationKey")]
         public Output<string> WriteAnnotationsApplicationKey { get; set; }
 
         private static Output<string> GetConnectionString(Input<string> resourceGroupName, Input<string> accountName)

@@ -41,6 +41,7 @@ jobs:
           popd
           
       - uses: pulumi/actions@v3
+        id: pulumi
         with:
           command: up
           stack-name: funkysi1701/metrics-pulumi/dev
@@ -54,20 +55,13 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-
-  application-insights:
-    needs: update
-    runs-on: windows-latest
-    steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v3
-        
+          
       - name: Application Insights Annotations
         if: github.ref == 'refs/heads/develop'
         uses: wictorwilen/application-insights-action@v1
         with:
-          applicationId: ${{ secrets.APPLICATION_ID }}
-          apiKey: ${{secrets.API_KEY}}
+          applicationId: ${{ steps.pulumi.outputs.writeAnnotationsApplicationKey }}
+          apiKey: ${{steps.pulumi.outputs.writeAnnotationsApiKey}}
           releaseName: ${{ github.event_name }}
           message: ${{ github.event.head_commit.message }}
           actor: ${{ github.actor }}
