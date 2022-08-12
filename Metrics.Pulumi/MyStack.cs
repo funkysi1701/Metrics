@@ -7,6 +7,7 @@ using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using System;
 using Kind = Pulumi.AzureNative.Storage.Kind;
+using Azure = Pulumi.Azure;
 
 namespace Metrics.Pulumi
 {
@@ -41,7 +42,7 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
             });
 
-            var blob = new Blob($"Metrics.TimerFunction.zip", new BlobArgs
+            var blobtimer = new Blob($"Metrics.TimerFunction.zip", new BlobArgs
             {
                 AccountName = storageAccount.Name,
                 ContainerName = container.Name,
@@ -50,7 +51,17 @@ namespace Metrics.Pulumi
                 Source = new FileArchive($"..\\Metrics.TimerFunction\\bin\\Release\\net6.0\\publish")
             });
 
-            var deploymentZipBlobSasUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
+            var blobhttp = new Blob($"Metrics.Function.zip", new BlobArgs
+            {
+                AccountName = storageAccount.Name,
+                ContainerName = container.Name,
+                ResourceGroupName = resourceGroup.Name,
+                Type = BlobType.Block,
+                Source = new FileArchive($"..\\Metrics.Function\\bin\\Release\\net6.0\\publish")
+            });
+
+            var deploymentZipBlobtimerSasUrl = SignedBlobReadUrl(blobtimer, container, storageAccount, resourceGroup);
+            var deploymentZipBlobhttpSasUrl = SignedBlobReadUrl(blobhttp, container, storageAccount, resourceGroup);
 
             var appServicePlan = new AppServicePlan("functions-win-asp", new AppServicePlanArgs
             {
@@ -73,6 +84,17 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
             });
 
+            var writeAnnotations = new Azure.AppInsights.ApiKey("writeAnnotations", new Azure.AppInsights.ApiKeyArgs
+            {
+                ApplicationInsightsId = appInsights.Id,
+                WritePermissions =
+                {
+                    "annotations",
+                },
+            });
+
+            this.WriteAnnotationsApiKey = writeAnnotations.Key;
+
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
                 Name = $"metrics-pulumi-timerfunction-{config.Require("env")}",
@@ -85,7 +107,7 @@ namespace Metrics.Pulumi
                     {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
-                            Value = deploymentZipBlobSasUrl,
+                            Value = deploymentZipBlobtimerSasUrl,
                         },
                         new NameValuePairArgs{
                             Name = "AzureWebJobsStorage",
@@ -205,6 +227,10 @@ namespace Metrics.Pulumi
                 {
                     AppSettings = new[]
                     {
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_RUN_FROM_PACKAGE",
+                            Value = deploymentZipBlobhttpSasUrl,
+                        },
                         new NameValuePairArgs{
                             Name = "AzureWebJobsStorage",
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
@@ -337,6 +363,9 @@ namespace Metrics.Pulumi
 
         [Output]
         public Output<string> Readme { get; set; }
+
+        [Output("writeAnnotationsApiKey")]
+        public Output<string> WriteAnnotationsApiKey { get; set; }
 
         private static Output<string> GetConnectionString(Input<string> resourceGroupName, Input<string> accountName)
         {

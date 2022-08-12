@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Pulumi.Azure" Version="5.14.0" />
     <PackageReference Include="Pulumi.AzureNative" Version="1.67.0" />
   </ItemGroup>
 
