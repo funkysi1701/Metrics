@@ -1,6 +1,6 @@
 ﻿using Metrics.OctopusEnergy.Api;
-using Metrics.TimerFunction;
-using Metrics.TimerFunction.Services;
+using Metrics.Function;
+using Metrics.Function.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ using System.Net.Http;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace Metrics.TimerFunction
+namespace Metrics.Function
 {
     public class Startup : FunctionsStartup
     {
@@ -24,9 +24,6 @@ namespace Metrics.TimerFunction
             builder.Services.AddScoped<TwitterService>();
             builder.Services.AddScoped<DevToService>();
             builder.Services.AddScoped<PowerService>();
-            builder.Services.AddScoped<BlogService>();
-            builder.Services.Configure<MyMongoDatabaseSettings>(config);
-            builder.Services.AddSingleton<MongoService>();
             builder.Services.AddHttpClient<IOctopusEnergyClient, OctopusEnergyClient>()
                 .ConfigurePrimaryHttpMessageHandler(h => new HttpClientHandler
                 {
