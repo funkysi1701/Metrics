@@ -5,6 +5,7 @@ using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
+using System;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 
 namespace Metrics.Pulumi
@@ -32,6 +33,24 @@ namespace Metrics.Pulumi
                 },
                 Kind = Kind.StorageV2,
             });
+
+            var container = new BlobContainer("deploymentzips", new BlobContainerArgs
+            {
+                AccountName = storageAccount.Name,
+                PublicAccess = PublicAccess.None,
+                ResourceGroupName = resourceGroup.Name,
+            });
+
+            var blob = new Blob($"myapp.zip", new BlobArgs
+            {
+                AccountName = storageAccount.Name,
+                ContainerName = container.Name,
+                ResourceGroupName = resourceGroup.Name,
+                Type = BlobType.Block,
+                Source = new FileArchive($"..\\Metrics.TimerFunction\\bin\\Release\\net6.0\\publish")
+            });
+
+            var deploymentZipBlobSasUrl = SignedBlobReadUrl(blob, container, storageAccount, resourceGroup);
 
             var appServicePlan = new AppServicePlan("functions-win-asp", new AppServicePlanArgs
             {
@@ -64,6 +83,10 @@ namespace Metrics.Pulumi
                 {
                     AppSettings = new[]
                     {
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_RUN_FROM_PACKAGE",
+                            Value = deploymentZipBlobSasUrl,
+                        },
                         new NameValuePairArgs{
                             Name = "AzureWebJobsStorage",
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
@@ -181,7 +204,7 @@ namespace Metrics.Pulumi
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-        {
+                    {
                         new NameValuePairArgs{
                             Name = "AzureWebJobsStorage",
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
@@ -331,6 +354,32 @@ namespace Metrics.Pulumi
                 // Build the connection string to the storage account.
                 return Output.Format($"DefaultEndpointsProtocol=https;AccountName={accountName};AccountKey={primaryStorageKey}");
             });
+        }
+
+        public static Output<string> SignedBlobReadUrl(Blob blob, BlobContainer container, StorageAccount account, ResourceGroup resourceGroup)
+        {
+            return Output.Tuple(blob.Name, container.Name, account.Name, resourceGroup.Name)
+                .Apply(t =>
+                {
+                    (string blobName, string containerName, string accountName, string resourceGroupName) = t;
+
+                    var blobSAS = ListStorageAccountServiceSAS.InvokeAsync(new ListStorageAccountServiceSASArgs
+                    {
+                        AccountName = accountName,
+                        Protocols = HttpProtocol.Https,
+                        SharedAccessStartTime = DateTime.Now.Subtract(new TimeSpan(365, 0, 0, 0)).ToString("yyyy-MM-dd"),
+                        SharedAccessExpiryTime = DateTime.Now.AddDays(3650).ToString("yyyy-MM-dd"),
+                        Resource = SignedResource.C,
+                        ResourceGroupName = resourceGroupName,
+                        Permissions = Permissions.R,
+                        CanonicalizedResource = "/blob/" + accountName + "/" + containerName,
+                        ContentType = "application/json",
+                        CacheControl = "max-age=5",
+                        ContentDisposition = "inline",
+                        ContentEncoding = "deflate",
+                    });
+                    return Output.Format($"https://{accountName}.blob.core.windows.net/{containerName}/{blobName}?{blobSAS.Result.ServiceSasToken}");
+                });
         }
     }
 }
