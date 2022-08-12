@@ -58,7 +58,7 @@ jobs:
       - name: 'Deploy Azure Functions Action'
         if: github.ref == 'refs/heads/develop'
         uses: Azure/functions-action@v1
-        id: fa
+        id: fa-timer
         with:
           app-name: 'metrics-pulumi-timerfunction-dev'
           slot-name: 'Production'
@@ -75,7 +75,7 @@ jobs:
       - name: 'Deploy Azure Functions Action'
         if: github.ref == 'refs/heads/develop'
         uses: Azure/functions-action@v1
-        id: fa
+        id: fa-http
         with:
           app-name: 'metrics-pulumi-function-dev'
           slot-name: 'Production'
