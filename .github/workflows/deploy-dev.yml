@@ -63,7 +63,7 @@ jobs:
           app-name: 'metrics-pulumi-timerfunction-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_c074d6c8b62542daa419cda00eb29e78  }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A8564F2A64C842B7A9B1E5428F876DED  }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: pwsh
