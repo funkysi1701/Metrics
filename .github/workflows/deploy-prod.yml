@@ -52,18 +52,35 @@ jobs:
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build Metrics.sln --configuration Release --output ./output
+          dotnet build Metrics.TimerFunction/Metrics.TimerFunction.csproj --configuration Release --output ./output
           popd
 
       - name: 'Run Azure Functions Action'
         if: github.ref == 'refs/heads/main'
         uses: Azure/functions-action@v1
-        id: fa
+        id: fa-timer
+        with:
+          app-name: 'metrics-pulumi-timerfunction-prod'
+          slot-name: 'Production'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24925D070E584D66A0E595F2B535A6D8 }}
+          
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build Metrics.Function/Metrics.Function.csproj --configuration Release --output ./output
+          popd
+
+      - name: 'Deploy Azure Functions Action'
+        if: github.ref == 'refs/heads/main'
+        uses: Azure/functions-action@v1
+        id: fa-http
         with:
           app-name: 'metrics-pulumi-function-prod'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24925D070E584D66A0E595F2B535A6D8 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A8564F2A64C842B7A9B1E5428F876DED  }}      
           
       - name: Application Insights Annotations
         if: github.ref == 'refs/heads/main'
