@@ -41,7 +41,7 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
             });
 
-            var blob = new Blob($"myapp.zip", new BlobArgs
+            var blob = new Blob($"Metrics.TimerFunction.zip", new BlobArgs
             {
                 AccountName = storageAccount.Name,
                 ContainerName = container.Name,
