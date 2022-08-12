@@ -54,7 +54,7 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
             });
 
-            var timerfunction = new WebApp("app", new WebAppArgs
+            var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
                 Name = $"metrics-pulumi-timerfunction-{config.Require("env")}",
                 Kind = "FunctionApp",
@@ -172,7 +172,7 @@ namespace Metrics.Pulumi
                 },
             });
 
-            var function = new WebApp("app", new WebAppArgs
+            var function = new WebApp("function", new WebAppArgs
             {
                 Name = $"metrics-pulumi-function-{config.Require("env")}",
                 Kind = "FunctionApp",
