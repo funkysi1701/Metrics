@@ -63,7 +63,7 @@ jobs:
           app-name: 'metrics-pulumi-timerfunction-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A8564F2A64C842B7A9B1E5428F876DED  }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E3B81F98A2FB484A8F6715B0A595D9A3  }}
 
       - name: 'Resolve Project Dependencies Using Dotnet'
         shell: pwsh
@@ -80,7 +80,7 @@ jobs:
           app-name: 'metrics-pulumi-function-dev'
           slot-name: 'Production'
           package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_92b11ddf6b2f4cc29124d79062db8b54  }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A8564F2A64C842B7A9B1E5428F876DED  }}
 
       - name: Application Insights Annotations
         if: github.ref == 'refs/heads/develop'
