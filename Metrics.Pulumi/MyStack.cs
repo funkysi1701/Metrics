@@ -76,15 +76,15 @@ namespace Metrics.Pulumi
                 }
             });
 
-            var appInsights = new Component("appInsights", new ComponentArgs
+            var appInsights = new Azure.AppInsights.Insights("appInsights", new Azure.AppInsights.InsightsArgs
             {
-                ResourceName = $"metrics-pulumi-appInsights-{config.Require("env")}",
-                ApplicationType = ApplicationType.Web,
-                Kind = "web",
+                Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
+                ApplicationType = "web",
+                Name = $"metrics-pulumi-appInsights-{config.Require("env")}",
             });
 
-            var writeAnnotations = new Azure.AppInsights.ApiKey($"wr-{Guid.NewGuid().ToString()[..5]}", new Azure.AppInsights.ApiKeyArgs
+            var writeAnnotations = new Azure.AppInsights.ApiKey($"writeAnnotations", new Azure.AppInsights.ApiKeyArgs
             {
                 ApplicationInsightsId = appInsights.Id,
                 WritePermissions =
