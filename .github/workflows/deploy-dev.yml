@@ -43,7 +43,7 @@ jobs:
       - uses: pulumi/actions@v3
         id: pulumi
         with:
-          command: up
+          command: import
           stack-name: funkysi1701/metrics-pulumi/dev
           upsert: true
           comment-on-pr: true
