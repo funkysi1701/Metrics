@@ -41,6 +41,7 @@ jobs:
           popd
 
       - uses: pulumi/actions@v3
+        id: pulumi-up
         with:
           command: up
           stack-name: funkysi1701/metrics-pulumi/prod
