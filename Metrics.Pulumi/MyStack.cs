@@ -84,7 +84,7 @@ namespace Metrics.Pulumi
                 ResourceGroupName = resourceGroup.Name,
             });
 
-            var writeAnnotations = new Azure.AppInsights.ApiKey($"writeAnnotations-{Guid.NewGuid().ToString()[..5]}", new Azure.AppInsights.ApiKeyArgs
+            var writeAnnotations = new Azure.AppInsights.ApiKey($"wr-{Guid.NewGuid().ToString()[..5]}", new Azure.AppInsights.ApiKeyArgs
             {
                 ApplicationInsightsId = appInsights.Id,
                 WritePermissions =
