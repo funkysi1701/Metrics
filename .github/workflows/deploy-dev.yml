@@ -41,7 +41,7 @@ jobs:
           popd
           
       - uses: pulumi/actions@v3
-        id: pulumi
+        id: pulumi-import
         with:
           command: import
           stack-name: funkysi1701/metrics-pulumi/dev
@@ -57,7 +57,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           
       - uses: pulumi/actions@v3
-        id: pulumi
+        id: pulumi-up
         with:
           command: up
           stack-name: funkysi1701/metrics-pulumi/dev
