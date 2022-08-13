@@ -94,7 +94,7 @@ namespace Metrics.Pulumi
             });
 
             //this.WriteAnnotationsApiKey = writeAnnotations.Key;
-            this.WriteAnnotationsApplicationKey = writeAnnotations.Id;
+            this.WriteAnnotationsApplicationKey = writeAnnotations.ApplicationInsightsId;
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
