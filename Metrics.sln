@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Pulumi", "Metrics.P
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{859CB5E0-4AE7-4C03-9744-BDE6CAA6FC36}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\azure-static-web-apps-polite-dune-009e18303.yml = .github\workflows\azure-static-web-apps-polite-dune-009e18303.yml
-		.github\workflows\azure-static-web-apps-victorious-mushroom-0c9db2703.yml = .github\workflows\azure-static-web-apps-victorious-mushroom-0c9db2703.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\deploy-dev.yml = .github\workflows\deploy-dev.yml
 		.github\workflows\deploy-prod.yml = .github\workflows\deploy-prod.yml
