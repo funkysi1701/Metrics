@@ -60,8 +60,8 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         uses: wictorwilen/application-insights-action@v1
         with:
-          applicationId: ${{ steps.pulumi.outputs.writeAnnotationsApplicationKey }}
-          apiKey: ${{steps.pulumi.outputs.writeAnnotationsApiKey}}
+          applicationId: ${{ steps.pulumi-up.outputs.writeAnnotationsApplicationKey }}
+          apiKey: ${{steps.pulumi-up.outputs.writeAnnotationsApiKey}}
           releaseName: ${{ github.event_name }}
           message: ${{ github.event.head_commit.message }}
           actor: ${{ github.actor }}
