@@ -41,9 +41,9 @@ jobs:
           popd
           
       - uses: pulumi/actions@v3
-        id: pulumi-refresh
+        id: pulumi-up
         with:
-          command: refresh
+          command: up
           stack-name: funkysi1701/metrics-pulumi/dev
           upsert: true
           comment-on-pr: true
