@@ -10,6 +10,18 @@ jobs:
       - uses: actions/setup-dotnet@v2
         with:
           dotnet-version: 6.x
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet publish Metrics.TimerFunction/Metrics.TimerFunction.csproj --configuration Release
+          popd
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet publish Metrics.Function/Metrics.Function.csproj --configuration Release
+          popd          
       - uses: pulumi/actions@v3
         with:
           command: preview
