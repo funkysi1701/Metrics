@@ -16,13 +16,32 @@ env:
 jobs:
   update:
     name: Update
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v2
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v3
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 6.x
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet publish Metrics.TimerFunction/Metrics.TimerFunction.csproj --configuration Release
+          popd
+          
+      - name: 'Resolve Project Dependencies Using Dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet publish Metrics.Function/Metrics.Function.csproj --configuration Release
+          popd
+
       - uses: pulumi/actions@v3
+        id: pulumi-up
         with:
           command: up
           stack-name: funkysi1701/metrics-pulumi/prod
@@ -36,41 +55,13 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-  build-and-deploy:
-    needs: update
-    runs-on: windows-latest
-    steps:
-      - name: 'Checkout GitHub Action'
-        uses: actions/checkout@v2
 
-      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: 'Resolve Project Dependencies Using Dotnet'
-        shell: pwsh
-        run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build Metrics.sln --configuration Release --output ./output
-          popd
-
-      - name: 'Run Azure Functions Action'
-        if: github.ref == 'refs/heads/main'
-        uses: Azure/functions-action@v1
-        id: fa
-        with:
-          app-name: 'metrics-pulumi-function-prod'
-          slot-name: 'Production'
-          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_24925D070E584D66A0E595F2B535A6D8 }}
-          
       - name: Application Insights Annotations
         if: github.ref == 'refs/heads/main'
         uses: wictorwilen/application-insights-action@v1
         with:
-          applicationId: ${{ secrets.PROD_APPLICATION_ID }}
-          apiKey: ${{secrets.PROD_API_KEY}}
+          applicationId: ${{ steps.pulumi-up.outputs.writeAnnotationsApplicationKey }}
+          apiKey: ${{steps.pulumi-up.outputs.writeAnnotationsApiKey}}
           releaseName: ${{ github.event_name }}
           message: ${{ github.event.head_commit.message }}
-          actor: ${{ github.actor }}          
+          actor: ${{ github.actor }}
