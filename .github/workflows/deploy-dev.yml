@@ -86,7 +86,11 @@ jobs:
           msg: ${{ needs.update.outputs.FunctionIPs }}
           separator: ','   
           
-      - name: 'Install MongoDB'
+      - name: 'List IPs'
         run: |
-          echo ${{ steps.httpIPs.outputs._1 }}
-          echo ${{ steps.httpIPs.outputs._2 }}
+          $N = ${{ steps.httpIPs.outputs.length }}
+          echo $N
+          for i in {1..$N}
+          do
+            echo echo ${{ steps.httpIPs.outputs._i }}
+          loop
