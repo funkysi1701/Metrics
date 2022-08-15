@@ -6,8 +6,10 @@ using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using System;
+using Atlas = Pulumi.Mongodbatlas;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 using Azure = Pulumi.Azure;
+using Config = Pulumi.Config;
 
 namespace Metrics.Pulumi
 {
@@ -15,7 +17,6 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
-            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
 
@@ -92,9 +93,6 @@ namespace Metrics.Pulumi
                     "annotations",
                 },
             });
-
-            this.WriteAnnotationsApiKey = writeAnnotations.Key;
-            this.WriteAnnotationsApplicationKey = appInsights.AppId;
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
@@ -356,8 +354,25 @@ namespace Metrics.Pulumi
                 },
             });
 
-            TimerFunctionIPs = timerfunction.PossibleOutboundIpAddresses;
-            FunctionIPs = function.PossibleOutboundIpAddresses;
+            var project = new Atlas.Project($"pulumi-project-{config.Require("env")}", new Atlas.ProjectArgs
+            {
+                OrgId = config.RequireSecret("AtlasOrg"),
+                Name = $"pulumi-project-{config.Require("env")}",
+            });
+
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                Name = $"pulumi-cluster-{config.Require("env")}",
+                ProviderInstanceSizeName = "M0",
+                ProviderName = "Azure"
+            });
+
+            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
+            this.WriteAnnotationsApiKey = writeAnnotations.Key;
+            this.WriteAnnotationsApplicationKey = appInsights.AppId;
+            this.TimerFunctionIPs = timerfunction.PossibleOutboundIpAddresses;
+            this.FunctionIPs = function.PossibleOutboundIpAddresses;
 
             //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             //{
