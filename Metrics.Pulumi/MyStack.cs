@@ -360,6 +360,12 @@ namespace Metrics.Pulumi
                 Name = $"pulumi-project-{config.Require("env")}",
             });
 
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                Name = $"pulumi-cluster-{config.Require("env")}",
+            });
+
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
             this.WriteAnnotationsApplicationKey = appInsights.AppId;
