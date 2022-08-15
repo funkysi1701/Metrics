@@ -115,6 +115,14 @@ namespace Metrics.Pulumi
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
                         },
                         new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
+                        },
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTSHARE",
+                            Value = $"metrics-pulumi-timerfunction-{config.Require("env")}-091999e2",
+                        },
+                        new NameValuePairArgs{
                             Name = "FUNCTIONS_WORKER_RUNTIME",
                             Value = "dotnet",
                         },
@@ -208,7 +216,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"),
+                            Value = appInsights.ConnectionString,
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
@@ -237,6 +245,14 @@ namespace Metrics.Pulumi
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
                         },
                         new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
+                        },
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTSHARE",
+                            Value = $"metrics-pulumi-timerfunction-{config.Require("env")}-091999e1",
+                        },
+                        new NameValuePairArgs{
                             Name = "FUNCTIONS_WORKER_RUNTIME",
                             Value = "dotnet",
                         },
@@ -330,7 +346,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"),
+                            Value = appInsights.ConnectionString,
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
