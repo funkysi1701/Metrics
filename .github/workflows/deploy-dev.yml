@@ -100,5 +100,4 @@ jobs:
           for i in {1..${{ steps.split.outputs.length }}}
           do
             echo $i
-            echo ${{ steps.split.outputs_${i} }}
           done
