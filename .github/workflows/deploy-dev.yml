@@ -81,4 +81,9 @@ jobs:
         id: httpIPs
         with:
           msg: steps.pulumi-up.outputs.FunctionIPs
-          separator: ','        
+          separator: ','   
+          
+      - name: 'Install MongoDB'
+        run: |
+          echo ${{ steps.httpIPs.outputs._1 }}
+          echo ${{ steps.httpIPs.outputs._2 }}
