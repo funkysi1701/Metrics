@@ -65,3 +65,15 @@ jobs:
           releaseName: ${{ github.event_name }}
           message: ${{ github.event.head_commit.message }}
           actor: ${{ github.actor }}
+
+      - uses: jungwinter/split@v2
+        id: timerIPS
+        with:
+          msg: steps.pulumi-up.outputs.TimerFunctionIPs
+          separator: ','
+          
+      - uses: jungwinter/split@v2
+        id: httpIPs
+        with:
+          msg: steps.pulumi-up.outputs.FunctionIPs
+          separator: ','        
