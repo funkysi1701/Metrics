@@ -17,6 +17,9 @@ jobs:
   update:
     name: Update
     runs-on: windows-latest
+    outputs:
+      TimerFunctionIPs: ${{ steps.pulumi-up.outputs.TimerFunctionIPs }}
+      FunctionIPs: ${{ steps.pulumi-up.outputs.FunctionIPs }}
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v3
@@ -74,13 +77,13 @@ jobs:
       - uses: jungwinter/split@v2
         id: timerIPS
         with:
-          msg: ${{ update.steps.pulumi-up.outputs.TimerFunctionIPs }}
+          msg: ${{ needs.update.outputs.TimerFunctionIPs }}
           separator: ','
           
       - uses: jungwinter/split@v2
         id: httpIPs
         with:
-          msg: ${{ update.steps.pulumi-up.outputs.FunctionIPs }}
+          msg: ${{ needs.update.outputs.FunctionIPs }}
           separator: ','   
           
       - name: 'Install MongoDB'
