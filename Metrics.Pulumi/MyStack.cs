@@ -364,7 +364,8 @@ namespace Metrics.Pulumi
             {
                 ProjectId = project.Id,
                 Name = $"pulumi-cluster-{config.Require("env")}",
-                ProviderInstanceSizeName = "M0"
+                ProviderInstanceSizeName = "M0",
+                ProviderName = "Azure"
             });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
