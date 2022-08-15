@@ -32,3 +32,7 @@ config:
     secure: AAABABKEk+Pw6KnxnbsO068CgNvZFv/75p7kGtc4Tm2q5hntEISMyJheg8C+V5ESrucXIaGHoLmytBp8xQgl4IHI0l6olUWH63kGyNzvEYP9pQ==
   metrics-pulumi:branch: main
   metrics-pulumi:env: prod
+  mongodbatlas:privateKey:
+    secure: AAABAHX4XMf3817GXz+TyA/9y1GXMW+PkVVfsQAunQFUzfU79eOPraVGgsIoy+YEW/fhhKDjf477N6V0gBwhTSDbqAc=
+  mongodbatlas:publicKey:
+    secure: AAABACf/yI9sbxK9jtfVZ4OppCe2KBtiX0o3OvkEqPNZ/S+neCBv+A==
