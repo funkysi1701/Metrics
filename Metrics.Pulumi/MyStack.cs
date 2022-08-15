@@ -356,6 +356,9 @@ namespace Metrics.Pulumi
                 },
             });
 
+            TimerFunctionIPs = timerfunction.OutboundIpAddresses;
+            FunctionIPs = function.OutboundIpAddresses;
+
             //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             //{
             //    Branch = config.Require("branch"),
@@ -380,6 +383,12 @@ namespace Metrics.Pulumi
 
         [Output]
         public Output<string> Readme { get; set; }
+
+        [Output]
+        public Output<string> TimerFunctionIPs { get; set; }
+
+        [Output]
+        public Output<string> FunctionIPs { get; set; }
 
         [Output("writeAnnotationsApiKey")]
         public Output<string> WriteAnnotationsApiKey { get; set; }
