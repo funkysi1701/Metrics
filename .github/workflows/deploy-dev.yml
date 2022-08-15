@@ -88,9 +88,8 @@ jobs:
           
       - name: 'List IPs'
         run: |
-          N = ${{ steps.httpIPs.outputs.length }}
-          echo $N
-          for i in {1..$N}
+          echo ${{ steps.httpIPs.outputs.length }}
+          for i in {1..${{ steps.httpIPs.outputs.length }}}
           do
             echo echo ${{ steps.httpIPs.outputs._i }}
           loop
