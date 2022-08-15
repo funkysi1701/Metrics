@@ -347,7 +347,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = appInsights.ConnectionString,,
+                            Value = appInsights.ConnectionString,
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
