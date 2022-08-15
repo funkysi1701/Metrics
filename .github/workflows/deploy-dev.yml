@@ -74,13 +74,13 @@ jobs:
       - uses: jungwinter/split@v2
         id: timerIPS
         with:
-          msg: steps.pulumi-up.outputs.TimerFunctionIPs
+          msg: update.steps.pulumi-up.outputs.TimerFunctionIPs
           separator: ','
           
       - uses: jungwinter/split@v2
         id: httpIPs
         with:
-          msg: steps.pulumi-up.outputs.FunctionIPs
+          msg: update.steps.pulumi-up.outputs.FunctionIPs
           separator: ','   
           
       - name: 'Install MongoDB'
