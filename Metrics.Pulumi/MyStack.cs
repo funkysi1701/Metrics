@@ -245,6 +245,14 @@ namespace Metrics.Pulumi
                             Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
                         },
                         new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
+                        },
+                        new NameValuePairArgs{
+                            Name = "WEBSITE_CONTENTSHARE",
+                            Value = $"metrics-pulumi-timerfunction-{config.Require("env")}-091999e1",
+                        },
+                        new NameValuePairArgs{
                             Name = "FUNCTIONS_WORKER_RUNTIME",
                             Value = "dotnet",
                         },
