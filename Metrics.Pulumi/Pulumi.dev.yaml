@@ -1,5 +1,7 @@
 config:
   azure:location: westeurope
+  metrics-pulumi:AtlasApiKeyId:
+    secure: AAABACnFgbEYy7Kv2z+KIr6wu6tSn5Vs3HdBJtEVV8ZepKzyQy2Lhw==
   metrics-pulumi:AtlasOrg:
     secure: AAABAIQEdC2Z/vR+IXnYOMd3oSwxKA3PKpDAC1Y9HacVhBHjG+OCiSsOrTMv7svH+c818bahj0c=
   metrics-pulumi:ConnectionString:
