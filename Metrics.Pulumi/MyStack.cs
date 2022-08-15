@@ -358,17 +358,6 @@ namespace Metrics.Pulumi
             {
                 OrgId = config.RequireSecret("AtlasOrg"),
                 Name = $"pulumi-project-{config.Require("env")}",
-                ApiKeys =
-                {
-                    new Atlas.Inputs.ProjectApiKeyArgs
-                    {
-                        ApiKeyId = config.RequireSecret("AtlasApiKeyId"),
-                        RoleNames =
-                        {
-                            "GROUP_READ_ONLY",
-                        },
-                    },
-                },
             });
 
             //var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
