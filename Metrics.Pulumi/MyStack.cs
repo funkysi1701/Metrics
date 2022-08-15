@@ -360,12 +360,12 @@ namespace Metrics.Pulumi
                 Name = $"pulumi-project-{config.Require("env")}",
             });
 
-            //var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
-            //{
-            //    Comment = "ip address for tf acc testing",
-            //    IpAddress = "2.3.4.5",
-            //    ProjectId = project.Id,
-            //});
+            var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+            {
+                Comment = "ip address",
+                IpAddress = "20.56.247.108",
+                ProjectId = project.Id,
+            });
 
             //var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
             //{
