@@ -357,6 +357,7 @@ namespace Metrics.Pulumi
             var project = new Atlas.Project($"pulumi-project-{config.Require("env")}", new Atlas.ProjectArgs
             {
                 OrgId = config.RequireSecret("AtlasOrg"),
+                Name = $"pulumi-project-{config.Require("env")}",
             });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
