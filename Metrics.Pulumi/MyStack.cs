@@ -356,8 +356,8 @@ namespace Metrics.Pulumi
                 },
             });
 
-            TimerFunctionIPs = timerfunction.OutboundIpAddresses;
-            FunctionIPs = function.OutboundIpAddresses;
+            TimerFunctionIPs = timerfunction.PossibleOutboundIpAddresses;
+            FunctionIPs = function.PossibleOutboundIpAddresses;
 
             //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             //{
