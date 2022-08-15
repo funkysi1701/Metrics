@@ -91,5 +91,6 @@ jobs:
           echo ${{ steps.httpIPs.outputs.length }}
           for i in {1..${{ steps.httpIPs.outputs.length }}}
           do
-            echo echo ${{ steps.httpIPs.outputs._i }}
+            echo $i
+            echo ${{ steps.httpIPs.outputs._$i }}
           loop
