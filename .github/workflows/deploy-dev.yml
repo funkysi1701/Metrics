@@ -93,4 +93,4 @@ jobs:
           do
             echo $i
             echo ${{ steps.httpIPs.outputs._i }}
-          loop
+          done
