@@ -86,11 +86,19 @@ jobs:
           msg: ${{ needs.update.outputs.FunctionIPs }}
           separator: ','   
           
+      - name: Split version code
+        uses: xom9ikk/split@v1
+        id: split
+        with:
+          string: ${{ needs.update.outputs.FunctionIPs }}
+          separator: ','
+          limit: -1          
+          
       - name: 'List IPs'
         run: |
           echo ${{ steps.httpIPs.outputs.length }}
-          for i in {1..${{ steps.httpIPs.outputs.length }}}
+          for i in {1..${{ steps.split.outputs.length }}}
           do
             echo $i
-            echo ${{ steps.httpIPs.outputs_${i} }}
+            echo ${{ steps.split.outputs_${i} }}
           done
