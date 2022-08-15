@@ -216,7 +216,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"),
+                            Value = appInsights.ConnectionString,
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
@@ -225,7 +225,8 @@ namespace Metrics.Pulumi
                     },
                 },
             });
-
+            var before = "InstrumentationKey=cb0f637d-2421-45d0-8e8e-cc419b8d207e;IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/";
+            var after = "InstrumentationKey=5ad71392-d142-41ec-9879-2e314e46048c;IngestionEndpoint=https://westeurope-3.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/";
             var function = new WebApp("function", new WebAppArgs
             {
                 Name = $"metrics-pulumi-function-{config.Require("env")}",
@@ -346,7 +347,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = Output.Format($"InstrumentationKey={appInsights.InstrumentationKey};IngestionEndpoint=https://westeurope-1.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/"),
+                            Value = appInsights.ConnectionString,,
                         },
                         new NameValuePairArgs{
                             Name = "FUNCTIONS_EXTENSION_VERSION",
