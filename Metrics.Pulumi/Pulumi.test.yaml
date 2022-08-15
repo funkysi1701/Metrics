@@ -1,5 +1,7 @@
 config:
   azure:location: westeurope
+  metrics-pulumi:AtlasOrg:
+    secure: AAABAEKcCAVAzGTn78xmJ72PmD2vaSmwpI/fIv9hsuOI5Ibi10Q/D1uz59CL1AdYa0o2aVhQxc8=
   metrics-pulumi:ConnectionString:
     secure: AAABAB7tfvhMRujY0faYo4tD10yoHBSAYzwQzgrHW27KERjE60KY3uzS/YVEjRRbFpoAx+eNz5PNgT/qNfWeWsk9dBVn/sbcT8jrHh7p+aUIDiiKf0uKeG7bNk1ycAhHPfMHsUZcBeNbo0UBdmnK4zngYxLAIkVS9hVeohx2KEWeLRaYSK0sqr4=
   metrics-pulumi:DEVTOAPI:
@@ -26,5 +28,5 @@ config:
     secure: AAABAIXf8dKA+/bjb9RI0/7wJlO2+XRED/i5uG6yu2A+8EQVcfRuQLaptod6Rhns+wj3CBVBnwpj
   metrics-pulumi:TWConsumerSecret:
     secure: AAABANesd/MM45Q7/TeoVgvarCf0SVfeCUqAA1qUX8QEbd0FcYmKyGx/uEsZeZWNIQM9puiNtMXWKQtxajpM6W6nHTX6jiaIkT/PAzq7w1w0dg==
-  metrics-pulumi:env: test
   metrics-pulumi:branch: test
+  metrics-pulumi:env: test
