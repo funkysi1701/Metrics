@@ -110,10 +110,12 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
+            var password = RandomString(10);
+
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
                 AuthDatabaseName = "admin",
-                Password = $"{config.Require("env")}-user",
+                Password = password,
                 ProjectId = project.Id,
                 Username = $"{config.Require("env")}-user",
                 Roles =
@@ -131,7 +133,7 @@ namespace Metrics.Pulumi
                 }
             });
 
-            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user", $"Metrics-{config.Require("env")}"));
+            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", password, $"Metrics-{config.Require("env")}"));
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
@@ -433,9 +435,18 @@ namespace Metrics.Pulumi
             //});
         }
 
-        private string InsertLoginDetails(string x, string user, string pass, string DatabaseName)
+        private static readonly Random random = new Random();
+
+        private static string RandomString(int length)
         {
-            var connectionString = x.Split("//");
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private static string InsertLoginDetails(string input, string user, string pass, string DatabaseName)
+        {
+            var connectionString = input.Split("//");
             var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority";
             return combinedString;
         }
