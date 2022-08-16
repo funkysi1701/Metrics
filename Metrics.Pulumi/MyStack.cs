@@ -133,7 +133,7 @@ namespace Metrics.Pulumi
                 }
             });
 
-            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", password, $"Metrics-{config.Require("env")}"));
+            var Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", password, $"Metrics-{config.Require("env")}"));
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
@@ -239,7 +239,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = this.Con.Apply(x => x),
+                            Value = Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -369,7 +369,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = this.Con.Apply(x => x),
+                            Value = Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -460,9 +460,6 @@ namespace Metrics.Pulumi
                 ProjectId = projectid,
             });
         }
-
-        [Output]
-        public Output<string> Con { get; set; }
 
         [Output]
         public Output<string> Readme { get; set; }
