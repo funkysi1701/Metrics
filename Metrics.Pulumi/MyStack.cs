@@ -383,7 +383,7 @@ namespace Metrics.Pulumi
                 ProjectId = project.Id,
                 Name = $"pulumi-cluster-{config.Require("env")}",
                 ProviderInstanceSizeName = "M0",
-                ProviderName = "Azure"
+                ProviderName = "AZURE",
             });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
