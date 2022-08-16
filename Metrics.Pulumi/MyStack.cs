@@ -110,7 +110,7 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
-            var password = RandomString(10);
+            var password = Output.CreateSecret(RandomString(10));
 
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
@@ -444,7 +444,7 @@ namespace Metrics.Pulumi
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        private static string InsertLoginDetails(string input, string user, string pass, string DatabaseName)
+        private static string InsertLoginDetails(string input, string user, Output<string> pass, string DatabaseName)
         {
             var connectionString = input.Split("//");
             var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority";
