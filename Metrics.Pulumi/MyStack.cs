@@ -381,9 +381,10 @@ namespace Metrics.Pulumi
             var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
             {
                 ProjectId = project.Id,
-                Name = $"pulumi-cluster-{config.Require("env")}",
                 ProviderInstanceSizeName = "M0",
-                ProviderName = "AZURE",
+                BackingProviderName = "AZURE",
+                ProviderName = "TENANT",
+                ProviderRegionName = "EUROPE_NORTH"
             });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
