@@ -360,7 +360,6 @@ namespace Metrics.Pulumi
             {
                 OrgId = config.RequireSecret("AtlasOrg"),
                 Name = $"pulumi-project-{config.Require("env")}",
-                
             });
 
             var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
@@ -372,11 +371,19 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
+            var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
+            {
+                AuthDatabaseName = "dev",
+                Password = $"{config.Require("env")}-user",
+                ProjectId = project.Id,
+                Username = $"{config.Require("env")}-user",
+            });
+
             var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
             listOfIps.Apply(x =>
             {
-                x.ForEach(y => AddFWRule(y, project.Id));
+                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
                 return "ok";
             });
 
@@ -384,7 +391,7 @@ namespace Metrics.Pulumi
 
             listOfIps.Apply(x =>
             {
-                x.ForEach(y => AddFWRule(y, project.Id));
+                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
                 return "ok";
             });
 
