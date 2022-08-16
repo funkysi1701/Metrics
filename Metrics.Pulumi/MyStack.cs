@@ -10,6 +10,7 @@ using Atlas = Pulumi.Mongodbatlas;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
+using System.Collections.Generic;
 
 namespace Metrics.Pulumi
 {
@@ -360,12 +361,29 @@ namespace Metrics.Pulumi
                 Name = $"pulumi-project-{config.Require("env")}",
             });
 
-            var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+            var listOfIps = timerfunction.PossibleOutboundIpAddresses.ToString().Split(",");
+
+            foreach (var ip in listOfIps)
             {
-                Comment = "ip address",
-                IpAddress = "20.56.247.108",
-                ProjectId = project.Id,
-            });
+                var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+                {
+                    Comment = "ip address",
+                    IpAddress = ip,
+                    ProjectId = project.Id,
+                });
+            }
+
+            listOfIps = function.PossibleOutboundIpAddresses.ToString().Split(",");
+
+            foreach (var ip in listOfIps)
+            {
+                var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+                {
+                    Comment = "ip address",
+                    IpAddress = ip,
+                    ProjectId = project.Id,
+                });
+            }
 
             //var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
             //{

@@ -17,9 +17,6 @@ jobs:
   update:
     name: Update
     runs-on: windows-latest
-    outputs:
-      TimerFunctionIPs: ${{ steps.pulumi-up.outputs.TimerFunctionIPs }}
-      FunctionIPs: ${{ steps.pulumi-up.outputs.FunctionIPs }}
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v3
@@ -68,36 +65,3 @@ jobs:
           releaseName: ${{ github.event_name }}
           message: ${{ github.event.head_commit.message }}
           actor: ${{ github.actor }}
-
-  mongo:
-    name: Mongo
-    needs: update
-    runs-on: ubuntu-latest
-    steps:
-      - uses: jungwinter/split@v2
-        id: timerIPS
-        with:
-          msg: ${{ needs.update.outputs.TimerFunctionIPs }}
-          separator: ','
-          
-      - uses: jungwinter/split@v2
-        id: httpIPs
-        with:
-          msg: ${{ needs.update.outputs.FunctionIPs }}
-          separator: ','   
-          
-      - name: Split version code
-        uses: xom9ikk/split@v1
-        id: split
-        with:
-          string: ${{ needs.update.outputs.FunctionIPs }}
-          separator: ','
-          limit: -1          
-          
-      - name: 'List IPs'
-        run: |
-          echo ${{ steps.httpIPs.outputs.length }}
-          for i in {1..${{ steps.split.outputs.length }}}
-          do
-            echo $i
-          done
