@@ -360,6 +360,7 @@ namespace Metrics.Pulumi
             {
                 OrgId = config.RequireSecret("AtlasOrg"),
                 Name = $"pulumi-project-{config.Require("env")}",
+                IsDataExplorerEnabled = true
             });
 
             var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
@@ -381,7 +382,7 @@ namespace Metrics.Pulumi
                 {
                     new Atlas.Inputs.DatabaseUserRoleArgs
                     {
-                        DatabaseName = "dev",
+                        DatabaseName = $"Metrics-{config.Require("env")}",
                         RoleName = "readWrite",
                     },
                     new Atlas.Inputs.DatabaseUserRoleArgs
@@ -392,21 +393,21 @@ namespace Metrics.Pulumi
                 }
             });
 
-            //var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").Distinct().ToList());
 
-            //listOfIps.Apply(x =>
-            //{
-            //    x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
-            //    return "ok";
-            //});
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
+                return "ok";
+            });
 
-            //listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").Distinct().ToList());
 
-            //listOfIps.Apply(x =>
-            //{
-            //    x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
-            //    return "ok";
-            //});
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
+                return "ok";
+            });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
