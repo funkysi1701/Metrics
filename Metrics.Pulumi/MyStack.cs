@@ -12,6 +12,7 @@ using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Immutable;
 
 namespace Metrics.Pulumi
 {
@@ -372,6 +373,8 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
+            this.Con = cluster.ConnectionStrings;
+
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
                 AuthDatabaseName = "admin",
@@ -442,6 +445,9 @@ namespace Metrics.Pulumi
                 ProjectId = projectid,
             });
         }
+
+        [Output]
+        public Output<ImmutableArray<Atlas.Outputs.ClusterConnectionString>> Con { get; set; }
 
         [Output]
         public Output<string> Readme { get; set; }
