@@ -377,23 +377,31 @@ namespace Metrics.Pulumi
                 Password = $"{config.Require("env")}-user",
                 ProjectId = project.Id,
                 Username = $"{config.Require("env")}-user",
+                Roles =
+                {
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = "dev",
+                        RoleName = "readWrite",
+                    },
+                }
             });
 
-            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            //var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            listOfIps.Apply(x =>
-            {
-                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
-                return "ok";
-            });
+            //listOfIps.Apply(x =>
+            //{
+            //    x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
+            //    return "ok";
+            //});
 
-            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            //listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            listOfIps.Apply(x =>
-            {
-                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
-                return "ok";
-            });
+            //listOfIps.Apply(x =>
+            //{
+            //    x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
+            //    return "ok";
+            //});
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
