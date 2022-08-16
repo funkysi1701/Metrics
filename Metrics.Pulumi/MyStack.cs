@@ -362,6 +362,15 @@ namespace Metrics.Pulumi
                 Name = $"pulumi-project-{config.Require("env")}",
             });
 
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                ProviderInstanceSizeName = "M0",
+                BackingProviderName = "AZURE",
+                ProviderName = "TENANT",
+                ProviderRegionName = "EUROPE_NORTH"
+            });
+
             var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
             listOfIps.Apply(x =>
@@ -378,20 +387,9 @@ namespace Metrics.Pulumi
                 return "ok";
             });
 
-            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
-            {
-                ProjectId = project.Id,
-                ProviderInstanceSizeName = "M0",
-                BackingProviderName = "AZURE",
-                ProviderName = "TENANT",
-                ProviderRegionName = "EUROPE_NORTH"
-            });
-
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
             this.WriteAnnotationsApplicationKey = appInsights.AppId;
-            this.TimerFunctionIPs = timerfunction.PossibleOutboundIpAddresses;
-            this.FunctionIPs = function.PossibleOutboundIpAddresses;
 
             //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             //{
@@ -427,12 +425,6 @@ namespace Metrics.Pulumi
 
         [Output]
         public Output<string> Readme { get; set; }
-
-        [Output]
-        public Output<string> TimerFunctionIPs { get; set; }
-
-        [Output]
-        public Output<string> FunctionIPs { get; set; }
 
         [Output("writeAnnotationsApiKey")]
         public Output<string> WriteAnnotationsApiKey { get; set; }
