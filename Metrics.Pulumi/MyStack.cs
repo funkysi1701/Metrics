@@ -416,7 +416,7 @@ namespace Metrics.Pulumi
 
         private static void AddFWRule(string ip, Output<string> projectid)
         {
-            var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+            _ = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
             {
                 Comment = "ip address",
                 IpAddress = ip,
