@@ -373,7 +373,7 @@ namespace Metrics.Pulumi
 
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
-                AuthDatabaseName = "dev",
+                AuthDatabaseName = "admin",
                 Password = $"{config.Require("env")}-user",
                 ProjectId = project.Id,
                 Username = $"{config.Require("env")}-user",
@@ -383,6 +383,11 @@ namespace Metrics.Pulumi
                     {
                         DatabaseName = "dev",
                         RoleName = "readWrite",
+                    },
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = "admin",
+                        RoleName = "readAnyDatabase",
                     },
                 }
             });
