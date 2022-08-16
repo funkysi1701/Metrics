@@ -373,8 +373,6 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
-            this.Con = cluster.ConnectionStrings.Apply(x => x.Where(y => y.Standard != null).ToList());
-
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
                 AuthDatabaseName = "admin",
@@ -395,6 +393,8 @@ namespace Metrics.Pulumi
                     },
                 }
             });
+
+            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user"));
 
             var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
             {
@@ -436,6 +436,13 @@ namespace Metrics.Pulumi
             //});
         }
 
+        private string InsertLoginDetails(string x, string user, string pass)
+        {
+            var connectionString = x.Split("//");
+            var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}";
+            return combinedString;
+        }
+
         private static void AddFWRule(string ip, Output<string> projectid)
         {
             _ = new Atlas.ProjectIpAccessList(ip, new Atlas.ProjectIpAccessListArgs
@@ -447,7 +454,7 @@ namespace Metrics.Pulumi
         }
 
         [Output]
-        public Output<List<Atlas.Outputs.ClusterConnectionString>> Con { get; set; }
+        public Output<string> Con { get; set; }
 
         [Output]
         public Output<string> Readme { get; set; }
