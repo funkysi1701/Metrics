@@ -361,7 +361,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "DatabaseName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "OldRSSFeed",
@@ -373,7 +373,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "runtime",
