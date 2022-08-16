@@ -360,6 +360,7 @@ namespace Metrics.Pulumi
             {
                 OrgId = config.RequireSecret("AtlasOrg"),
                 Name = $"pulumi-project-{config.Require("env")}",
+                
             });
 
             var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
@@ -368,24 +369,24 @@ namespace Metrics.Pulumi
                 ProviderInstanceSizeName = "M0",
                 BackingProviderName = "AZURE",
                 ProviderName = "TENANT",
-                ProviderRegionName = "EUROPE_NORTH"
+                ProviderRegionName = "EUROPE_NORTH",
             });
 
-            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            //var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            listOfIps.Apply(x =>
-            {
-                x.ForEach(y => AddFWRule(y, project.Id));
-                return "ok";
-            });
+            //listOfIps.Apply(x =>
+            //{
+            //    x.ForEach(y => AddFWRule(y, project.Id));
+            //    return "ok";
+            //});
 
-            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            //listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            listOfIps.Apply(x =>
-            {
-                x.ForEach(y => AddFWRule(y, project.Id));
-                return "ok";
-            });
+            //listOfIps.Apply(x =>
+            //{
+            //    x.ForEach(y => AddFWRule(y, project.Id));
+            //    return "ok";
+            //});
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
