@@ -393,19 +393,17 @@ namespace Metrics.Pulumi
                 }
             });
 
-            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").Distinct().ToList());
-
-            listOfIps.Apply(x =>
+            var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
             {
-                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
-                return "ok";
+                var (timer, http) = t;
+                return $"{timer},{http}";
             });
 
-            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").Distinct().ToList());
+            var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
 
             listOfIps.Apply(x =>
             {
-                x.ForEach(y => AddFWRule(y, project.Id));//check for duplicates
+                x.ForEach(y => AddFWRule(y, project.Id));
                 return "ok";
             });
 
