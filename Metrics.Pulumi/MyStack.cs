@@ -1,18 +1,15 @@
 ﻿using Pulumi;
-using Pulumi.AzureNative.Insights;
 using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using System;
+using System.Linq;
 using Atlas = Pulumi.Mongodbatlas;
-using Kind = Pulumi.AzureNative.Storage.Kind;
 using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
-using System.Collections.Generic;
-using System.Linq;
-using System.Collections.Immutable;
+using Kind = Pulumi.AzureNative.Storage.Kind;
 
 namespace Metrics.Pulumi
 {
@@ -97,6 +94,45 @@ namespace Metrics.Pulumi
                 },
             });
 
+            var project = new Atlas.Project($"pulumi-project-{config.Require("env")}", new Atlas.ProjectArgs
+            {
+                OrgId = config.RequireSecret("AtlasOrg"),
+                Name = $"pulumi-project-{config.Require("env")}",
+                IsDataExplorerEnabled = true
+            });
+
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                ProviderInstanceSizeName = "M0",
+                BackingProviderName = "AZURE",
+                ProviderName = "TENANT",
+                ProviderRegionName = "EUROPE_NORTH",
+            });
+
+            var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
+            {
+                AuthDatabaseName = "admin",
+                Password = $"{config.Require("env")}-user",
+                ProjectId = project.Id,
+                Username = $"{config.Require("env")}-user",
+                Roles =
+                {
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = $"Metrics-{config.Require("env")}",
+                        RoleName = "readWrite",
+                    },
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = "admin",
+                        RoleName = "readAnyDatabase",
+                    },
+                }
+            });
+
+            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user", $"Metrics-{config.Require("env")}"));
+
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
                 Name = $"metrics-pulumi-timerfunction-{config.Require("env")}",
@@ -106,7 +142,7 @@ namespace Metrics.Pulumi
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-                    {
+        {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
                             Value = deploymentZipBlobtimerSasUrl,
@@ -331,7 +367,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = config.RequireSecret("ConnectionString"),
+                            Value = this.Con,
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -357,45 +393,6 @@ namespace Metrics.Pulumi
                 },
             });
 
-            var project = new Atlas.Project($"pulumi-project-{config.Require("env")}", new Atlas.ProjectArgs
-            {
-                OrgId = config.RequireSecret("AtlasOrg"),
-                Name = $"pulumi-project-{config.Require("env")}",
-                IsDataExplorerEnabled = true
-            });
-
-            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
-            {
-                ProjectId = project.Id,
-                ProviderInstanceSizeName = "M0",
-                BackingProviderName = "AZURE",
-                ProviderName = "TENANT",
-                ProviderRegionName = "EUROPE_NORTH",
-            });
-
-            var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
-            {
-                AuthDatabaseName = "admin",
-                Password = $"{config.Require("env")}-user",
-                ProjectId = project.Id,
-                Username = $"{config.Require("env")}-user",
-                Roles =
-                {
-                    new Atlas.Inputs.DatabaseUserRoleArgs
-                    {
-                        DatabaseName = $"Metrics-{config.Require("env")}",
-                        RoleName = "readWrite",
-                    },
-                    new Atlas.Inputs.DatabaseUserRoleArgs
-                    {
-                        DatabaseName = "admin",
-                        RoleName = "readAnyDatabase",
-                    },
-                }
-            });
-
-            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user", $"Metrics-{config.Require("env")}"));
-
             var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
             {
                 var (timer, http) = t;
@@ -410,7 +407,7 @@ namespace Metrics.Pulumi
                 return "ok";
             });
 
-            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
+            this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
             this.WriteAnnotationsApplicationKey = appInsights.AppId;
 
