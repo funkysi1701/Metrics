@@ -193,7 +193,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "DatabaseName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "OldRSSFeed",
@@ -205,7 +205,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "runtime",
@@ -373,7 +373,7 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
-            this.Con = cluster.ConnectionStrings;
+            this.Con = cluster.ConnectionStrings.Apply(x => x.Where(y => y.Standard != null).ToList());
 
             var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
@@ -447,7 +447,7 @@ namespace Metrics.Pulumi
         }
 
         [Output]
-        public Output<ImmutableArray<Atlas.Outputs.ClusterConnectionString>> Con { get; set; }
+        public Output<List<Atlas.Outputs.ClusterConnectionString>> Con { get; set; }
 
         [Output]
         public Output<string> Readme { get; set; }
