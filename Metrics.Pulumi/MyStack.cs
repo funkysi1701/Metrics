@@ -378,13 +378,13 @@ namespace Metrics.Pulumi
                 return "ok";
             });
 
-            //var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
-            //{
-            //    ProjectId = project.Id,
-            //    Name = $"pulumi-cluster-{config.Require("env")}",
-            //    ProviderInstanceSizeName = "M0",
-            //    ProviderName = "Azure"
-            //});
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                Name = $"pulumi-cluster-{config.Require("env")}",
+                ProviderInstanceSizeName = "M0",
+                ProviderName = "Azure"
+            });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
