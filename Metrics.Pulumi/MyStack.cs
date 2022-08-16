@@ -372,21 +372,21 @@ namespace Metrics.Pulumi
                 ProviderRegionName = "EUROPE_NORTH",
             });
 
-            //var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            //listOfIps.Apply(x =>
-            //{
-            //    x.ForEach(y => AddFWRule(y, project.Id));
-            //    return "ok";
-            //});
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
 
-            //listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
+            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            //listOfIps.Apply(x =>
-            //{
-            //    x.ForEach(y => AddFWRule(y, project.Id));
-            //    return "ok";
-            //});
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
@@ -416,7 +416,7 @@ namespace Metrics.Pulumi
 
         private static void AddFWRule(string ip, Output<string> projectid)
         {
-            _ = new Atlas.ProjectIpAccessList($"{Guid.NewGuid()}", new Atlas.ProjectIpAccessListArgs
+            _ = new Atlas.ProjectIpAccessList(ip, new Atlas.ProjectIpAccessListArgs
             {
                 Comment = "ip address",
                 IpAddress = ip,
