@@ -11,6 +11,7 @@ using Kind = Pulumi.AzureNative.Storage.Kind;
 using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Metrics.Pulumi
 {
@@ -361,29 +362,21 @@ namespace Metrics.Pulumi
                 Name = $"pulumi-project-{config.Require("env")}",
             });
 
-            var listOfIps = timerfunction.PossibleOutboundIpAddresses.ToString().Split(",");
+            var listOfIps = timerfunction.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            foreach (var ip in listOfIps)
+            listOfIps.Apply(x =>
             {
-                var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
-                {
-                    Comment = "ip address",
-                    IpAddress = ip,
-                    ProjectId = project.Id,
-                });
-            }
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
 
-            listOfIps = function.PossibleOutboundIpAddresses.ToString().Split(",");
+            listOfIps = function.PossibleOutboundIpAddresses.Apply(x => x.Split(",").ToList());
 
-            foreach (var ip in listOfIps)
+            listOfIps.Apply(x =>
             {
-                var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
-                {
-                    Comment = "ip address",
-                    IpAddress = ip,
-                    ProjectId = project.Id,
-                });
-            }
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
 
             //var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
             //{
@@ -419,6 +412,16 @@ namespace Metrics.Pulumi
             //        Tier = "Free",
             //    },
             //});
+        }
+
+        private static void AddFWRule(string ip, Output<string> projectid)
+        {
+            var test = new Atlas.ProjectIpAccessList("test", new Atlas.ProjectIpAccessListArgs
+            {
+                Comment = "ip address",
+                IpAddress = ip,
+                ProjectId = projectid,
+            });
         }
 
         [Output]
