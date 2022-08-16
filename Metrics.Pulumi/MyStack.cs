@@ -239,7 +239,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = this.Con,
+                            Value = this.Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -369,7 +369,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = this.Con,
+                            Value = this.Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -444,10 +444,10 @@ namespace Metrics.Pulumi
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        private static string InsertLoginDetails(string input, string user, Output<string> pass, string DatabaseName)
+        private static Output<string> InsertLoginDetails(string input, string user, Output<string> pass, string DatabaseName)
         {
             var connectionString = input.Split("//");
-            var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority";
+            var combinedString = Output.Format($"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority");
             return combinedString;
         }
 
