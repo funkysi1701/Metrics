@@ -201,7 +201,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = config.RequireSecret("ConnectionString"),
+                            Value = this.Con,
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
@@ -394,7 +394,7 @@ namespace Metrics.Pulumi
                 }
             });
 
-            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user"));
+            this.Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", $"{config.Require("env")}-user", $"Metrics-{config.Require("env")}"));
 
             var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
             {
@@ -436,10 +436,10 @@ namespace Metrics.Pulumi
             //});
         }
 
-        private string InsertLoginDetails(string x, string user, string pass)
+        private string InsertLoginDetails(string x, string user, string pass, string DatabaseName)
         {
             var connectionString = x.Split("//");
-            var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}";
+            var combinedString = $"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority";
             return combinedString;
         }
 
