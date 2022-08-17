@@ -413,26 +413,26 @@ namespace Metrics.Pulumi
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
             this.WriteAnnotationsApplicationKey = appInsights.AppId;
 
-            //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
-            //{
-            //    Branch = config.Require("branch"),
-            //    BuildProperties = new StaticSiteBuildPropertiesArgs
-            //    {
-            //        ApiLocation = "Metrics.Function",
-            //        AppArtifactLocation = "wwwroot",
-            //        AppLocation = "Metrics.Static",
-            //    },
-            //    Location = "westeurope",
-            //    Name = $"metrics-pulumi-static-{config.Require("env")}",
-            //    RepositoryToken = config.RequireSecret("GitHubToken"),
-            //    RepositoryUrl = "https://github.com/funkysi1701/Metrics",
-            //    ResourceGroupName = resourceGroup.Name,
-            //    Sku = new SkuDescriptionArgs
-            //    {
-            //        Name = "Free",
-            //        Tier = "Free",
-            //    },
-            //});
+            var staticSite = new StaticSite("staticSite", new StaticSiteArgs
+            {
+                Branch = config.Require("branch"),
+                BuildProperties = new StaticSiteBuildPropertiesArgs
+                {
+                    ApiLocation = "Metrics.Function",
+                    AppArtifactLocation = "wwwroot",
+                    AppLocation = "Metrics.Static",
+                },
+                Location = "westeurope",
+                Name = $"metrics-pulumi-static-{config.Require("env")}",
+                RepositoryToken = config.RequireSecret("GitHubToken"),
+                RepositoryUrl = "https://github.com/funkysi1701/Metrics",
+                ResourceGroupName = resourceGroup.Name,
+                Sku = new SkuDescriptionArgs
+                {
+                    Name = "Free",
+                    Tier = "Free",
+                },
+            });
         }
 
         private static readonly Random random = new Random();
