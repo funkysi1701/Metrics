@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Metrics.OctopusEnergy.Api.Properties;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
-using System.Threading.Tasks;
-using Metrics.OctopusEnergy.Api.Properties;
 
 namespace Metrics.OctopusEnergy.Api
 {
@@ -42,7 +37,7 @@ namespace Metrics.OctopusEnergy.Api
                 .AddQueryParam("is_business", isBusiness);
         }
 
-        public async Task<ProductDetail> GetProductAsync(string productCode, DateTimeOffset? tariffsActiveAt = null)
+        public async Task<ProductDetail?> GetProductAsync(string productCode, DateTimeOffset? tariffsActiveAt = null)
         {
             var uri = ComposeGetProductUri(productCode, tariffsActiveAt);
 
@@ -240,7 +235,7 @@ namespace Metrics.OctopusEnergy.Api
                 .AddQueryParam("period_to", to);
         }
 
-        protected async Task<IEnumerable<TResult>> GetCollectionAsync<TResult>(Uri uri, string apiKey = null)
+        protected async Task<IEnumerable<TResult>> GetCollectionAsync<TResult>(Uri? uri, string? apiKey = null)
         {
             var results = Enumerable.Empty<TResult>();
 
@@ -254,11 +249,11 @@ namespace Metrics.OctopusEnergy.Api
 
                 if (pages < 3)
                 {
-                    uri = string.IsNullOrEmpty(response.Next) ? null : new Uri(response.Next);
+                    uri = string.IsNullOrEmpty(response?.Next) ? null : new Uri(response.Next);
                 }
                 else uri = null;
 
-                results = results.Concat(response.Results ?? Enumerable.Empty<TResult>());
+                results = results.Concat(response?.Results ?? Enumerable.Empty<TResult>());
             }
 
             Debug.WriteLine($"Pages fetched: {pages}");
@@ -266,7 +261,7 @@ namespace Metrics.OctopusEnergy.Api
             return results;
         }
 
-        private async Task<TResult> GetAsync<TResult>(Uri uri, string apiKey = null)
+        private async Task<TResult?> GetAsync<TResult>(Uri uri, string? apiKey = null)
         {
             Debug.WriteLine(uri.ToString());
 

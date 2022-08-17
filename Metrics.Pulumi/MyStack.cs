@@ -1,13 +1,15 @@
 ﻿using Pulumi;
-using Pulumi.AzureNative.Insights;
 using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using System;
-using Kind = Pulumi.AzureNative.Storage.Kind;
+using System.Linq;
+using Atlas = Pulumi.Mongodbatlas;
 using Azure = Pulumi.Azure;
+using Config = Pulumi.Config;
+using Kind = Pulumi.AzureNative.Storage.Kind;
 
 namespace Metrics.Pulumi
 {
@@ -15,7 +17,6 @@ namespace Metrics.Pulumi
     {
         public MyStack()
         {
-            this.Readme = Output.Create(System.IO.File.ReadAllText("./Pulumi.README.md"));
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
 
@@ -93,8 +94,46 @@ namespace Metrics.Pulumi
                 },
             });
 
-            this.WriteAnnotationsApiKey = writeAnnotations.Key;
-            this.WriteAnnotationsApplicationKey = appInsights.AppId;
+            var project = new Atlas.Project($"pulumi-project-{config.Require("env")}", new Atlas.ProjectArgs
+            {
+                OrgId = config.RequireSecret("AtlasOrg"),
+                Name = $"pulumi-project-{config.Require("env")}",
+                IsDataExplorerEnabled = true
+            });
+
+            var cluster = new Atlas.Cluster($"pulumi-cluster-{config.Require("env")}", new Atlas.ClusterArgs
+            {
+                ProjectId = project.Id,
+                ProviderInstanceSizeName = "M0",
+                BackingProviderName = "AZURE",
+                ProviderName = "TENANT",
+                ProviderRegionName = "EUROPE_NORTH",
+            });
+
+            var password = Output.CreateSecret(RandomString(10));
+
+            var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
+            {
+                AuthDatabaseName = "admin",
+                Password = password,
+                ProjectId = project.Id,
+                Username = $"{config.Require("env")}-user",
+                Roles =
+                {
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = $"Metrics-{config.Require("env")}",
+                        RoleName = "readWrite",
+                    },
+                    new Atlas.Inputs.DatabaseUserRoleArgs
+                    {
+                        DatabaseName = "admin",
+                        RoleName = "readAnyDatabase",
+                    },
+                }
+            });
+
+            var Con = cluster.SrvAddress.Apply(x => InsertLoginDetails(x, $"{config.Require("env")}-user", password, $"Metrics-{config.Require("env")}"));
 
             var timerfunction = new WebApp("timerfunction", new WebAppArgs
             {
@@ -105,7 +144,7 @@ namespace Metrics.Pulumi
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-                    {
+        {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
                             Value = deploymentZipBlobtimerSasUrl,
@@ -192,7 +231,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "DatabaseName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "OldRSSFeed",
@@ -200,11 +239,11 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = config.RequireSecret("ConnectionString"),
+                            Value = Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "runtime",
@@ -322,7 +361,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "DatabaseName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "OldRSSFeed",
@@ -330,11 +369,11 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
-                            Value = config.RequireSecret("ConnectionString"),
+                            Value = Con.Apply(x => x),
                         },
                         new NameValuePairArgs{
                             Name = "CollectionName",
-                            Value = $"Metrics{config.Require("env")}",
+                            Value = $"Metrics-{config.Require("env")}",
                         },
                         new NameValuePairArgs{
                             Name = "runtime",
@@ -356,6 +395,24 @@ namespace Metrics.Pulumi
                 },
             });
 
+            var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
+            {
+                var (timer, http) = t;
+                return $"{timer},{http}";
+            });
+
+            var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
+
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
+
+            this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
+            this.WriteAnnotationsApiKey = writeAnnotations.Key;
+            this.WriteAnnotationsApplicationKey = appInsights.AppId;
+
             //var staticSite = new StaticSite("staticSite", new StaticSiteArgs
             //{
             //    Branch = config.Require("branch"),
@@ -376,6 +433,32 @@ namespace Metrics.Pulumi
             //        Tier = "Free",
             //    },
             //});
+        }
+
+        private static readonly Random random = new Random();
+
+        private static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        private static Output<string> InsertLoginDetails(string input, string user, Output<string> pass, string DatabaseName)
+        {
+            var connectionString = input.Split("//");
+            var combinedString = Output.Format($"{connectionString[0]}//{user}:{pass}@{connectionString[1]}/{DatabaseName}?retryWrites=true&w=majority");
+            return combinedString;
+        }
+
+        private static void AddFWRule(string ip, Output<string> projectid)
+        {
+            _ = new Atlas.ProjectIpAccessList(ip, new Atlas.ProjectIpAccessListArgs
+            {
+                Comment = "ip address",
+                IpAddress = ip,
+                ProjectId = projectid,
+            });
         }
 
         [Output]
