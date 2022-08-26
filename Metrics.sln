@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\destroy-prod.yml = .github\workflows\destroy-prod.yml
 		.github\workflows\destroy-test.yml = .github\workflows\destroy-test.yml
 		.github\workflows\pull_request.yml = .github\workflows\pull_request.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Static", "Metrics.Static\Metrics.Static.csproj", "{5000D379-24E8-44E3-8F1B-552790C9EDD5}"

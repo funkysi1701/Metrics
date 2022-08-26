@@ -1,36 +1,41 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Metrics.Static</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <button aria-label="Menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="https://www.funkysi1701.com/">Funky Si's Blog</a>
+
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="https://www.funkysi1701.com/" style="color: white" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="https://www.funkysi1701.com/posts/about/" style="color: white">
+                <span class="oi oi-person" aria-hidden="true"></span> About
             </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="https://metrics.funkysi1701.com/" style="color: white">
+                <span class="oi oi-graph" aria-hidden="true"></span> Metrics
             </NavLink>
-        </div>
-    </nav>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="https://www.funkysi1701.com/posts/pwned-pass/" style="color: white">
+                <span class="oi oi-phone" aria-hidden="true"></span> Pwned Pass
+            </NavLink>
+        </li>
+
+    </ul>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
