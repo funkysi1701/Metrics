@@ -1,0 +1,7 @@
+﻿@namespace Metrics.Static.Components
+@inherits LineBase
+@using ChartJs.Blazor.Charts
+
+<div style="max-width: 388px !important;float:left;padding:30px">
+    <ChartJsLineChart @ref="_lineChartJs" Config="@_config" Width="2400" Height="2000" />
+</div>
