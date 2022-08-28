@@ -422,6 +422,7 @@ namespace Metrics.Pulumi
                     ApiLocation = "Metrics.Function",
                     AppArtifactLocation = "wwwroot",
                     AppLocation = "Metrics.Static",
+                    SkipGithubActionWorkflowGeneration = true
                 },
                 Location = "westeurope",
                 Name = $"metrics-pulumi-static-{config.Require("env")}",
