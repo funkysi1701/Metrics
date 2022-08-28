@@ -435,7 +435,7 @@ namespace Metrics.Pulumi
                 },
             });
 
-            _ = new res.Deployment("spa-configuration",
+            _ = new res.Deployment("static-webapp-configuration",
                     new res.DeploymentArgs
                     {
                         ResourceGroupName = resourceGroup.Name,
@@ -461,9 +461,12 @@ namespace Metrics.Pulumi
                                                 "properties", new Dictionary<string, object>()
                                                 {
                                                     { "ConnectionString", Con.Apply(x => x) },
-                                                    { "CollectionName", $"Metrics-{config.Require("env")}" }
+                                                    { "CollectionName", $"Metrics-{config.Require("env")}" },
+                                                    { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
+                                                    { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
+                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" }
                                                 }
-                                            },
+                                            }
                                         }
                                     }
                                 }
