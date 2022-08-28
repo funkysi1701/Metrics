@@ -1,15 +1,16 @@
 ﻿using Pulumi;
-using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
 using Pulumi.AzureNative.Web.Inputs;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Atlas = Pulumi.Mongodbatlas;
 using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
 using Kind = Pulumi.AzureNative.Storage.Kind;
+using res = Pulumi.AzureNative.Resources;
 
 namespace Metrics.Pulumi
 {
@@ -20,7 +21,7 @@ namespace Metrics.Pulumi
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
 
-            var resourceGroup = new ResourceGroup(name, new ResourceGroupArgs
+            var resourceGroup = new res.ResourceGroup(name, new res.ResourceGroupArgs
             {
                 ResourceGroupName = name,
                 Location = "westeurope"
@@ -433,6 +434,42 @@ namespace Metrics.Pulumi
                     Tier = "Free",
                 },
             });
+
+            _ = new res.Deployment("spa-configuration",
+                    new res.DeploymentArgs
+                    {
+                        ResourceGroupName = resourceGroup.Name,
+                        Properties = new res.Inputs.DeploymentPropertiesArgs
+                        {
+                            Mode = res.DeploymentMode.Incremental,
+                            Template = new Dictionary<string, object>
+                            {
+                                { "$schema", "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#" },
+                                { "contentVersion", "1.0.0.0" },
+                                {
+                                    "resources", new List<Dictionary<string, object>>()
+                                    {
+                                        new ()
+                                        {
+                                            { "type", "Microsoft.Web/staticSites/config" },
+                                            { "apiVersion", "2020-10-01" },
+                                            { "name", staticSite.Name.Apply(c => $"{c}/appsettings") },
+
+                                            { "kind", "string" },
+
+                                            {
+                                                "properties", new Dictionary<string, object>()
+                                                {
+                                                    { "ConnectionString", Con.Apply(x => x) },
+                                                    { "CollectionName", $"Metrics-{config.Require("env")}" }
+                                                }
+                                            },
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
         }
 
         private static readonly Random random = new Random();
@@ -488,7 +525,7 @@ namespace Metrics.Pulumi
             });
         }
 
-        public static Output<string> SignedBlobReadUrl(Blob blob, BlobContainer container, StorageAccount account, ResourceGroup resourceGroup)
+        public static Output<string> SignedBlobReadUrl(Blob blob, BlobContainer container, StorageAccount account, res.ResourceGroup resourceGroup)
         {
             return Output.Tuple(blob.Name, container.Name, account.Name, resourceGroup.Name)
                 .Apply(t =>
