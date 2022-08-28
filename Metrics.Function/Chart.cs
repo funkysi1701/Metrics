@@ -33,7 +33,7 @@ namespace Metrics.Function
         [OpenApiParameter(name: "offset", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **offset** parameter")]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **username** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IList<IList<ChartView>>), Description = "The OK response")]
-        public IActionResult GetChart(
+        public async Task<IActionResult> GetChart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -49,7 +49,7 @@ namespace Metrics.Function
             log.LogInformation(username);
             try
             {
-                var result = GetChartDetails(type, day, OffSet, username);
+                var result = await GetChartDetails(type, day, OffSet, username);
                 return new OkObjectResult(result);
             }
             catch (Exception e)
