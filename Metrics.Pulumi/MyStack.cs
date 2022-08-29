@@ -27,7 +27,7 @@ namespace Metrics.Pulumi
                 Location = "westeurope"
             });
 
-            var storageAccount = new StorageAccount($"metrics-sa-{config.Require("env")}", new StorageAccountArgs
+            var storageAccount = new StorageAccount($"metricssa{config.Require("env")}", new StorageAccountArgs
             {
                 ResourceGroupName = resourceGroup.Name,
                 Sku = new SkuArgs
