@@ -27,7 +27,7 @@ namespace Metrics.Pulumi
                 Location = "westeurope"
             });
 
-            var storageAccount = new StorageAccount("sa", new StorageAccountArgs
+            var storageAccount = new StorageAccount($"metrics-sa-{config.Require("env")}", new StorageAccountArgs
             {
                 ResourceGroupName = resourceGroup.Name,
                 Sku = new SkuArgs
@@ -113,7 +113,7 @@ namespace Metrics.Pulumi
 
             var password = Output.CreateSecret(RandomString(10));
 
-            var test = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
+            _ = new Atlas.DatabaseUser($"{config.Require("env")}-user", new Atlas.DatabaseUserArgs
             {
                 AuthDatabaseName = "admin",
                 Password = password,
@@ -476,7 +476,7 @@ namespace Metrics.Pulumi
                     });
         }
 
-        private static readonly Random random = new Random();
+        private static readonly Random random = new();
 
         private static string RandomString(int length)
         {
