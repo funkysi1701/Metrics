@@ -65,7 +65,7 @@ namespace Metrics.Pulumi
             var deploymentZipBlobtimerSasUrl = SignedBlobReadUrl(blobtimer, container, storageAccount, resourceGroup);
             var deploymentZipBlobhttpSasUrl = SignedBlobReadUrl(blobhttp, container, storageAccount, resourceGroup);
 
-            var appServicePlan = new AppServicePlan("functions-win-asp", new AppServicePlanArgs
+            var appServicePlan = new AppServicePlan($"metrics-pulumi-functions-asp-{config.Require("env")}", new AppServicePlanArgs
             {
                 ResourceGroupName = resourceGroup.Name,
 
@@ -407,6 +407,7 @@ namespace Metrics.Pulumi
             listOfIps.Apply(x =>
             {
                 x.ForEach(y => AddFWRule(y, project.Id));
+                x.ForEach(y => AddFWRule("0.0.0.0", project.Id)); //To be removed later
                 return "ok";
             });
 
