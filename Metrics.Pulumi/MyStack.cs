@@ -407,9 +407,10 @@ namespace Metrics.Pulumi
             listOfIps.Apply(x =>
             {
                 x.ForEach(y => AddFWRule(y, project.Id));
-                AddFWRule("0.0.0.0", project.Id); //To be removed later
                 return "ok";
             });
+
+            AddFWRule("0.0.0.0", project.Id); //To be removed later
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
