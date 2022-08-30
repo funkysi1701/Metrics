@@ -402,6 +402,14 @@ namespace Metrics.Pulumi
                 return $"{timer},{http}";
             });
 
+            // This block needs to be removed and replaced with the correct IP ranges
+            _ = new Atlas.ProjectIpAccessList("all", new Atlas.ProjectIpAccessListArgs
+            {
+                Comment = "ip address",
+                CidrBlock = "0.0.0.0/0",
+                ProjectId = project.Id,
+            });
+
             var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
 
             listOfIps.Apply(x =>
@@ -409,8 +417,6 @@ namespace Metrics.Pulumi
                 x.ForEach(y => AddFWRule(y, project.Id));
                 return "ok";
             });
-
-            AddFWRule("0.0.0.0", project.Id); //To be removed later
 
             this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
             this.WriteAnnotationsApiKey = writeAnnotations.Key;
