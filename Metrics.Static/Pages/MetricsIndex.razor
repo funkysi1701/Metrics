@@ -1,0 +1,41 @@
+﻿@page "/"
+@page "/metrics"
+@page "/metrics/{Username}"
+@page "/metrics/{Offset:int}"
+@using Metrics.Core
+@inherits MetricsBase
+<PageTitle>Metrics - Funky Si's Blog</PageTitle>
+<h2>Metrics</h2>
+
+<p>A page of metrics about me from various services.</p>
+
+<div class="post-content">
+    <Chart Type="@MetricType.TwitterFollowers" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.TwitterFollowing" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.NumberOfTweets" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.TwitterFavourites" OffSet="@OffSet" Username="@Username"></Chart>
+
+    <Chart Type="@MetricType.Blog" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.OldBlog" OffSet="@OffSet" Username="@Username"></Chart>
+
+    <Chart Type="@MetricType.GitHubFollowers" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.GitHubFollowing" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.GitHubRepo" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.GitHubStars" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.GitHubCommits" OffSet="@OffSet" Username="@Username"></Chart>
+
+    <Chart Type="@MetricType.DevToPosts" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.DevToPublishedPosts" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.DevToViews" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.DevToReactions" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.DevToComments" OffSet="@OffSet" Username="@Username"></Chart>
+
+    <Chart Type="@MetricType.OPSPosts" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.OPSPublishedPosts" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.OPSViews" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.OPSReactions" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.OPSComments" OffSet="@OffSet" Username="@Username"></Chart>
+
+    <Chart Type="@MetricType.Gas" OffSet="@OffSet" Username="@Username"></Chart>
+    <Chart Type="@MetricType.Electricity" OffSet="@OffSet" Username="@Username"></Chart>
+</div>
