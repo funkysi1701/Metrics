@@ -407,7 +407,7 @@ namespace Metrics.Pulumi
             listOfIps.Apply(x =>
             {
                 x.ForEach(y => AddFWRule(y, project.Id));
-                x.ForEach(y => AddFWRule("0.0.0.0", project.Id)); //To be removed later
+                AddFWRule("0.0.0.0", project.Id); //To be removed later
                 return "ok";
             });
 
