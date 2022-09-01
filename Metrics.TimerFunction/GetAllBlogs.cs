@@ -38,10 +38,10 @@ namespace Metrics.TimerFunction
             Client.DefaultRequestHeaders.UserAgent.Add(productValue);
             Client.DefaultRequestHeaders.UserAgent.Add(commentValue);
             var baseurl = config.GetValue<string>("OPSURL");
-            using HttpResponseMessage httpResponse = await Client.GetAsync(new Uri($"{baseurl}articles/me/all?per_page={n}"));
+            using HttpResponseMessage httpResponse = await Client.GetAsync(new Uri($"{baseurl}articles/me?per_page={n}"));
             string result = await httpResponse.Content.ReadAsStringAsync();
             var posts = JsonConvert.DeserializeObject<List<BlogPosts>>(result);
-            return posts.ToList();
+            return posts.Where(x => x.Published).ToList();
         }
     }
 }
