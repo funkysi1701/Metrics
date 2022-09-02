@@ -53,7 +53,7 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
+        private static async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
         {
             var client = new HttpClient
             {
