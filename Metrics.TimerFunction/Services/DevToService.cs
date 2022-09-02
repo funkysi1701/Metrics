@@ -21,7 +21,11 @@ namespace Metrics.TimerFunction.Services
         {
             IActionResult result = null;
 
-            var blogs = await GetAllBlogs.GetAllOps(Configuration, 200);
+            List<BlogPosts> blogs = new();
+            for (int i = 0; i < 20; i++)
+            {
+                blogs.AddRange(await GetAllBlogs.GetAllOps(Configuration, 10, i));
+            }
             result = await Chart.SaveData(blogs.Count, (int)MetricType.OPSPosts, username);
             try
             {

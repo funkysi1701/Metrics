@@ -28,7 +28,7 @@ namespace Metrics.TimerFunction
             return posts.Where(x => x.Published).ToList();
         }
 
-        public static async Task<List<BlogPosts>> GetAllOps(IConfiguration config, int n)
+        public static async Task<List<BlogPosts>> GetAllOps(IConfiguration config, int per_page, int page)
         {
             var Client = new HttpClient();
             Client.DefaultRequestHeaders.Add("api-key", config.GetValue<string>("OPSAPI"));
@@ -38,7 +38,7 @@ namespace Metrics.TimerFunction
             Client.DefaultRequestHeaders.UserAgent.Add(productValue);
             Client.DefaultRequestHeaders.UserAgent.Add(commentValue);
             var baseurl = config.GetValue<string>("OPSURL");
-            using HttpResponseMessage httpResponse = await Client.GetAsync(new Uri($"{baseurl}articles/me?per_page={n}"));
+            using HttpResponseMessage httpResponse = await Client.GetAsync(new Uri($"{baseurl}articles/me/all?per_page={per_page}&page={page}"));
             string result = await httpResponse.Content.ReadAsStringAsync();
             var posts = JsonConvert.DeserializeObject<List<BlogPosts>>(result);
             return posts.Where(x => x.Published).ToList();
