@@ -483,7 +483,8 @@ namespace Metrics.Pulumi
                                                     { "CollectionName", $"Metrics-{config.Require("env")}" },
                                                     { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
                                                     { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
-                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" }
+                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" },
+                                                    { "FunctionAPI", $"metrics-pulumi-function-{config.Require("env")}" }
                                                 }
                                             }
                                         }

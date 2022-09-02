@@ -5,6 +5,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -19,6 +20,13 @@ namespace Metrics.StaticFunction
 {
     public class Chart
     {
+        private readonly IConfiguration Configuration;
+
+        public Chart(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         [FunctionName("GetChart")]
         [OpenApiOperation(operationId: "GetChart", tags: new[] { "api" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
@@ -53,11 +61,11 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private static async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
+        private async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:7238")
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI"))
             };
             var typeParameter = (int)type;
             using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");

@@ -23,7 +23,8 @@
     "URL": "",
     "OldRSSFeed": "https://www.pwnedpass.com/feed/",
     "ConnectionString": "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
-    "CollectionName": "Metrics"
+    "CollectionName": "Metrics",
+    "FunctionAPI": "http://localhost:7238"
   },
   "Host": {
     "LocalHttpPort": 7237,
