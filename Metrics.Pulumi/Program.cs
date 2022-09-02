@@ -5,6 +5,6 @@ namespace Metrics.Pulumi
 {
     public class Program
     {
-        private static Task<int> Main() => Deployment.RunAsync<MyStack>();
+        private static Task<int> Main() => Deployment.RunAsync<MetricsStack>();
     }
 }

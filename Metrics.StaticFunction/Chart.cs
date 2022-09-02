@@ -1,28 +1,30 @@
 using Metrics.Core;
-using Metrics.Function.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Metrics.Function
+namespace Metrics.StaticFunction
 {
     public class Chart
     {
-        private readonly MongoService _mongoService;
+        private readonly IConfiguration Configuration;
 
-        public Chart(MongoService mongoService)
+        public Chart(IConfiguration configuration)
         {
-            _mongoService = mongoService;
+            Configuration = configuration;
         }
 
         [FunctionName("GetChart")]
@@ -59,101 +61,21 @@ namespace Metrics.Function
             }
         }
 
-        [FunctionName("Get")]
-        [OpenApiOperation(operationId: "GetFn", tags: new[] { "api" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "type", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **type** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(List<Metric>), Description = "The OK response")]
-        public async Task<List<Metric>> GetFn(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
-        {
-            int type = int.Parse(req.Query["type"]);
-            return await Get(type);
-        }
-
-        [FunctionName("GetAll")]
-        [OpenApiOperation(operationId: "GetAllFn", tags: new[] { "api" })]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(List<Metric>), Description = "The OK response")]
-        public async Task<List<Metric>> GetAllFn(
-           [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-           ILogger log)
-        {
-            return await GetAll();
-        }
-
-        public async Task<IActionResult> SaveData(decimal value, int type, string username)
-        {
-            var m = new Metric
-            {
-                MetricId = DateTime.UtcNow.Ticks,
-                id = DateTime.UtcNow.Ticks.ToString(),
-                Date = DateTime.UtcNow,
-                Type = type,
-                Value = value,
-                PartitionKey = "1",
-                Username = username
-            };
-            try
-            {
-                await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
-            }
-            catch (Exception e)
-            {
-                return new BadRequestObjectResult(e.Message);
-            }
-        }
-
-        public async Task<IActionResult> SaveData(decimal value, int type, DateTime To, string username)
-        {
-            var m = new Metric
-            {
-                MetricId = DateTime.UtcNow.Ticks,
-                id = DateTime.UtcNow.Ticks.ToString(),
-                Date = To,
-                Type = type,
-                Value = value,
-                PartitionKey = "1",
-                Username = username
-            };
-            try
-            {
-                await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
-            }
-            catch (Exception e)
-            {
-                return new BadRequestObjectResult(e.Message);
-            }
-        }
-
-        public async Task Delete(int type, DateTime dt)
-        {
-            var m = await _mongoService.GetAsync();
-            m = m.Where(x => x.Type == type && x.Date == dt).ToList();
-            foreach (var item in m)
-            {
-                await _mongoService.RemoveAsync(item.id);
-            }
-        }
-
-        public async Task<List<Metric>> Get(int type)
-        {
-            List<Metric> metrics = await _mongoService.GetAsync();
-            return metrics.Where(x => x.Type == type).ToList();
-        }
-
-        public async Task<List<Metric>> GetAll()
-        {
-            return await _mongoService.GetAsync();
-        }
-
         private async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
         {
-            var metrics = await _mongoService.GetAsync();
-            metrics = metrics.Where(x => x.Username == username && x.Type == (int)type).ToList();
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI"))
+            };
+            var typeParameter = (int)type;
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");
+            string result = await httpResponse.Content.ReadAsStringAsync();
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return null;
+            }
+            var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
+            metrics = metrics.Where(x => x.Username == username).ToList();
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
             if (type == MetricType.Gas || type == MetricType.Electricity)
