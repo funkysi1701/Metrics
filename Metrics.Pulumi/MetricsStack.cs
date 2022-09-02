@@ -14,9 +14,9 @@ using res = Pulumi.AzureNative.Resources;
 
 namespace Metrics.Pulumi
 {
-    public class MyStack : Stack
+    public class MetricsStack : Stack
     {
-        public MyStack()
+        public MetricsStack()
         {
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
@@ -62,8 +62,18 @@ namespace Metrics.Pulumi
                 Source = new FileArchive($"..\\Metrics.Function\\bin\\Release\\net6.0\\publish")
             });
 
+            var blobstatic = new Blob($"Metrics.StaticFunction.zip", new BlobArgs
+            {
+                AccountName = storageAccount.Name,
+                ContainerName = container.Name,
+                ResourceGroupName = resourceGroup.Name,
+                Type = BlobType.Block,
+                Source = new FileArchive($"..\\Metrics.StaticFunction\\bin\\Release\\net6.0\\publish")
+            });
+
             var deploymentZipBlobtimerSasUrl = SignedBlobReadUrl(blobtimer, container, storageAccount, resourceGroup);
             var deploymentZipBlobhttpSasUrl = SignedBlobReadUrl(blobhttp, container, storageAccount, resourceGroup);
+            var deploymentZipBlobstaticSasUrl = SignedBlobReadUrl(blobstatic, container, storageAccount, resourceGroup);
 
             var appServicePlan = new AppServicePlan($"metrics-pulumi-functions-asp-{config.Require("env")}", new AppServicePlanArgs
             {
@@ -145,7 +155,7 @@ namespace Metrics.Pulumi
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-        {
+                    {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
                             Value = deploymentZipBlobtimerSasUrl,
@@ -427,7 +437,7 @@ namespace Metrics.Pulumi
                 Branch = config.Require("branch"),
                 BuildProperties = new StaticSiteBuildPropertiesArgs
                 {
-                    ApiLocation = "Metrics.Function",
+                    ApiLocation = "Metrics.StaticFunction",
                     AppArtifactLocation = "wwwroot",
                     AppLocation = "Metrics.Static",
                     SkipGithubActionWorkflowGeneration = false

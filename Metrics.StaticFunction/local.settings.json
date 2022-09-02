@@ -1,0 +1,32 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "TWConsumerKey": "",
+    "TWConsumerSecret": "",
+    "TWAccessToken": "",
+    "TWAccessSecret": "",
+    "GitHubToken": "",
+    "Username1": "",
+    "DEVTOAPI": "",
+    "DEVTOURL": "",
+    "RSSFeed": "https://www.funkysi1701.com/index.xml",
+    "OPSAPI": "",
+    "OPSURL": "",
+    "OctopusKey": "",
+    "OctopusElecMPAN": "",
+    "OctopusElecSerial": "",
+    "OctopusGasMPAN": "",
+    "OctopusGasSerial": "",
+    "DatabaseName": "Metrics",
+    "URL": "",
+    "OldRSSFeed": "https://www.pwnedpass.com/feed/",
+    "ConnectionString": "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
+    "CollectionName": "Metrics"
+  },
+  "Host": {
+    "LocalHttpPort": 7237,
+    "CORS": "*"
+  }
+}
