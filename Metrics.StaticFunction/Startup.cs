@@ -24,8 +24,6 @@ namespace Metrics.StaticFunction
             builder.Services.AddScoped<TwitterService>();
             builder.Services.AddScoped<DevToService>();
             builder.Services.AddScoped<PowerService>();
-            builder.Services.Configure<MyMongoDatabaseSettings>(config);
-            builder.Services.AddSingleton<MongoService>();
             builder.Services.AddHttpClient<IOctopusEnergyClient, OctopusEnergyClient>()
                 .ConfigurePrimaryHttpMessageHandler(h => new HttpClientHandler
                 {

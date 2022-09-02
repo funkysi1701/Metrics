@@ -14,9 +14,9 @@ namespace Metrics.StaticFunction.Services
         private readonly Chart Chart;
         private TwitterClient TwitterClient { get; set; }
 
-        public TwitterService(IConfiguration configuration, MongoService mongoService)
+        public TwitterService(IConfiguration configuration)
         {
-            Chart = new Chart(mongoService);
+            Chart = new Chart();
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
         }
 

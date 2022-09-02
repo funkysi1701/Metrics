@@ -15,10 +15,10 @@ namespace Metrics.StaticFunction.Services
         private readonly string Key;
         private readonly IOctopusEnergyClient Client;
 
-        public PowerService(IConfiguration configuration, IOctopusEnergyClient client, MongoService mongoService)
+        public PowerService(IConfiguration configuration, IOctopusEnergyClient client)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new Chart();
             Client = client;
             Key = Configuration.GetValue<string>("OctopusKey");
         }

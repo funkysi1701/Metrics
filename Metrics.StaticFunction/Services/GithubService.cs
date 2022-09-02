@@ -12,10 +12,10 @@ namespace Metrics.StaticFunction.Services
         private readonly Chart Chart;
         private IConfiguration Configuration { get; set; }
 
-        public GithubService(IConfiguration configuration, MongoService mongoService)
+        public GithubService(IConfiguration configuration)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new Chart();
         }
 
         public GitHubClient GitHub()

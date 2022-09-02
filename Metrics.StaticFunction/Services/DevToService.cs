@@ -12,10 +12,10 @@ namespace Metrics.StaticFunction.Services
         private readonly Chart Chart;
         private IConfiguration Configuration { get; set; }
 
-        public DevToService(IConfiguration configuration, MongoService mongoService)
+        public DevToService(IConfiguration configuration)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new Chart();
         }
 
         public async Task<IActionResult> GetOps(string username)

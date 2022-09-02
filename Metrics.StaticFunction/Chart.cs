@@ -1,5 +1,4 @@
 using Metrics.Core;
-using Metrics.StaticFunction.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -18,11 +17,8 @@ namespace Metrics.StaticFunction
 {
     public class Chart
     {
-        private readonly MongoService _mongoService;
-
-        public Chart(MongoService mongoService)
+        public Chart()
         {
-            _mongoService = mongoService;
         }
 
         [FunctionName("GetChart")]
@@ -97,7 +93,7 @@ namespace Metrics.StaticFunction
             };
             try
             {
-                await _mongoService.CreateAsync(m);
+                // Make API POST Call SaveData(m)
                 return new OkObjectResult("OK");
             }
             catch (Exception e)
@@ -120,7 +116,7 @@ namespace Metrics.StaticFunction
             };
             try
             {
-                await _mongoService.CreateAsync(m);
+                // Make API POST Call SaveData(m)
                 return new OkObjectResult("OK");
             }
             catch (Exception e)
@@ -131,28 +127,32 @@ namespace Metrics.StaticFunction
 
         public async Task Delete(int type, DateTime dt)
         {
-            var m = await _mongoService.GetAsync();
-            m = m.Where(x => x.Type == type && x.Date == dt).ToList();
-            foreach (var item in m)
-            {
-                await _mongoService.RemoveAsync(item.id);
-            }
+            // Make API GET Call GetData()
+            // m = m.Where(x => x.Type == type && x.Date == dt).ToList();
+            //foreach (var item in m)
+            //{
+            // Make API Delete Call
+            //    await _mongoService.RemoveAsync(item.id);
+            //}
         }
 
         public async Task<List<Metric>> Get(int type)
         {
-            List<Metric> metrics = await _mongoService.GetAsync();
-            return metrics.Where(x => x.Type == type).ToList();
+            // Make API GET Call GetData()
+            //List<Metric> metrics = await _mongoService.GetAsync();
+            //return metrics.Where(x => x.Type == type).ToList();
         }
 
         public async Task<List<Metric>> GetAll()
         {
-            return await _mongoService.GetAsync();
+            // Make API GET Call GetData()
+            // return await _mongoService.GetAsync();
         }
 
         private async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
         {
-            var metrics = await _mongoService.GetAsync();
+            // Make API GET Call GetData()
+            // var metrics = await _mongoService.GetAsync();
             metrics = metrics.Where(x => x.Username == username && x.Type == (int)type).ToList();
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
