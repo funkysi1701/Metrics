@@ -57,9 +57,10 @@ namespace Metrics.StaticFunction
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:7237")
+                BaseAddress = new Uri("http://localhost:7238")
             };
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}/api/Get?type={type}");
+            var typeParameter = (int)type;
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {

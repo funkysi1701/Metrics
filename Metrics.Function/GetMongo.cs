@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,8 +33,16 @@ namespace Metrics.Function
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            int type = int.Parse(req.Query["type"]);
-            return await Get(type);
+            try
+            {
+                int type = int.Parse(req.Query["type"]);
+                return await Get(type);
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                return new List<Metric>();
+            }
         }
 
         public async Task<List<Metric>> Get(int type)
