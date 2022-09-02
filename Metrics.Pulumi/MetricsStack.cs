@@ -62,25 +62,13 @@ namespace Metrics.Pulumi
                 Source = new FileArchive($"..\\Metrics.Function\\bin\\Release\\net6.0\\publish")
             });
 
-            var blobstatic = new Blob($"Metrics.StaticFunction.zip", new BlobArgs
-            {
-                AccountName = storageAccount.Name,
-                ContainerName = container.Name,
-                ResourceGroupName = resourceGroup.Name,
-                Type = BlobType.Block,
-                Source = new FileArchive($"..\\Metrics.StaticFunction\\bin\\Release\\net6.0\\publish")
-            });
-
             var deploymentZipBlobtimerSasUrl = SignedBlobReadUrl(blobtimer, container, storageAccount, resourceGroup);
             var deploymentZipBlobhttpSasUrl = SignedBlobReadUrl(blobhttp, container, storageAccount, resourceGroup);
-            var deploymentZipBlobstaticSasUrl = SignedBlobReadUrl(blobstatic, container, storageAccount, resourceGroup);
 
             var appServicePlan = new AppServicePlan($"metrics-pulumi-functions-asp-{config.Require("env")}", new AppServicePlanArgs
             {
                 ResourceGroupName = resourceGroup.Name,
-
                 Kind = "FunctionApp",
-
                 Sku = new SkuDescriptionArgs
                 {
                     Tier = "Dynamic",
@@ -465,9 +453,7 @@ namespace Metrics.Pulumi
                                             { "type", "Microsoft.Web/staticSites/config" },
                                             { "apiVersion", "2020-10-01" },
                                             { "name", staticSite.Name.Apply(c => $"{c}/appsettings") },
-
                                             { "kind", "string" },
-
                                             {
                                                 "properties", new Dictionary<string, object>()
                                                 {
