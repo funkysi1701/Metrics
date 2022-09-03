@@ -1,4 +1,5 @@
 ﻿using Pulumi;
+using Pulumi.Azure.AppInsights;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
 using Pulumi.AzureNative.Web;
@@ -142,125 +143,7 @@ namespace Metrics.Pulumi
                 ServerFarmId = appServicePlan.Id,
                 SiteConfig = new SiteConfigArgs
                 {
-                    AppSettings = new[]
-                    {
-                        new NameValuePairArgs{
-                            Name = "WEBSITE_RUN_FROM_PACKAGE",
-                            Value = deploymentZipBlobtimerSasUrl,
-                        },
-                        new NameValuePairArgs{
-                            Name = "AzureWebJobsStorage",
-                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
-                        },
-                        new NameValuePairArgs{
-                            Name = "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            Value = GetConnectionString(resourceGroup.Name, storageAccount.Name),
-                        },
-                        new NameValuePairArgs{
-                            Name = "WEBSITE_CONTENTSHARE",
-                            Value = $"metrics-pulumi-timerfunction-{config.Require("env")}-091999e2",
-                        },
-                        new NameValuePairArgs{
-                            Name = "FUNCTIONS_WORKER_RUNTIME",
-                            Value = "dotnet",
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWConsumerKey",
-                            Value = config.RequireSecret("TWConsumerKey"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWConsumerSecret",
-                            Value = config.RequireSecret("TWConsumerSecret"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWAccessToken",
-                            Value = config.RequireSecret("TWAccessToken"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWAccessSecret",
-                            Value = config.RequireSecret("TWAccessSecret"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "GitHubToken",
-                            Value = config.RequireSecret("GitHubToken"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "Username1",
-                            Value = "funkysi1701",
-                        },
-                        new NameValuePairArgs{
-                            Name = "DEVTOAPI",
-                            Value = config.RequireSecret("DEVTOAPI"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "DEVTOURL",
-                            Value = "https://dev.to/api/",
-                        },
-                        new NameValuePairArgs{
-                            Name = "RSSFeed",
-                            Value = "https://www.funkysi1701.com/index.xml",
-                        },
-                        new NameValuePairArgs{
-                            Name = "OPSAPI",
-                            Value = config.RequireSecret("OPSAPI"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "OPSURL",
-                            Value = "https://community.ops.io/api/",
-                        },
-                        new NameValuePairArgs{
-                            Name = "OctopusKey",
-                            Value = config.RequireSecret("OctopusKey"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "OctopusElecMPAN",
-                            Value = config.RequireSecret("OctopusElecMPAN"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "OctopusElecSerial",
-                            Value = config.RequireSecret("OctopusElecSerial"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "OctopusGasMPAN",
-                            Value = config.RequireSecret("OctopusGasMPAN"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "OctopusGasSerial",
-                            Value = config.RequireSecret("OctopusGasSerial"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "DatabaseName",
-                            Value = $"Metrics-{config.Require("env")}",
-                        },
-                        new NameValuePairArgs{
-                            Name = "OldRSSFeed",
-                            Value = "https://www.pwnedpass.com/feed/",
-                        },
-                        new NameValuePairArgs{
-                            Name = "ConnectionString",
-                            Value = Con.Apply(x => x),
-                        },
-                        new NameValuePairArgs{
-                            Name = "CollectionName",
-                            Value = $"Metrics-{config.Require("env")}",
-                        },
-                        new NameValuePairArgs{
-                            Name = "runtime",
-                            Value = "dotnet",
-                        },
-                        new NameValuePairArgs{
-                            Name = "APPINSIGHTS_INSTRUMENTATIONKEY",
-                            Value = appInsights.InstrumentationKey,
-                        },
-                        new NameValuePairArgs{
-                            Name = "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            Value = appInsights.ConnectionString,
-                        },
-                        new NameValuePairArgs{
-                            Name = "FUNCTIONS_EXTENSION_VERSION",
-                            Value = "~4",
-                        },
-                    },
+                    AppSettings = AppSettings(deploymentZipBlobtimerSasUrl, resourceGroup, storageAccount, config, Con, appInsights)
                 },
             });
 
@@ -272,11 +155,98 @@ namespace Metrics.Pulumi
                 ServerFarmId = appServicePlan.Id,
                 SiteConfig = new SiteConfigArgs
                 {
-                    AppSettings = new[]
+                    AppSettings = AppSettings(deploymentZipBlobhttpSasUrl, resourceGroup, storageAccount, config, Con, appInsights)
+                },
+            });
+
+            var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
+            {
+                var (timer, http) = t;
+                return $"{timer},{http}";
+            });
+
+            var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
+
+            listOfIps.Apply(x =>
+            {
+                x.ForEach(y => AddFWRule(y, project.Id));
+                return "ok";
+            });
+
+            this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
+            this.WriteAnnotationsApiKey = writeAnnotations.Key;
+            this.WriteAnnotationsApplicationKey = appInsights.AppId;
+
+            var staticSite = new StaticSite("staticSite", new StaticSiteArgs
+            {
+                Branch = config.Require("branch"),
+                BuildProperties = new StaticSiteBuildPropertiesArgs
+                {
+                    ApiLocation = "Metrics.StaticFunction",
+                    AppArtifactLocation = "wwwroot",
+                    AppLocation = "Metrics.Static",
+                    SkipGithubActionWorkflowGeneration = false
+                },
+                Location = "westeurope",
+                Name = $"metrics-pulumi-static-{config.Require("env")}",
+                RepositoryToken = config.RequireSecret("GitHubToken"),
+                RepositoryUrl = "https://github.com/funkysi1701/Metrics",
+                ResourceGroupName = resourceGroup.Name,
+                Sku = new SkuDescriptionArgs
+                {
+                    Name = "Free",
+                    Tier = "Free",
+                },
+            });
+
+            _ = new res.Deployment("static-webapp-configuration",
+                    new res.DeploymentArgs
+                    {
+                        ResourceGroupName = resourceGroup.Name,
+                        Properties = new res.Inputs.DeploymentPropertiesArgs
+                        {
+                            Mode = res.DeploymentMode.Incremental,
+                            Template = new Dictionary<string, object>
+                            {
+                                { "$schema", "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#" },
+                                { "contentVersion", "1.0.0.0" },
+                                {
+                                    "resources", new List<Dictionary<string, object>>()
+                                    {
+                                        new ()
+                                        {
+                                            { "type", "Microsoft.Web/staticSites/config" },
+                                            { "apiVersion", "2020-10-01" },
+                                            { "name", staticSite.Name.Apply(c => $"{c}/appsettings") },
+                                            { "kind", "string" },
+                                            {
+                                                "properties", new Dictionary<string, object>()
+                                                {
+                                                    { "ConnectionString", Con.Apply(x => x) },
+                                                    { "CollectionName", $"Metrics-{config.Require("env")}" },
+                                                    { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
+                                                    { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
+                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" },
+                                                    { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+        }
+
+        private static readonly Random random = new();
+
+        private static NameValuePairArgs[] AppSettings(Output<string> url, res.ResourceGroup resourceGroup, StorageAccount storageAccount, Config config, Output<string> Con, Insights appInsights)
+        {
+            return new[]
                     {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
-                            Value = deploymentZipBlobhttpSasUrl,
+                            Value = url,
                         },
                         new NameValuePairArgs{
                             Name = "AzureWebJobsStorage",
@@ -390,90 +360,8 @@ namespace Metrics.Pulumi
                             Name = "FUNCTIONS_EXTENSION_VERSION",
                             Value = "~4",
                         },
-                    },
-                },
-            });
-
-            var Ips = Output.Tuple(timerfunction.PossibleOutboundIpAddresses, function.PossibleOutboundIpAddresses).Apply(t =>
-            {
-                var (timer, http) = t;
-                return $"{timer},{http}";
-            });
-
-            var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
-
-            listOfIps.Apply(x =>
-            {
-                x.ForEach(y => AddFWRule(y, project.Id));
-                return "ok";
-            });
-
-            this.Readme = Output.Create(System.IO.File.ReadAllText("../README.md"));
-            this.WriteAnnotationsApiKey = writeAnnotations.Key;
-            this.WriteAnnotationsApplicationKey = appInsights.AppId;
-
-            var staticSite = new StaticSite("staticSite", new StaticSiteArgs
-            {
-                Branch = config.Require("branch"),
-                BuildProperties = new StaticSiteBuildPropertiesArgs
-                {
-                    ApiLocation = "Metrics.StaticFunction",
-                    AppArtifactLocation = "wwwroot",
-                    AppLocation = "Metrics.Static",
-                    SkipGithubActionWorkflowGeneration = false
-                },
-                Location = "westeurope",
-                Name = $"metrics-pulumi-static-{config.Require("env")}",
-                RepositoryToken = config.RequireSecret("GitHubToken"),
-                RepositoryUrl = "https://github.com/funkysi1701/Metrics",
-                ResourceGroupName = resourceGroup.Name,
-                Sku = new SkuDescriptionArgs
-                {
-                    Name = "Free",
-                    Tier = "Free",
-                },
-            });
-
-            _ = new res.Deployment("static-webapp-configuration",
-                    new res.DeploymentArgs
-                    {
-                        ResourceGroupName = resourceGroup.Name,
-                        Properties = new res.Inputs.DeploymentPropertiesArgs
-                        {
-                            Mode = res.DeploymentMode.Incremental,
-                            Template = new Dictionary<string, object>
-                            {
-                                { "$schema", "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#" },
-                                { "contentVersion", "1.0.0.0" },
-                                {
-                                    "resources", new List<Dictionary<string, object>>()
-                                    {
-                                        new ()
-                                        {
-                                            { "type", "Microsoft.Web/staticSites/config" },
-                                            { "apiVersion", "2020-10-01" },
-                                            { "name", staticSite.Name.Apply(c => $"{c}/appsettings") },
-                                            { "kind", "string" },
-                                            {
-                                                "properties", new Dictionary<string, object>()
-                                                {
-                                                    { "ConnectionString", Con.Apply(x => x) },
-                                                    { "CollectionName", $"Metrics-{config.Require("env")}" },
-                                                    { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
-                                                    { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
-                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" },
-                                                    { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    };
         }
-
-        private static readonly Random random = new();
 
         private static string RandomString(int length)
         {
