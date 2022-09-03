@@ -11,7 +11,7 @@ namespace Metrics.StaticFunction
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var config = new ConfigurationBuilder()
+            _ = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
