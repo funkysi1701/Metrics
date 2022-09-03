@@ -1,13 +1,11 @@
-﻿using Metrics.Function;
-using Metrics.Function.Services;
+﻿using Metrics.StaticFunction;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
-namespace Metrics.Function
+namespace Metrics.StaticFunction
 {
     public class Startup : FunctionsStartup
     {
@@ -18,8 +16,6 @@ namespace Metrics.Function
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
-            builder.Services.Configure<MyMongoDatabaseSettings>(config);
-            builder.Services.AddSingleton<MongoService>();
         }
     }
 }

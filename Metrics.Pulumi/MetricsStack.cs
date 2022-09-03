@@ -14,9 +14,9 @@ using res = Pulumi.AzureNative.Resources;
 
 namespace Metrics.Pulumi
 {
-    public class MyStack : Stack
+    public class MetricsStack : Stack
     {
-        public MyStack()
+        public MetricsStack()
         {
             var config = new Config();
             var name = $"metrics-pulumi-{config.Require("env")}";
@@ -68,9 +68,7 @@ namespace Metrics.Pulumi
             var appServicePlan = new AppServicePlan($"metrics-pulumi-functions-asp-{config.Require("env")}", new AppServicePlanArgs
             {
                 ResourceGroupName = resourceGroup.Name,
-
                 Kind = "FunctionApp",
-
                 Sku = new SkuDescriptionArgs
                 {
                     Tier = "Dynamic",
@@ -145,7 +143,7 @@ namespace Metrics.Pulumi
                 SiteConfig = new SiteConfigArgs
                 {
                     AppSettings = new[]
-        {
+                    {
                         new NameValuePairArgs{
                             Name = "WEBSITE_RUN_FROM_PACKAGE",
                             Value = deploymentZipBlobtimerSasUrl,
@@ -402,14 +400,6 @@ namespace Metrics.Pulumi
                 return $"{timer},{http}";
             });
 
-            // This block needs to be removed and replaced with the correct IP ranges
-            _ = new Atlas.ProjectIpAccessList("all", new Atlas.ProjectIpAccessListArgs
-            {
-                Comment = "ip address",
-                CidrBlock = "0.0.0.0/0",
-                ProjectId = project.Id,
-            });
-
             var listOfIps = Ips.Apply(x => x.Split(",").Distinct().ToList());
 
             listOfIps.Apply(x =>
@@ -427,7 +417,7 @@ namespace Metrics.Pulumi
                 Branch = config.Require("branch"),
                 BuildProperties = new StaticSiteBuildPropertiesArgs
                 {
-                    ApiLocation = "Metrics.Function",
+                    ApiLocation = "Metrics.StaticFunction",
                     AppArtifactLocation = "wwwroot",
                     AppLocation = "Metrics.Static",
                     SkipGithubActionWorkflowGeneration = false
@@ -463,9 +453,7 @@ namespace Metrics.Pulumi
                                             { "type", "Microsoft.Web/staticSites/config" },
                                             { "apiVersion", "2020-10-01" },
                                             { "name", staticSite.Name.Apply(c => $"{c}/appsettings") },
-
                                             { "kind", "string" },
-
                                             {
                                                 "properties", new Dictionary<string, object>()
                                                 {
@@ -473,7 +461,8 @@ namespace Metrics.Pulumi
                                                     { "CollectionName", $"Metrics-{config.Require("env")}" },
                                                     { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
                                                     { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
-                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" }
+                                                    { "DatabaseName", $"Metrics-{config.Require("env")}" },
+                                                    { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" }
                                                 }
                                             }
                                         }
