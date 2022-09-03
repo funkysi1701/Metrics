@@ -199,6 +199,13 @@ namespace Metrics.Pulumi
                 },
             });
 
+            _ = new StaticSiteCustomDomain("staticSiteCustomDomain", new()
+            {
+                DomainName = $"metrics-{config.Require("env")}.funkysi1701.com",
+                Name = staticSite.Name,
+                ResourceGroupName = resourceGroup.Name,
+            });
+
             _ = new res.Deployment("static-webapp-configuration",
                     new res.DeploymentArgs
                     {
