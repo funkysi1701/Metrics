@@ -33,7 +33,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = await Chart.SaveData(user.Followers, 4, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -50,7 +50,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = await Chart.SaveData(user.Following, 5, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -67,7 +67,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = await Chart.SaveData(user.PublicRepos, 6, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -84,7 +84,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = await Chart.SaveData(stars.Count, 7, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -107,7 +107,7 @@ namespace Metrics.TimerFunction.Services
                 result = await Chart.SaveData(today.Count, 8, username);
                 try
                 {
-                    var ok = result as OkObjectResult;
+                    _ = result as OkObjectResult;
                 }
                 catch
                 {
@@ -117,7 +117,7 @@ namespace Metrics.TimerFunction.Services
             else result = await Chart.SaveData(today.Count + sofar.Last().Value.Value, 8, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
