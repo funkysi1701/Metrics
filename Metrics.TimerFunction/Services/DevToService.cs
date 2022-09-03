@@ -22,11 +22,15 @@ namespace Metrics.TimerFunction.Services
         {
             IActionResult result = null;
 
-            var blogs = await GetAllBlogs.GetAllOps(Configuration, 200);
+            List<BlogPosts> blogs = new();
+            for (int i = 0; i < 21; i++)
+            {
+                blogs.AddRange(await GetAllBlogs.GetAllOps(Configuration, 10, i));
+            }
             result = await Chart.SaveData(blogs.Count, (int)MetricType.OPSPosts, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -35,7 +39,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(blogs.Count(x => x.Published), (int)MetricType.OPSPublishedPosts, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -53,7 +57,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(views, (int)MetricType.OPSViews, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -62,7 +66,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(reactions, (int)MetricType.OPSReactions, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -71,7 +75,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(comments, (int)MetricType.OPSComments, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -89,7 +93,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(blogs.Count, (int)MetricType.DevToPosts, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -98,7 +102,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(blogs.Count(x => x.Published), (int)MetricType.DevToPublishedPosts, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -116,7 +120,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(views, (int)MetricType.DevToViews, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -125,7 +129,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(reactions, (int)MetricType.DevToReactions, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {
@@ -134,7 +138,7 @@ namespace Metrics.TimerFunction.Services
             result = await Chart.SaveData(comments, (int)MetricType.DevToComments, username);
             try
             {
-                var ok = result as OkObjectResult;
+                _ = result as OkObjectResult;
             }
             catch
             {

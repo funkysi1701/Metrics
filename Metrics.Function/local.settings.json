@@ -8,7 +8,7 @@
     "RSSFeed": "https://www.funkysi1701.com/index.xml"
   },
   "Host": {
-    "LocalHttpPort": 7237,
+    "LocalHttpPort": 7238,
     "CORS": "*"
   }
 }
