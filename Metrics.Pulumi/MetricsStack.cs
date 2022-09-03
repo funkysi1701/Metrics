@@ -200,9 +200,15 @@ namespace Metrics.Pulumi
                 },
             });
 
+            var zone = new Cloudflare.Zone("zone", new()
+            {
+                AccountId = config.RequireSecret("accountId"),
+                ZoneName = "funkysi1701.com",
+            });
+
             _ = new Cloudflare.Record("cloudflare-cname", new()
             {
-                ZoneId = $"{config.RequireSecret("zoneId")}",
+                ZoneId = zone.Id,
                 Name = $"metrics-{config.Require("env")}",
                 Value = staticSite.DefaultHostname,
                 Type = "CNAME",

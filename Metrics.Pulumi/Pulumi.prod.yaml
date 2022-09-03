@@ -32,6 +32,8 @@ config:
     secure: AAABAGuzZb+kVISvTCjhCsEEj8sB2ONrtxuAzyLcSBnN4lMenv4iHkBezs1JUIQVNhsr5uZhFJ2g
   metrics-pulumi:TWConsumerSecret:
     secure: AAABABKEk+Pw6KnxnbsO068CgNvZFv/75p7kGtc4Tm2q5hntEISMyJheg8C+V5ESrucXIaGHoLmytBp8xQgl4IHI0l6olUWH63kGyNzvEYP9pQ==
+  metrics-pulumi:accountId:
+    secure: AAABACkybZKX/oim9gA4tIP+pHpsCzIgFlRK/RdISMy1MqP1sExxlmkPFTDVvKX2eQpIWzbZ6TXsW5QQwm3Ujw==
   metrics-pulumi:branch: main
   metrics-pulumi:env: prod
   metrics-pulumi:zoneId:

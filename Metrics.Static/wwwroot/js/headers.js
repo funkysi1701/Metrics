@@ -1,4 +1,4 @@
-﻿var JsFunctions = window.JsFunctions || {};
+﻿let JsFunctions = window.JsFunctions || {};
 
 JsFunctions = {
     offset: function offset() {
