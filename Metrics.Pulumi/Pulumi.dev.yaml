@@ -2,8 +2,6 @@ config:
   azure:location: westeurope
   cloudflare:apiToken:
     secure: AAABAHsaz4qFIQbioBjP9u2zolL6A4CJB2SJouSE/WXWzwlP6AaT52JHBKzD/Ot+w84pmFP/V+lMuk1XrWNf2Dir4MtCT2i8
-  cloudflare:zoneId:
-    secure: AAABAMt9Me4/BsFkL+mXs+Z0bUa5nZu4FCIR5kMfR3YZVte0h0aoJpNwOr4cJ7vFwf2iuMm9qK5Ir8c9jBHiqw==
   metrics-pulumi:AtlasApiKeyId:
     secure: AAABACnFgbEYy7Kv2z+KIr6wu6tSn5Vs3HdBJtEVV8ZepKzyQy2Lhw==
   metrics-pulumi:AtlasOrg:
@@ -36,6 +34,8 @@ config:
     secure: AAABABueD/cCixd7moYeheiBqdu9aJHllN2pumIeAI/A2NtANajhVjUFy/bOFTfv+k3bZ4IQv9qsLixY3ig1RZJvGzxXCyoDuWcIilLfBk0n2w==
   metrics-pulumi:branch: develop
   metrics-pulumi:env: dev
+  metrics-pulumi:zoneId:
+    secure: AAABAK9wpStFuRsw+pLeuIbwrQN68FRbQG6it5ti0YZRogB1RzrA7fXPTJ+GpS2PnNImNZ7YEFWMkgu/C9gs+Q==
   mongodbatlas:privateKey:
     secure: AAABAF8in3YZE2iz07CZUhVsy5kuYkbof7EznGcMJ7ENuOG/vqpoFxz4O1Og7UO9jgI6La/T380JFgjV/enjE3dv3NI=
   mongodbatlas:publicKey:
