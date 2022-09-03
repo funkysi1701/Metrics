@@ -203,7 +203,6 @@ namespace Metrics.Pulumi
             {
                 AccountId = config.RequireSecret("accountId"),
                 ZoneId = config.RequireSecret("zoneId"),
-                Name = "Zone-funkysi1701",
             });
 
             _ = new Cloudflare.Record("cloudflare-cname", new()
