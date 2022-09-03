@@ -12,6 +12,7 @@ using Azure = Pulumi.Azure;
 using Config = Pulumi.Config;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 using res = Pulumi.AzureNative.Resources;
+using Cloudflare = Pulumi.Cloudflare;
 
 namespace Metrics.Pulumi
 {
@@ -197,6 +198,15 @@ namespace Metrics.Pulumi
                     Name = "Free",
                     Tier = "Free",
                 },
+            });
+
+            _ = new Cloudflare.Record("cloudflare-cname", new()
+            {
+                ZoneId = $"{config.RequireSecret("zoneId")}",
+                Name = $"metrics-{config.Require("env")}",
+                Value = staticSite.DefaultHostname,
+                Type = "CNAME",
+                Ttl = 3600,
             });
 
             _ = new StaticSiteCustomDomain("staticSiteCustomDomain", new()
