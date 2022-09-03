@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Atlas = Pulumi.Mongodbatlas;
-using Azure = Pulumi.Azure;
+using Cloudflare = Pulumi.Cloudflare;
 using Config = Pulumi.Config;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 using res = Pulumi.AzureNative.Resources;
@@ -77,7 +77,7 @@ namespace Metrics.Pulumi
                 }
             });
 
-            var appInsights = new Azure.AppInsights.Insights("appInsights", new Azure.AppInsights.InsightsArgs
+            var appInsights = new Insights("appInsights", new InsightsArgs
             {
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
@@ -85,7 +85,7 @@ namespace Metrics.Pulumi
                 Name = $"metrics-pulumi-appInsights-{config.Require("env")}",
             });
 
-            var writeAnnotations = new Azure.AppInsights.ApiKey($"writeAnnotations", new Azure.AppInsights.ApiKeyArgs
+            var writeAnnotations = new ApiKey($"writeAnnotations", new ApiKeyArgs
             {
                 ApplicationInsightsId = appInsights.Id,
                 WritePermissions =
@@ -197,6 +197,28 @@ namespace Metrics.Pulumi
                     Name = "Free",
                     Tier = "Free",
                 },
+            });
+
+            var zone = Cloudflare.GetZone.Invoke(new Cloudflare.GetZoneInvokeArgs()
+            {
+                AccountId = config.RequireSecret("accountId"),
+                ZoneId = config.RequireSecret("zoneId"),
+            });
+
+            _ = new Cloudflare.Record("cloudflare-cname", new()
+            {
+                ZoneId = zone.Apply(x => x.ZoneId),
+                Name = $"metrics-{config.Require("env")}",
+                Value = staticSite.DefaultHostname,
+                Type = "CNAME",
+                Ttl = 3600,
+            });
+
+            _ = new StaticSiteCustomDomain("staticSiteCustomDomain", new()
+            {
+                DomainName = $"metrics-{config.Require("env")}.funkysi1701.com",
+                Name = staticSite.Name,
+                ResourceGroupName = resourceGroup.Name,
             });
 
             _ = new res.Deployment("static-webapp-configuration",
