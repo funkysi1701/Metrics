@@ -8,11 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Atlas = Pulumi.Mongodbatlas;
-using Azure = Pulumi.Azure;
+using Cloudflare = Pulumi.Cloudflare;
 using Config = Pulumi.Config;
 using Kind = Pulumi.AzureNative.Storage.Kind;
 using res = Pulumi.AzureNative.Resources;
-using Cloudflare = Pulumi.Cloudflare;
 
 namespace Metrics.Pulumi
 {
@@ -78,7 +77,7 @@ namespace Metrics.Pulumi
                 }
             });
 
-            var appInsights = new Azure.AppInsights.Insights("appInsights", new Azure.AppInsights.InsightsArgs
+            var appInsights = new Insights("appInsights", new InsightsArgs
             {
                 Location = resourceGroup.Location,
                 ResourceGroupName = resourceGroup.Name,
@@ -86,7 +85,7 @@ namespace Metrics.Pulumi
                 Name = $"metrics-pulumi-appInsights-{config.Require("env")}",
             });
 
-            var writeAnnotations = new Azure.AppInsights.ApiKey($"writeAnnotations", new Azure.AppInsights.ApiKeyArgs
+            var writeAnnotations = new ApiKey($"writeAnnotations", new ApiKeyArgs
             {
                 ApplicationInsightsId = appInsights.Id,
                 WritePermissions =
@@ -200,15 +199,16 @@ namespace Metrics.Pulumi
                 },
             });
 
-            var zone = new Cloudflare.Zone("zone", new()
+            var zone = Cloudflare.GetZone.Invoke(new Cloudflare.GetZoneInvokeArgs()
             {
                 AccountId = config.RequireSecret("accountId"),
-                ZoneName = "funkysi1701.com",
+                ZoneId = config.RequireSecret("zoneId"),
+                Name = "Zone-funkysi1701",
             });
 
             _ = new Cloudflare.Record("cloudflare-cname", new()
             {
-                ZoneId = zone.Id,
+                ZoneId = zone.Apply(x => x.ZoneId),
                 Name = $"metrics-{config.Require("env")}",
                 Value = staticSite.DefaultHostname,
                 Type = "CNAME",
