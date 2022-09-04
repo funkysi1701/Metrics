@@ -23,12 +23,16 @@ var opt = new MyMongoDatabaseSettings
 };
 var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
-await CheckKey();
-
-async Task CheckKey()
+Console.WriteLine("Enter 0 - 22");
+var type = Console.ReadLine();
+if(type != null)
 {
-    Console.WriteLine("Enter 0 - 22");
-    var type = Console.ReadLine();
+    await CheckKey(type);
+}
+
+
+async Task CheckKey(string? type)
+{
     if (int.TryParse(type, out int Mtype) && Mtype >= 0 && Mtype <= 22)
     {
         var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == Mtype).ToList();
@@ -48,7 +52,13 @@ async Task CheckKey()
     }
     else
     {
-        System.Environment.Exit(1);
+        Environment.Exit(1);
     }
-    await CheckKey();
+
+    Console.WriteLine("Enter 0 - 22");
+    type = Console.ReadLine();
+    if (type != null)
+    {
+        await CheckKey(type);
+    }
 }
