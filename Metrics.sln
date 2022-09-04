@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Function", "Metrics
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.StaticFunction", "Metrics.StaticFunction\Metrics.StaticFunction.csproj", "{AA2E053C-80F4-43B5-96FD-5CA094ECC364}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrics.Console", "Metrics.Console\Metrics.Console.csproj", "{8B75223F-9731-434A-AF9B-EA580B1F4682}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{AA2E053C-80F4-43B5-96FD-5CA094ECC364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA2E053C-80F4-43B5-96FD-5CA094ECC364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA2E053C-80F4-43B5-96FD-5CA094ECC364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
