@@ -1,4 +1,4 @@
-﻿using Metrics.OctopusEnergy.Api;
+﻿using ImpSoft.OctopusEnergy.Api;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
