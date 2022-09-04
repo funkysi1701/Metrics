@@ -4,12 +4,8 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-h1:focus {
-    outline: none;
-}
-
 a, .btn-link {
-    color: #0071c1;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -53,12 +49,189 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-.blazor-error-boundary {
-    background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIG92ZXJmbG93PSJoaWRkZW4iPjxkZWZzPjxjbGlwUGF0aCBpZD0iY2xpcDAiPjxyZWN0IHg9IjIzNSIgeT0iNTEiIHdpZHRoPSI1NiIgaGVpZ2h0PSI0OSIvPjwvY2xpcFBhdGg+PC9kZWZzPjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMCkiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzUgLTUxKSI+PHBhdGggZD0iTTI2My41MDYgNTFDMjY0LjcxNyA1MSAyNjUuODEzIDUxLjQ4MzcgMjY2LjYwNiA1Mi4yNjU4TDI2Ny4wNTIgNTIuNzk4NyAyNjcuNTM5IDUzLjYyODMgMjkwLjE4NSA5Mi4xODMxIDI5MC41NDUgOTIuNzk1IDI5MC42NTYgOTIuOTk2QzI5MC44NzcgOTMuNTEzIDI5MSA5NC4wODE1IDI5MSA5NC42NzgyIDI5MSA5Ny4wNjUxIDI4OS4wMzggOTkgMjg2LjYxNyA5OUwyNDAuMzgzIDk5QzIzNy45NjMgOTkgMjM2IDk3LjA2NTEgMjM2IDk0LjY3ODIgMjM2IDk0LjM3OTkgMjM2LjAzMSA5NC4wODg2IDIzNi4wODkgOTMuODA3MkwyMzYuMzM4IDkzLjAxNjIgMjM2Ljg1OCA5Mi4xMzE0IDI1OS40NzMgNTMuNjI5NCAyNTkuOTYxIDUyLjc5ODUgMjYwLjQwNyA1Mi4yNjU4QzI2MS4yIDUxLjQ4MzcgMjYyLjI5NiA1MSAyNjMuNTA2IDUxWk0yNjMuNTg2IDY2LjAxODNDMjYwLjczNyA2Ni4wMTgzIDI1OS4zMTMgNjcuMTI0NSAyNTkuMzEzIDY5LjMzNyAyNTkuMzEzIDY5LjYxMDIgMjU5LjMzMiA2OS44NjA4IDI1OS4zNzEgNzAuMDg4N0wyNjEuNzk1IDg0LjAxNjEgMjY1LjM4IDg0LjAxNjEgMjY3LjgyMSA2OS43NDc1QzI2Ny44NiA2OS43MzA5IDI2Ny44NzkgNjkuNTg3NyAyNjcuODc5IDY5LjMxNzkgMjY3Ljg3OSA2Ny4xMTgyIDI2Ni40NDggNjYuMDE4MyAyNjMuNTg2IDY2LjAxODNaTTI2My41NzYgODYuMDU0N0MyNjEuMDQ5IDg2LjA1NDcgMjU5Ljc4NiA4Ny4zMDA1IDI1OS43ODYgODkuNzkyMSAyNTkuNzg2IDkyLjI4MzcgMjYxLjA0OSA5My41Mjk1IDI2My41NzYgOTMuNTI5NSAyNjYuMTE2IDkzLjUyOTUgMjY3LjM4NyA5Mi4yODM3IDI2Ny4zODcgODkuNzkyMSAyNjcuMzg3IDg3LjMwMDUgMjY2LjExNiA4Ni4wNTQ3IDI2My41NzYgODYuMDU0N1oiIGZpbGw9IiNGRkU1MDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvZz48L3N2Zz4=) no-repeat 1rem/1.8rem, #b32121;
-    padding: 1rem 1rem 1rem 3.7rem;
-    color: white;
+blockquote.ltag__twitter-tweet {
+    font-family: var(--ff-sans-serif);
+    background: white;
+    max-width: 500px;
+    font-size: 0.75em;
+    line-height: 1.35em;
+    border-radius: 3px;
+    margin: 1.6em auto !important;
+    min-height: 60px;
+    cursor: pointer;
+    padding: 0px !important;
+    border: 1px solid #dbdbdb !important;
+    box-shadow: 1px 2px 4px 0 rgba(0,0,0,0.18)
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
+    blockquote.ltag__twitter-tweet:hover {
+        border: 1px solid lightgray !important
     }
+
+    blockquote.ltag__twitter-tweet a {
+        color: #55acee
+    }
+
+@media screen and (min-width: 360px) {
+    blockquote.ltag__twitter-tweet {
+        min-height: 105px
+    }
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__media {
+    position: relative;
+    overflow: hidden
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__media img {
+        width: 100%;
+        left: 0;
+        right: 0;
+        margin: auto;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px
+    }
+
+        blockquote.ltag__twitter-tweet .ltag__twitter-tweet__media img.ltag__twitter-tweet__play-butt {
+            width: 70px;
+            height: 70px;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0
+        }
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__video {
+    display: none
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__video video {
+        width: 100%
+    }
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header {
+    position: relative;
+    height: 45px
+}
+
+@media screen and (min-width: 360px) {
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header {
+        height: 52px
+    }
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header .ltag__twitter-tweet__profile-image {
+    height: 36px;
+    min-height: 36px;
+    width: 36px;
+    border-radius: 50px;
+    position: absolute;
+    left: calc(0.3vw + 13px);
+    top: calc(0.3vw + 13px);
+    background-color: #ececec
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header .ltag__twitter-tweet__twitter-logo {
+    position: absolute;
+    right: calc(0.3vw + 8px);
+    top: 20px;
+    left: auto
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header .ltag__twitter-tweet__twitter-logo img {
+        height: 24px;
+        min-height: 24px;
+        max-width: 24px;
+        display: inline-block;
+        width: 36px;
+        margin: auto
+    }
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header .ltag__twitter-tweet__full-name {
+    color: #1c2022;
+    position: absolute;
+    left: calc(0.3vw + 57px);
+    top: calc(0.3vw + 13px);
+    font-weight: bold;
+    font-size: 16px
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__header .ltag__twitter-tweet__username {
+    position: absolute;
+    left: calc(0.3vw + 57px);
+    top: calc(0.3vw + 33px);
+    color: #697882;
+    font-size: 14px
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__body {
+    color: #1c2022;
+    font-size: 16px;
+    line-height: 22px;
+    padding: calc(0.3vw + 13px) calc(0.3vw + 13px) 0px
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__body br {
+        line-height: 0 !important
+    }
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__date {
+    font-size: 14px;
+    color: #697882;
+    margin-top: 3px;
+    padding: 0px calc(0.3vw + 13px)
+}
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__quote {
+    color: #1c2022;
+    margin: calc(0.3vw + 13px) calc(0.3vw + 13px) 0px;
+    padding: calc(0.2vw + 8px) calc(0.2vw + 8px);
+    border: 1px solid #dce3e8;
+    border-radius: 4px;
+    font-size: 15px;
+    line-height: 1.1em
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__quote:hover {
+        border: 1px solid #a09dad
+    }
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__quote .ltag__twitter-tweet__quote__header {
+        padding: 0 0 calc(0.05vw + 3px);
+        font-size: 0.9em
+    }
+
+        blockquote.ltag__twitter-tweet .ltag__twitter-tweet__quote .ltag__twitter-tweet__quote__header .ltag__twitter-tweet__quote__header__name {
+            font-weight: bold;
+            font-size: 1.1em
+        }
+
+blockquote.ltag__twitter-tweet .ltag__twitter-tweet__actions {
+    margin: 6px auto 0px;
+    padding: 0px calc(0.3vw + 13px) 5px;
+    color: #aab8c2;
+    font-size: 14px
+}
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__actions .ltag__twitter-tweet__actions__button {
+        width: 18px;
+        height: 22px;
+        display: inline-block;
+        margin-left: 20px;
+        margin-right: 2px;
+    }
+
+        blockquote.ltag__twitter-tweet .ltag__twitter-tweet__actions .ltag__twitter-tweet__actions__button:first-child {
+            margin-left: 8px
+        }
+
+    blockquote.ltag__twitter-tweet .ltag__twitter-tweet__actions img {
+        height: 20px;
+        min-height: 20px
+    }
+
+.highlight__panel.js-actions-panel {
+    display: none
+}

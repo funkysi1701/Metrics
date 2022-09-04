@@ -150,14 +150,28 @@ namespace Metrics.TimerFunction
         public async Task Run5([TimerTrigger("0 59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await powerService.GetGas();
+            try
+            {
+                await powerService.GetGas();
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+            }
         }
 
         [FunctionName("SaveElec")]
         public async Task Run6([TimerTrigger("0 59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await powerService.GetElec();
+            try
+            {
+                await powerService.GetElec();
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+            }
         }
 
         [FunctionName("SaveCommits")]
