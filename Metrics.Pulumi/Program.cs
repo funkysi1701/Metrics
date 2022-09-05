@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Metrics.Pulumi
 {
-    public class Program
+    public static class Program
     {
         private static Task<int> Main() => Deployment.RunAsync<MetricsStack>();
     }
