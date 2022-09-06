@@ -1,5 +1,4 @@
-﻿using Metrics.Core;
-using ChartJs.Blazor.ChartJS.Common.Axes;
+﻿using ChartJs.Blazor.ChartJS.Common.Axes;
 using ChartJs.Blazor.ChartJS.Common.Axes.Ticks;
 using ChartJs.Blazor.ChartJS.Common.Enums;
 using ChartJs.Blazor.ChartJS.Common.Properties;
@@ -15,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Metrics.Core.Enum;
 
 namespace Metrics.Static.Components
 {

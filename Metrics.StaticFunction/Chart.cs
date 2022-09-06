@@ -1,4 +1,5 @@
-using Metrics.Core;
+using Metrics.Core.Enum;
+using Metrics.Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;

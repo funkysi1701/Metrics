@@ -1,4 +1,4 @@
-﻿namespace Metrics.Core
+﻿namespace Metrics.Core.Model
 {
     public class Metric
     {
