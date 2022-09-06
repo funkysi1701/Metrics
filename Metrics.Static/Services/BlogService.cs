@@ -1,4 +1,4 @@
-﻿using Metrics.Core;
+﻿using Metrics.Core.Model;
 using System.Net.Http.Json;
 
 namespace Metrics.Static.Services

@@ -1,4 +1,5 @@
-﻿using Metrics.Core;
+﻿using Metrics.Core.Enum;
+using Metrics.Core.Model;
 using Metrics.Static.Services;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;

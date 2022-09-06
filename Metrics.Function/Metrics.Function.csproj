@@ -13,7 +13,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.17.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Metrics.Core\Metrics.Core.csproj" />

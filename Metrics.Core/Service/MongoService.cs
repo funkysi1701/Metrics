@@ -1,10 +1,8 @@
-﻿using Metrics.Core;
+﻿using Metrics.Core.Model;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.Service
 {
     public class MongoService
     {

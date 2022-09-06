@@ -1,4 +1,4 @@
-using Metrics.Core;
+using Metrics.Core.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;

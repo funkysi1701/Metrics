@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Metrics.Core
+namespace Metrics.Core.Enum
 {
     public enum MetricType
     {
