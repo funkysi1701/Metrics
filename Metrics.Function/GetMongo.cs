@@ -1,5 +1,5 @@
-using Metrics.Core;
-using Metrics.Function.Services;
+using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
