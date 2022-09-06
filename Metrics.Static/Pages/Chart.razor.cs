@@ -92,41 +92,7 @@ namespace Metrics.Static.Pages
                 IList<IList<ChartView>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
                 if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
-                    var result =
-                        from s in dailyChart[0].OrderBy(x => x.Date)
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Value = g.Sum(x => x.Total),
-                        };
-
-                    foreach (var item in result)
-                    {
-                        dailyLabel.Add(item.Date);
-                        dailyData.Add(item.Value.Value);
-                    }
-
-                    result =
-                        from s in dailyChart[1].OrderBy(x => x.Date)
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Value = g.Sum(x => x.Total),
-                        };
-
-                    foreach (var item in result)
-                    {
-                        dailyLabel.Add(item.Date);
-                        dailyPrevData.Add(item.Value.Value);
-                    }
+                    PowerSetupDaily(dailyChart);
                 }
                 else
                 {
@@ -180,65 +146,7 @@ namespace Metrics.Static.Pages
                 IList<IList<ChartView>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
                 if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
-                    var preresult =
-                        from s in monthlyChart[0].OrderBy(x => x.Date)
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Total = g.Average(x => x.Total),
-                        };
-
-                    var result =
-                        from s in preresult
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Value = g.Sum(x => x.Total),
-                        };
-
-                    foreach (var item in result)
-                    {
-                        monthlyLabel.Add(item.Date);
-                        monthlyData.Add(item.Value.Value);
-                    }
-
-                    preresult =
-                        from s in monthlyChart[1].OrderBy(x => x.Date)
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Total = g.Average(x => x.Total),
-                        };
-
-                    result =
-                        from s in preresult
-                        group s by new
-                        {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                        } into g
-                        select new
-                        {
-                            g.Key.Date,
-                            Value = g.Sum(x => x.Total),
-                        };
-
-                    foreach (var item in result)
-                    {
-                        monthlyLabel.Add(item.Date);
-                        monthlyPrevData.Add(item.Value.Value);
-                    }
+                    PowerSetupMonthly(monthlyChart);
                 }
                 else
                 {
@@ -280,6 +188,108 @@ namespace Metrics.Static.Pages
                 }
                 LoadCompleteM = true;
                 StateHasChanged();
+            }
+        }
+
+        void PowerSetupDaily(IList<IList<ChartView>> dailyChart)
+        {
+            var result =
+                from s in dailyChart[0].OrderBy(x => x.Date)
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Value = g.Sum(x => x.Total),
+                };
+
+            foreach (var item in result)
+            {
+                dailyLabel.Add(item.Date);
+                dailyData.Add(item.Value.Value);
+            }
+
+            result =
+                from s in dailyChart[1].OrderBy(x => x.Date)
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Value = g.Sum(x => x.Total),
+                };
+
+            foreach (var item in result)
+            {
+                dailyLabel.Add(item.Date);
+                dailyPrevData.Add(item.Value.Value);
+            }
+        }
+
+        void PowerSetupMonthly(IList<IList<ChartView>> monthlyChart)
+        {
+            var preresult =
+                from s in monthlyChart[0].OrderBy(x => x.Date)
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Total = g.Average(x => x.Total),
+                };
+
+            var result =
+                from s in preresult
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Value = g.Sum(x => x.Total),
+                };
+
+            foreach (var item in result)
+            {
+                monthlyLabel.Add(item.Date);
+                monthlyData.Add(item.Value.Value);
+            }
+
+            preresult =
+                from s in monthlyChart[1].OrderBy(x => x.Date)
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Total = g.Average(x => x.Total),
+                };
+
+            result =
+                from s in preresult
+                group s by new
+                {
+                    Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                } into g
+                select new
+                {
+                    g.Key.Date,
+                    Value = g.Sum(x => x.Total),
+                };
+
+            foreach (var item in result)
+            {
+                monthlyLabel.Add(item.Date);
+                monthlyPrevData.Add(item.Value.Value);
             }
         }
 
