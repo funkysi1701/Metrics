@@ -1,4 +1,6 @@
-﻿using Metrics.Core;
+﻿using Metrics.Core.Enum;
+using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;

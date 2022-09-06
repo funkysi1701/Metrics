@@ -1,4 +1,5 @@
 ﻿using ImpSoft.OctopusEnergy.Api;
+using Metrics.Core.Service;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

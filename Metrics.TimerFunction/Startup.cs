@@ -1,4 +1,6 @@
 ﻿using ImpSoft.OctopusEnergy.Api;
+using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Metrics.TimerFunction;
 using Metrics.TimerFunction.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;

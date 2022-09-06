@@ -1,5 +1,5 @@
-using Metrics.Core;
-using Metrics.TimerFunction.Services;
+using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
