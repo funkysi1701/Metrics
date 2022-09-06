@@ -51,232 +51,247 @@ namespace Metrics.Static.Pages
             StateHasChanged();
         }
 
-        protected async Task LoadHourly(string Username)
+        protected Task LoadHourly(string Username)
         {
-            IList<IList<ChartView>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
-            foreach (var subitem in hourlyChart[0].OrderBy(x => x.Date))
-            {
-                if (subitem.Total.HasValue)
-                {
-                    hourlyLabel.Add(subitem.Date);
-                    hourlyData.Add(subitem.Total.Value);
-                }
-            }
+            return Task.Run(async () => await Load(Username));
 
-            foreach (var subitem in hourlyChart[1].OrderBy(x => x.Date))
+            async Task Load(string Username)
             {
-                if (subitem.Total.HasValue)
+                IList<IList<ChartView>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
+                foreach (var subitem in hourlyChart[0].OrderBy(x => x.Date))
                 {
-                    hourlyLabel.Add(subitem.Date);
-                    hourlyPrevData.Add(subitem.Total.Value);
+                    if (subitem.Total.HasValue)
+                    {
+                        hourlyLabel.Add(subitem.Date);
+                        hourlyData.Add(subitem.Total.Value);
+                    }
                 }
+
+                foreach (var subitem in hourlyChart[1].OrderBy(x => x.Date))
+                {
+                    if (subitem.Total.HasValue)
+                    {
+                        hourlyLabel.Add(subitem.Date);
+                        hourlyPrevData.Add(subitem.Total.Value);
+                    }
+                }
+                if (hourlyData.Count > 0)
+                {
+                    LoadCompleteH = true;
+                }
+                StateHasChanged();
             }
-            if (hourlyData.Count > 0)
-            {
-                LoadCompleteH = true;
-            }
-            StateHasChanged();
         }
 
-        protected async Task LoadDaily(string Username)
+        protected Task LoadDaily(string Username)
         {
-            IList<IList<ChartView>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
-            if (Type == MetricType.Gas || Type == MetricType.Electricity)
+            return Task.Run(async () => await Load(Username));
+
+            async Task Load(string Username)
             {
-                var result =
-                    from s in dailyChart[0].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Sum(x => x.Total),
-                    };
-
-                foreach (var item in result)
+                IList<IList<ChartView>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
+                if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
-                    dailyLabel.Add(item.Date);
-                    dailyData.Add(item.Value.Value);
+                    var result =
+                        from s in dailyChart[0].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Sum(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        dailyLabel.Add(item.Date);
+                        dailyData.Add(item.Value.Value);
+                    }
+
+                    result =
+                        from s in dailyChart[1].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Sum(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        dailyLabel.Add(item.Date);
+                        dailyPrevData.Add(item.Value.Value);
+                    }
                 }
-
-                result =
-                    from s in dailyChart[1].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Sum(x => x.Total),
-                    };
-
-                foreach (var item in result)
+                else
                 {
-                    dailyLabel.Add(item.Date);
-                    dailyPrevData.Add(item.Value.Value);
+                    var result =
+                        from s in dailyChart[0].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Max(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        dailyLabel.Add(item.Date);
+                        dailyData.Add(item.Value.Value);
+                    }
+
+                    result =
+                        from s in dailyChart[1].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Max(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        dailyLabel.Add(item.Date);
+                        dailyPrevData.Add(item.Value.Value);
+                    }
                 }
+                LoadCompleteD = true;
+                StateHasChanged();
             }
-            else
-            {
-                var result =
-                    from s in dailyChart[0].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Max(x => x.Total),
-                    };
-
-                foreach (var item in result)
-                {
-                    dailyLabel.Add(item.Date);
-                    dailyData.Add(item.Value.Value);
-                }
-
-                result =
-                    from s in dailyChart[1].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Max(x => x.Total),
-                    };
-
-                foreach (var item in result)
-                {
-                    dailyLabel.Add(item.Date);
-                    dailyPrevData.Add(item.Value.Value);
-                }
-            }
-            LoadCompleteD = true;
-            StateHasChanged();
         }
 
-        protected async Task LoadMonthly(string Username)
+        protected Task LoadMonthly(string Username)
         {
-            IList<IList<ChartView>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
-            if (Type == MetricType.Gas || Type == MetricType.Electricity)
+            return Task.Run(async () => await Load(Username));
+
+            async Task Load(string Username)
             {
-                var preresult =
-                    from s in monthlyChart[0].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Total = g.Average(x => x.Total),
-                    };
-
-                var result =
-                    from s in preresult
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Sum(x => x.Total),
-                    };
-
-                foreach (var item in result)
+                IList<IList<ChartView>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
+                if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
-                    monthlyLabel.Add(item.Date);
-                    monthlyData.Add(item.Value.Value);
+                    var preresult =
+                        from s in monthlyChart[0].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Total = g.Average(x => x.Total),
+                        };
+
+                    var result =
+                        from s in preresult
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Sum(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        monthlyLabel.Add(item.Date);
+                        monthlyData.Add(item.Value.Value);
+                    }
+
+                    preresult =
+                        from s in monthlyChart[1].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Total = g.Average(x => x.Total),
+                        };
+
+                    result =
+                        from s in preresult
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Sum(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        monthlyLabel.Add(item.Date);
+                        monthlyPrevData.Add(item.Value.Value);
+                    }
                 }
-
-                preresult =
-                    from s in monthlyChart[1].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Total = g.Average(x => x.Total),
-                    };
-
-                result =
-                    from s in preresult
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Sum(x => x.Total),
-                    };
-
-                foreach (var item in result)
+                else
                 {
-                    monthlyLabel.Add(item.Date);
-                    monthlyPrevData.Add(item.Value.Value);
+                    var result =
+                        from s in monthlyChart[0].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Max(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        monthlyLabel.Add(item.Date);
+                        monthlyData.Add(item.Value.Value);
+                    }
+
+                    result =
+                        from s in monthlyChart[1].OrderBy(x => x.Date)
+                        group s by new
+                        {
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                        } into g
+                        select new
+                        {
+                            g.Key.Date,
+                            Value = g.Max(x => x.Total),
+                        };
+
+                    foreach (var item in result)
+                    {
+                        monthlyLabel.Add(item.Date);
+                        monthlyPrevData.Add(item.Value.Value);
+                    }
                 }
+                LoadCompleteM = true;
+                StateHasChanged();
             }
-            else
-            {
-                var result =
-                    from s in monthlyChart[0].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Max(x => x.Total),
-                    };
-
-                foreach (var item in result)
-                {
-                    monthlyLabel.Add(item.Date);
-                    monthlyData.Add(item.Value.Value);
-                }
-
-                result =
-                    from s in monthlyChart[1].OrderBy(x => x.Date)
-                    group s by new
-                    {
-                        Date = new DateTime(s.Date.Year, s.Date.Month, 1)
-                    } into g
-                    select new
-                    {
-                        g.Key.Date,
-                        Value = g.Max(x => x.Total),
-                    };
-
-                foreach (var item in result)
-                {
-                    monthlyLabel.Add(item.Date);
-                    monthlyPrevData.Add(item.Value.Value);
-                }
-            }
-            LoadCompleteM = true;
-            StateHasChanged();
         }
 
-        protected async Task Load()
+        protected void Load()
         {
             Title = GetEnumDescription(Type);
 
-            await LoadHourly(Username);
+            _ = LoadHourly(Username);
 
-            await LoadDaily(Username);
+            _ = LoadDaily(Username);
 
-            await LoadMonthly(Username);
+            _ = LoadMonthly(Username);
         }
 
         public static string GetEnumDescription(Enum value)
