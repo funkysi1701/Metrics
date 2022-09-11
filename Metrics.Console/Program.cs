@@ -13,7 +13,7 @@ IConfiguration config = new ConfigurationBuilder()
 
 CosmosClientBuilder cosmosClientBuilderOld = new(config["CosmosDBStringOld"]);
 var cosmosClientOld = cosmosClientBuilderOld.Build();
-var databaseOld = cosmosClientOld.GetDatabase(config["DatabaseName"]);
+var databaseOld = cosmosClientOld.GetDatabase(config["DatabaseNameOld"]);
 var containerOld = databaseOld.GetContainer(config["ContainerName"]);
 var opt = new MyMongoDatabaseSettings
 {
