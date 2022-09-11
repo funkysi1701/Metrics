@@ -18,7 +18,15 @@ namespace Metrics.Static.Services
 
         public async Task<IList<IList<ChartView>>> GetChart(int type, int day, int offSet, string username)
         {
-            return await Client.GetFromJsonAsync<IList<IList<ChartView>>>(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
+            try
+            {
+                return await Client.GetFromJsonAsync<IList<IList<ChartView>>>(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
+            }
+            catch
+            {
+                return null;
+            }
+
         }
     }
 }
