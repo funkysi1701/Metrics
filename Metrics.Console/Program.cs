@@ -25,11 +25,10 @@ var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
 Console.WriteLine("Enter 0 - 22");
 var type = Console.ReadLine();
-if(type != null)
+if (type != null)
 {
     await CheckKey(type);
 }
-
 
 async Task CheckKey(string? type)
 {
