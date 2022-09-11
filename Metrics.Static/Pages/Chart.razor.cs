@@ -58,6 +58,10 @@ namespace Metrics.Static.Pages
             async Task Load(string Username)
             {
                 IList<IList<ChartView>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
+                if(hourlyChart == null)
+                {
+                    return;
+                }
                 foreach (var subitem in hourlyChart[0].OrderBy(x => x.Date))
                 {
                     if (subitem.Total.HasValue)
@@ -90,6 +94,10 @@ namespace Metrics.Static.Pages
             async Task Load(string Username)
             {
                 IList<IList<ChartView>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
+                if (dailyChart == null)
+                {
+                    return;
+                }
                 if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
                     PowerSetupDaily(dailyChart);
@@ -144,6 +152,10 @@ namespace Metrics.Static.Pages
             async Task Load(string Username)
             {
                 IList<IList<ChartView>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
+                if (monthlyChart == null)
+                {
+                    return;
+                }
                 if (Type == MetricType.Gas || Type == MetricType.Electricity)
                 {
                     PowerSetupMonthly(monthlyChart);
