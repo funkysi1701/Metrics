@@ -48,6 +48,7 @@ async Task CheckKey(string? type)
             }
             Console.WriteLine(item.Date?.ToString("yyyy-MM-dd HH:mm"));
         }
+        Console.WriteLine($"Type = {Mtype}");
     }
     else
     {
