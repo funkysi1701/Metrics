@@ -1,0 +1,23 @@
+﻿@page "/RawData"
+@using Metrics.Core
+@using Metrics.Core.Enum
+@using Metrics.Static.Components
+@inherits RawDataBase
+
+The Raw Data
+
+@if (chartViews != null)
+{
+    <table>
+        @foreach(var item in chartViews)
+        {
+            <tr>
+                @foreach(var subitem in item)
+                {
+                    <td>@subitem.Date</td>
+                    <td>@subitem.Total</td>
+                }
+            </tr>
+        }
+    </table>
+}
