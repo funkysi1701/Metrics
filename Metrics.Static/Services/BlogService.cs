@@ -9,9 +9,10 @@ namespace Metrics.Static.Services
         private HttpClient Client { get; set; }
         private IApplicationInsights AppInsights { get; set; }
 
-        public BlogService(HttpClient httpClient, IConfiguration config)
+        public BlogService(HttpClient httpClient, IConfiguration config, IApplicationInsights AppInsights)
         {
             Client = httpClient;
+            this.AppInsights = AppInsights;
             if (!string.IsNullOrEmpty(config.GetValue<string>("BaseURL")))
             {
                 Client.BaseAddress = new Uri(config.GetValue<string>("BaseURL"));
