@@ -1,4 +1,5 @@
-﻿using Metrics.Core.Enum;
+﻿using BlazorApplicationInsights;
+using Metrics.Core.Enum;
 using Metrics.Core.Model;
 using Metrics.Static.Services;
 using Microsoft.AspNetCore.Components;
@@ -10,6 +11,7 @@ namespace Metrics.Static.Pages
     public class ChartBase : ComponentBase
     {
         [Inject] private BlogService BlogService { get; set; }
+        [Inject] private IApplicationInsights AppInsights { get; set; }
 
         [Parameter]
         public int OffSet { get; set; }
@@ -58,7 +60,7 @@ namespace Metrics.Static.Pages
             async Task Load(string Username)
             {
                 IList<IList<ChartView>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
-                if(hourlyChart == null)
+                if (hourlyChart == null)
                 {
                     return;
                 }
@@ -83,6 +85,7 @@ namespace Metrics.Static.Pages
                 {
                     LoadCompleteH = true;
                 }
+                await AppInsights.TrackEvent($"LoadHourly MetricType: {Type}, OffSet: {OffSet}, User: {Username}");
                 StateHasChanged();
             }
         }
@@ -141,6 +144,7 @@ namespace Metrics.Static.Pages
                     }
                 }
                 LoadCompleteD = true;
+                await AppInsights.TrackEvent($"LoadDaily MetricType: {Type}, OffSet: {OffSet}, User: {Username}");
                 StateHasChanged();
             }
         }
@@ -199,11 +203,12 @@ namespace Metrics.Static.Pages
                     }
                 }
                 LoadCompleteM = true;
+                await AppInsights.TrackEvent($"LoadMonthly MetricType: {Type}, OffSet: {OffSet}, User: {Username}");
                 StateHasChanged();
             }
         }
 
-        void PowerSetupDaily(IList<IList<ChartView>> dailyChart)
+        private void PowerSetupDaily(IList<IList<ChartView>> dailyChart)
         {
             var result =
                 from s in dailyChart[0].OrderBy(x => x.Date)
@@ -242,7 +247,7 @@ namespace Metrics.Static.Pages
             }
         }
 
-        void PowerSetupMonthly(IList<IList<ChartView>> monthlyChart)
+        private void PowerSetupMonthly(IList<IList<ChartView>> monthlyChart)
         {
             var preresult =
                 from s in monthlyChart[0].OrderBy(x => x.Date)

@@ -1,3 +1,4 @@
+using BlazorApplicationInsights;
 using Metrics.Static;
 using Metrics.Static.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,4 +10,5 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<BlogService>();
+builder.Services.AddBlazorApplicationInsights();
 await builder.Build().RunAsync();

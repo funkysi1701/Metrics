@@ -1,4 +1,5 @@
-﻿using Metrics.Core.Model;
+﻿using BlazorApplicationInsights;
+using Metrics.Core.Model;
 using System.Net.Http.Json;
 
 namespace Metrics.Static.Services
@@ -6,6 +7,7 @@ namespace Metrics.Static.Services
     public class BlogService
     {
         private HttpClient Client { get; set; }
+        private IApplicationInsights AppInsights { get; set; }
 
         public BlogService(HttpClient httpClient, IConfiguration config)
         {
@@ -22,11 +24,14 @@ namespace Metrics.Static.Services
             {
                 return await Client.GetFromJsonAsync<IList<IList<ChartView>>>(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
             }
-            catch
+            catch (Exception ex)
             {
+                var er = new Error();
+                er.Message = ex.Message;
+                er.Stack = ex.StackTrace;
+                await AppInsights.TrackException(er);
                 return null;
             }
-
         }
     }
 }
