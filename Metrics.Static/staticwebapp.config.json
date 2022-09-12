@@ -18,6 +18,7 @@
     "nel": "{\"report_to\":\"default\",\"max_age\":31536000,\"include_subdomains\":true}",
     "expect-ct": "max-age=604800, report-uri=\"https://funkysi1701.report-uri.com/r/d/ct/enforce\"",
     "cross-origin-embedder-policy-report-only": "(unsafe-none|require-corp); report-to=\"default\"",
-    "cross-origin-opener-policy-report-only": "(same-origin|same-origin-allow-popups|unsafe-none); report-to=\"default\""
+    "cross-origin-opener-policy-report-only": "(same-origin|same-origin-allow-popups|unsafe-none); report-to=\"default\"",
+    "Blazor-Environment": "Development"
   }
 }
