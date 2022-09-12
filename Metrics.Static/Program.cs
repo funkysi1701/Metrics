@@ -9,6 +9,12 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
 builder.Services.AddScoped<BlogService>();
-builder.Services.AddBlazorApplicationInsights();
+builder.Services.AddBlazorApplicationInsights(async applicationInsights =>
+{
+    await applicationInsights.SetInstrumentationKey(builder.Configuration.GetValue<string>("InstrumentationKey"));
+
+    await applicationInsights.TrackPageView();
+});
 await builder.Build().RunAsync();
