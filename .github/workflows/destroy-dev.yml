@@ -23,7 +23,7 @@ jobs:
           dotnet-version: 6.x
       - uses: pulumi/actions@v3
         with:
-          command: destroy
+          command: refresh
           stack-name: funkysi1701/metrics-pulumi/dev
           upsert: true
           comment-on-pr: true
@@ -37,7 +37,7 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - uses: pulumi/actions@v3
         with:
-          command: refresh
+          command: destroy
           stack-name: funkysi1701/metrics-pulumi/dev
           upsert: true
           comment-on-pr: true
