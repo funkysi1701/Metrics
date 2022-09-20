@@ -13,20 +13,15 @@ namespace Metrics.Static.Pages
 
         protected IList<IList<ChartView>> chartViews;
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
-            _ = Load();
+            await Load();
         }
 
-        private Task Load()
+        private async Task Load()
         {
-            return Task.Run(async () => await Load());
-
-            async Task Load()
-            {
-                chartViews = await BlogService.GetChart(0, (int)MyChartType.Hourly, 0, "funkysi1701");
-                await AppInsights.TrackEvent($"LoadRawData MetricType: 0, OffSet: 0, User: funkysi1701");
-            }
+            chartViews = await BlogService.GetChart(0, (int)MyChartType.Hourly, 0, "funkysi1701");
+            await AppInsights.TrackEvent($"LoadRawData MetricType: 0, OffSet: 0, User: funkysi1701");
         }
 
         public void RefreshMe()
