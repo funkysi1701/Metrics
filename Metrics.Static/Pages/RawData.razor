@@ -9,15 +9,19 @@ The Raw Data
 @if (chartViews != null)
 {
     <table>
+        <tr>
+            <td>Date</td>
+            <td>Value</td>
+        </tr>
         @foreach(var item in chartViews)
         {
-            <tr>
-                @foreach(var subitem in item)
-                {
+            @foreach(var subitem in item)
+            {
+                <tr>
                     <td>@subitem.Date</td>
                     <td>@subitem.Total</td>
-                }
-            </tr>
+                </tr>
+            }
         }
     </table>
 }
