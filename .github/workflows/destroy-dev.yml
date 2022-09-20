@@ -6,7 +6,7 @@ name: Destroy - Dev
 on:
   workflow_dispatch:
   schedule:
-    - cron: '21 0 * * *'
+    - cron: '21,41 0 * * *'
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
