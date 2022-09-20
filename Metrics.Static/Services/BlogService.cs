@@ -19,11 +19,11 @@ namespace Metrics.Static.Services
             }
         }
 
-        public async Task<IList<IList<ChartView>>> GetChart(int type, int day, int offSet, string username)
+        public async Task<IList<IList<ChartViewWithType>>> GetChart(int type, int day, int offSet, string username)
         {
             try
             {
-                return await Client.GetFromJsonAsync<IList<IList<ChartView>>>(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
+                return await Client.GetFromJsonAsync<IList<IList<ChartViewWithType>>>(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
             }
             catch (Exception ex)
             {
