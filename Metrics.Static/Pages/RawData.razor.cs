@@ -11,7 +11,8 @@ namespace Metrics.Static.Pages
         [Inject] private BlogService BlogService { get; set; }
         [Inject] private IApplicationInsights AppInsights { get; set; }
 
-        protected IList<IList<ChartView>> chartViews;
+        protected IList<IList<ChartViewWithType>> chartViews;
+        protected List<IList<IList<ChartViewWithType>>> listoflists;
 
         protected override async Task OnInitializedAsync()
         {
@@ -20,8 +21,13 @@ namespace Metrics.Static.Pages
 
         private async Task Load()
         {
-            chartViews = await BlogService.GetChart(0, (int)MyChartType.Hourly, 0, "funkysi1701");
-            await AppInsights.TrackEvent($"LoadRawData MetricType: 0, OffSet: 0, User: funkysi1701");
+            listoflists = new List<IList<IList<ChartViewWithType>>>();
+            for (int i = 0; i <= (int)MetricType.OPSComments; i++)
+            {
+                chartViews = await BlogService.GetChart(i, (int)MyChartType.Hourly, 0, "funkysi1701");
+                listoflists.Add(chartViews);
+                await AppInsights.TrackEvent($"LoadRawData MetricType: {i}, OffSet: 0, User: funkysi1701");
+            }
         }
 
         public void RefreshMe()

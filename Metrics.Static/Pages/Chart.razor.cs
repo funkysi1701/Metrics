@@ -59,7 +59,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartView>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
+                IList<IList<ChartViewWithType>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
                 if (hourlyChart == null)
                 {
                     return;
@@ -96,7 +96,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartView>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
+                IList<IList<ChartViewWithType>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
                 if (dailyChart == null)
                 {
                     return;
@@ -155,7 +155,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartView>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
+                IList<IList<ChartViewWithType>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
                 if (monthlyChart == null)
                 {
                     return;
@@ -208,7 +208,7 @@ namespace Metrics.Static.Pages
             }
         }
 
-        private void PowerSetupDaily(IList<IList<ChartView>> dailyChart)
+        private void PowerSetupDaily(IList<IList<ChartViewWithType>> dailyChart)
         {
             var result =
                 from s in dailyChart[0].OrderBy(x => x.Date)
@@ -247,7 +247,7 @@ namespace Metrics.Static.Pages
             }
         }
 
-        private void PowerSetupMonthly(IList<IList<ChartView>> monthlyChart)
+        private void PowerSetupMonthly(IList<IList<ChartViewWithType>> monthlyChart)
         {
             var preresult =
                 from s in monthlyChart[0].OrderBy(x => x.Date)
