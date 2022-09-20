@@ -8,16 +8,24 @@ The Raw Data
 
 @if (chartViews != null)
 {
-    <table>
-        @foreach(var item in chartViews)
+    <table border="1" cellpadding="5px">
+        <tr>
+            <td>Date</td>
+            <td>Value</td>
+        </tr>
+        @foreach (var item in listoflists)
         {
-            <tr>
-                @foreach(var subitem in item)
+            @foreach (var subitem in item)
+            {
+                @foreach (var subsubitem in subitem)
                 {
-                    <td>@subitem.Date</td>
-                    <td>@subitem.Total</td>
+                    <tr>
+                        <td>@subsubitem.Date.ToString("dd/MM/yy HH:mm")</td>
+                        <td>@subsubitem.Type</td>
+                        <td>@subsubitem.Total</td>
+                    </tr>
                 }
-            </tr>
+            }
         }
     </table>
 }
