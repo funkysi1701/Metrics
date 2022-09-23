@@ -62,7 +62,7 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private async Task<IList<IList<ChartView>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
+        private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
         {
             var client = new HttpClient
             {
@@ -104,29 +104,31 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private static IList<IList<ChartView>> GetResult(List<Metric> metrics, List<Metric> Prevmetrics)
+        private static IList<IList<ChartViewWithType>> GetResult(List<Metric> metrics, List<Metric> Prevmetrics)
         {
-            var result = new List<ChartView>();
+            var result = new List<ChartViewWithType>();
             foreach (var item in metrics.Where(x => x.Date != null))
             {
-                var c = new ChartView
+                var c = new ChartViewWithType
                 {
+                    Type = item.Type.Value,
                     Date = item.Date.Value,
                     Total = item.Value
                 };
                 result.Add(c);
             }
-            var prevresult = new List<ChartView>();
+            var prevresult = new List<ChartViewWithType>();
             foreach (var previtem in Prevmetrics.Where(x => x.Date != null))
             {
-                var c = new ChartView
+                var c = new ChartViewWithType
                 {
+                    Type = previtem.Type.Value,
                     Date = previtem.Date.Value,
                     Total = previtem.Value
                 };
                 prevresult.Add(c);
             }
-            var final = new List<IList<ChartView>>
+            var final = new List<IList<ChartViewWithType>>
             {
                 result,
                 prevresult

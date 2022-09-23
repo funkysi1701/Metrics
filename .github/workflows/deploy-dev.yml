@@ -8,7 +8,8 @@ on:
     branches:
       - develop
   workflow_dispatch:
-
+  schedule:
+    - cron: '31 1 1 * *'
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.x' # set this to the dotnet version to use
@@ -46,6 +47,21 @@ jobs:
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet publish Metrics.StaticFunction/Metrics.StaticFunction.csproj --configuration Release
           popd
+
+      - uses: pulumi/actions@v3
+        with:
+          command: refresh
+          stack-name: funkysi1701/metrics-pulumi/dev
+          upsert: true
+          comment-on-pr: true
+          work-dir: Metrics.Pulumi
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
       - uses: pulumi/actions@v3
         id: pulumi-up
