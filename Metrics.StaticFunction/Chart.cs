@@ -47,7 +47,7 @@ namespace Metrics.StaticFunction
             log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
-                var result = await GetChartDetails(type, day, OffSet, username);
+                var result = await GetChartDetails(type, day, OffSet, username, log);
                 return new OkObjectResult(result);
             }
             catch (Exception e)
@@ -57,7 +57,7 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
+        private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username, ILogger log)
         {
             var client = new HttpClient
             {
@@ -69,6 +69,7 @@ namespace Metrics.StaticFunction
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
+                log.LogError($"Error {result} for Get {typeParameter}");
                 return null;
             }
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
