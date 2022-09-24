@@ -40,6 +40,7 @@ namespace Metrics.Function
                 int type = int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
                 int maxRecords = int.Parse(req.Query["maxRecords"]);
+                log.LogInformation($"Get, type: {type}, username: {username}, maxRecords: {maxRecords}");
                 var result = await Get(type, username, maxRecords);
                 return new OkObjectResult(result);
             }
