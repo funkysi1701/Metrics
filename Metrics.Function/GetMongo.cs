@@ -27,6 +27,7 @@ namespace Metrics.Function
         [OpenApiOperation(operationId: "GetFn", tags: new[] { "api" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "type", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **type** parameter")]
+        [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **username** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(List<Metric>), Description = "The OK response")]
         public async Task<List<Metric>> GetFn(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -35,7 +36,8 @@ namespace Metrics.Function
             try
             {
                 int type = int.Parse(req.Query["type"]);
-                return await Get(type);
+                string username = req.Query["username"];
+                return await Get(type, username);
             }
             catch (Exception e)
             {
@@ -44,9 +46,9 @@ namespace Metrics.Function
             }
         }
 
-        public async Task<List<Metric>> Get(int type)
+        public async Task<List<Metric>> Get(int type, string username)
         {
-            return await _mongoService.GetAsync(type);
+            return await _mongoService.GetAsync(type, username);
         }
     }
 }

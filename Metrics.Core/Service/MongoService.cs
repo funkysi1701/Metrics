@@ -29,7 +29,7 @@ namespace Metrics.Core.Service
         public async Task<List<Metric>> GetAsync() =>
             await _collection.Find(_ => true).ToListAsync();
 
-        public async Task<List<Metric>> GetAsync(int? type) =>
-            await _collection.Find(i => i.Type == type).ToListAsync();
+        public async Task<List<Metric>> GetAsync(int? type, string username) =>
+            await _collection.Find(i => i.Type == type && i.Username == username).ToListAsync();
     }
 }

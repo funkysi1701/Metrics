@@ -63,9 +63,9 @@ namespace Metrics.TimerFunction
             }
         }
 
-        public async Task Delete(int type, DateTime dt)
+        public async Task Delete(int type, DateTime dt, string username)
         {
-            var m = await _mongoService.GetAsync(type);
+            var m = await _mongoService.GetAsync(type, username);
             m = m.Where(x => x.Date == dt).ToList();
             foreach (var item in m)
             {
@@ -73,9 +73,9 @@ namespace Metrics.TimerFunction
             }
         }
 
-        public async Task<List<Metric>> Get(int type)
+        public async Task<List<Metric>> Get(int type, string username)
         {
-            return await _mongoService.GetAsync(type);
+            return await _mongoService.GetAsync(type, username);
         }
 
         public async Task<List<Metric>> GetAll()

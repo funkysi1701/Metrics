@@ -69,7 +69,7 @@ namespace Metrics.StaticFunction
                 BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
             };
             var typeParameter = (int)type;
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}&username={username}");
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -77,7 +77,6 @@ namespace Metrics.StaticFunction
                 return null;
             }
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
-            metrics = metrics.Where(x => x.Username == username).ToList();
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
             if (type == MetricType.Gas || type == MetricType.Electricity)
