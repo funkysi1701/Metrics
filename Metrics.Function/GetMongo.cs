@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -40,7 +39,7 @@ namespace Metrics.Function
             }
             catch (Exception e)
             {
-                log.LogError(e.Message);
+                log.LogError($"Exception {e.Message} in GetMongo::Get");
                 return new List<Metric>();
             }
         }

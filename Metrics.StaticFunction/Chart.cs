@@ -57,7 +57,7 @@ namespace Metrics.StaticFunction
             }
             catch (Exception e)
             {
-                log.LogError($"Exception {e.Message}");
+                log.LogError($"Exception {e.Message} in Chart::GetChart");
                 return new BadRequestResult();
             }
         }
