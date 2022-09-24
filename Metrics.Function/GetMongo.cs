@@ -47,8 +47,8 @@ namespace Metrics.Function
 
         public async Task<List<Metric>> Get(int type)
         {
-            List<Metric> metrics = await _mongoService.GetAsync();
-            return metrics.Where(x => x.Type == type).ToList();
+            List<Metric> metrics = await _mongoService.GetAsync(type);
+            return metrics.ToList();
         }
     }
 }
