@@ -29,6 +29,7 @@ namespace Metrics.Function
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "type", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **type** parameter")]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **username** parameter")]
+        [OpenApiParameter(name: "maxRecords", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **maxRecords** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "The OK response")]
         public async Task<IActionResult> GetFn(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -38,7 +39,8 @@ namespace Metrics.Function
             {
                 int type = int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
-                var result = await Get(type, username);
+                int maxRecords = int.Parse(req.Query["maxRecords"]);
+                var result = await Get(type, username, maxRecords);
                 return new OkObjectResult(result);
             }
             catch (Exception e)
@@ -48,9 +50,9 @@ namespace Metrics.Function
             }
         }
 
-        public async Task<List<Metric>> Get(int type, string username)
+        public async Task<List<Metric>> Get(int type, string username, int maxRecords)
         {
-            return await _mongoService.GetAsync(type, username);
+            return await _mongoService.GetAsync(type, username, maxRecords);
         }
     }
 }
