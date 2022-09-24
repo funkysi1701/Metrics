@@ -40,16 +40,11 @@ namespace Metrics.StaticFunction
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("GetChart");
-
             MetricType type = (MetricType)int.Parse(req.Query["type"]);
-            log.LogInformation(type.ToString());
             MyChartType day = (MyChartType)int.Parse(req.Query["day"]);
-            log.LogInformation(day.ToString());
             int OffSet = int.Parse(req.Query["offset"]);
-            log.LogInformation(OffSet.ToString());
             string username = req.Query["username"];
-            log.LogInformation(username);
+            log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
                 var result = await GetChartDetails(type, day, OffSet, username);
@@ -66,7 +61,8 @@ namespace Metrics.StaticFunction
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI"))
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
+                Timeout = TimeSpan.FromMinutes(30)
             };
             var typeParameter = (int)type;
             using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");
