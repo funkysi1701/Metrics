@@ -1,6 +1,7 @@
 using Metrics.Core.Model;
 using Metrics.Core.Service;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
@@ -28,8 +29,8 @@ namespace Metrics.Function
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "type", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **type** parameter")]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **username** parameter")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(List<Metric>), Description = "The OK response")]
-        public async Task<List<Metric>> GetFn(
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "The OK response")]
+        public async Task<IActionResult> GetFn(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
@@ -37,12 +38,13 @@ namespace Metrics.Function
             {
                 int type = int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
-                return await Get(type, username);
+                var result = await Get(type, username);
+                return new OkObjectResult(result);
             }
             catch (Exception e)
             {
                 log.LogError($"Exception {e.Message} in GetMongo::Get");
-                return new List<Metric>();
+                return new BadRequestObjectResult(e.Message);
             }
         }
 
