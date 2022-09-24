@@ -48,6 +48,11 @@ namespace Metrics.StaticFunction
             try
             {
                 var result = await GetChartDetails(type, day, OffSet, username, log);
+                if (result == null)
+                {
+                    log.LogError("Null Error in Chart::GetChart");
+                }
+                log.LogInformation($"GetChart OK");
                 return new OkObjectResult(result);
             }
             catch (Exception e)
