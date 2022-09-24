@@ -101,8 +101,8 @@ namespace Metrics.TimerFunction.Services
             IActionResult result;
             var events = await github.Activity.Events.GetAllUserPerformed(username);
             var today = events.Where(x => x.Type == "PushEvent" && x.CreatedAt > DateTime.Now.Date).ToList();
-            var sofar = await Chart.GetAll();
-            sofar = sofar.Where(x => x.Date != null && x.Type == 8 && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
+            var sofar = await Chart.Get(8);
+            sofar = sofar.Where(x => x.Date != null && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
             if (sofar.Count == 0)
             {
                 result = await Chart.SaveData(today.Count, 8, username);
