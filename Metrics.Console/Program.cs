@@ -41,7 +41,7 @@ async Task CheckKey(string? type)
 {
     if (int.TryParse(type, out int Mtype) && Mtype >= 0 && Mtype <= 22)
     {
-        var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == Mtype).ToList();
+        var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == Mtype).OrderByDescending(x => x.Date).ToList();
         Console.WriteLine($"Type = {Mtype}");
         foreach (var item in m)
         {
@@ -51,7 +51,7 @@ async Task CheckKey(string? type)
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.ToString().Substring(0, 200));
             }
             Console.WriteLine($"{item.Date?.ToString("yyyy-MM-dd HH:mm")} {item.Type}");
         }
