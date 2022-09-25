@@ -44,12 +44,12 @@ namespace Metrics.TimerFunction.Services
 
         public async Task CheckConsumption(int Id, IEnumerable<Consumption> consumption)
         {
-            var exist = await Chart.Get(Id);
+            var exist = await Chart.Get(Id, Configuration.GetValue<string>("Username1"));
             foreach (var item in consumption)
             {
                 if (exist.Any(x => x.Date.Value == item.Start.UtcDateTime.Date))
                 {
-                    await Chart.Delete(Id, item.Start.UtcDateTime);
+                    await Chart.Delete(Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
                 }
                 await Chart.SaveData(item.Quantity, Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
             }
