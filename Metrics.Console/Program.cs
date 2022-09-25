@@ -40,7 +40,8 @@ if (type != null)
     }
     else await CheckKey(type);
 }
-System.Diagnostics.Process.Start(Environment.ProcessPath);
+if(Environment.ProcessPath!=null)
+    System.Diagnostics.Process.Start(Environment.ProcessPath);
 Environment.Exit(0);
 
 async Task CheckKey(string? type)
