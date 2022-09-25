@@ -40,43 +40,43 @@ namespace Metrics.StaticFunction
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("GetChart");
-
             MetricType type = (MetricType)int.Parse(req.Query["type"]);
-            log.LogInformation(type.ToString());
             MyChartType day = (MyChartType)int.Parse(req.Query["day"]);
-            log.LogInformation(day.ToString());
             int OffSet = int.Parse(req.Query["offset"]);
-            log.LogInformation(OffSet.ToString());
             string username = req.Query["username"];
-            log.LogInformation(username);
+            log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
-                var result = await GetChartDetails(type, day, OffSet, username);
+                var result = await GetChartDetails(type, day, OffSet, username, log);
+                if (result == null)
+                {
+                    log.LogError("Null Error in Chart::GetChart");
+                }
+                log.LogInformation($"GetChart OK");
                 return new OkObjectResult(result);
             }
             catch (Exception e)
             {
-                log.LogError($"Exception {e.Message}");
+                log.LogError($"Exception {e.Message} in Chart::GetChart");
                 return new BadRequestResult();
             }
         }
 
-        private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username)
+        private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username, ILogger log)
         {
             var client = new HttpClient
             {
-                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI"))
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
             };
             var typeParameter = (int)type;
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}");
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}&username={username}&maxRecords=20000");
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
+                log.LogError($"Error {result} for Get {typeParameter}");
                 return null;
             }
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
-            metrics = metrics.Where(x => x.Username == username).ToList();
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
             if (type == MetricType.Gas || type == MetricType.Electricity)

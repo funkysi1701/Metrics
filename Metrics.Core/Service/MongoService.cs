@@ -28,5 +28,14 @@ namespace Metrics.Core.Service
 
         public async Task<List<Metric>> GetAsync() =>
             await _collection.Find(_ => true).ToListAsync();
+
+        public async Task<List<Metric>> GetAsync(int? type, string username, int maxRecords)
+        {
+            return await _collection
+                .Find(i => i.Type == type && i.Username == username)
+                .SortByDescending(x => x.Date)
+                .Limit(maxRecords)
+                .ToListAsync();
+        }
     }
 }
