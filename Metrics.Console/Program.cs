@@ -23,18 +23,22 @@ var opt = new MyMongoDatabaseSettings
 };
 var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
-Console.WriteLine("Enter 0 - 22, or A for All");
+Console.WriteLine("Enter 0 - 22, or A for All, Q for Quit");
 var type = Console.ReadLine();
 if (type != null)
 {
-    if (type == "A")
+    if (type == "Q")
+    {
+        Environment.Exit(0);
+    }
+    else if (type == "A")
     {
         for (int i = 0; i < 23; i++)
         {
             await CheckKey(i.ToString());
         }
     }
-    await CheckKey(type);
+    else await CheckKey(type);
 }
 
 async Task CheckKey(string? type)
@@ -62,10 +66,6 @@ async Task CheckKey(string? type)
         Environment.Exit(1);
     }
 
-    Console.WriteLine("Enter 0 - 22");
-    type = Console.ReadLine();
-    if (type != null)
-    {
-        await CheckKey(type);
-    }
+    System.Diagnostics.Process.Start(Environment.ProcessPath);
+    Environment.Exit(0);
 }
