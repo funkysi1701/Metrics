@@ -23,10 +23,17 @@ var opt = new MyMongoDatabaseSettings
 };
 var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
-Console.WriteLine("Enter 0 - 22");
+Console.WriteLine("Enter 0 - 22, or A for All");
 var type = Console.ReadLine();
 if (type != null)
 {
+    if (type == "A")
+    {
+        for (int i = 0; i < 23; i++)
+        {
+            await CheckKey(i.ToString());
+        }
+    }
     await CheckKey(type);
 }
 
@@ -46,7 +53,7 @@ async Task CheckKey(string? type)
             {
                 Console.WriteLine(ex.ToString());
             }
-            Console.WriteLine(item.Date?.ToString("yyyy-MM-dd HH:mm"));
+            Console.WriteLine($"{item.Date?.ToString("yyyy-MM-dd HH:mm")} {item.Type}");
         }
         Console.WriteLine($"Type = {Mtype}");
     }
