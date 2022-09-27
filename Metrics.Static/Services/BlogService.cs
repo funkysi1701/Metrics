@@ -1,4 +1,5 @@
 ﻿using BlazorApplicationInsights;
+using Metrics.Core.Errors;
 using Metrics.Core.Model;
 using System.Text.Json;
 
@@ -26,7 +27,7 @@ namespace Metrics.Static.Services
                 var response = await Client.GetAsync(new Uri($"{Client.BaseAddress}api/GetChart?type={type}&day={day}&offset={offSet}&username={username}"));
                 var content = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
-                    throw new ApplicationException($"Reason: {response.ReasonPhrase}, Message: {content}");
+                    throw new HttpStatusCodeException(response.StatusCode, $"Reason: {response.ReasonPhrase}, Message: {content}");
 
                 return JsonSerializer.Deserialize<IList<IList<ChartViewWithType>>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             }

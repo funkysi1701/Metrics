@@ -21,7 +21,7 @@ namespace Metrics.TimerFunction.Services
 
         public GitHubClient GitHub()
         {
-            var github = new GitHubClient(new ProductHeaderValue(Configuration.GetValue<string>("Username1")));
+            var github = new GitHubClient(new ProductHeaderValue(Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"));
             var tokenAuth = new Credentials(Configuration.GetValue<string>("GitHubToken"));
             github.Credentials = tokenAuth;
             return github;
