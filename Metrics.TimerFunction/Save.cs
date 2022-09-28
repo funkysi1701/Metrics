@@ -27,11 +27,11 @@ namespace Metrics.TimerFunction
             this.Configuration = Configuration;
             ghusers = new List<string>
             {
-                Configuration.GetValue<string>("Username1") == "" ? "funkysi1701": Configuration.GetValue<string>("Username1")
+                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
             twusers = new List<string>
             {
-                Configuration.GetValue<string>("Username1") == "" ? "funkysi1701": Configuration.GetValue<string>("Username1"),
+                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701",
                 "zogface",
                 "juliankay"
             };
