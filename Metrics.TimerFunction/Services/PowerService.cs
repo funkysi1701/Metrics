@@ -51,7 +51,7 @@ namespace Metrics.TimerFunction.Services
                 {
                     await Chart.Delete(Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
                 }
-                await Chart.SaveData(item.Quantity, Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
+                await Chart.SaveData(item.Quantity, Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701");
             }
         }
     }

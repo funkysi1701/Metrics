@@ -23,7 +23,7 @@ namespace Metrics.TimerFunction.Services
         public async Task<IActionResult> GetBlogCount(ILogger log, string url, int Type)
         {
             var count = DOXML(url, log);
-            return await Chart.SaveData(count, Type, Configuration.GetValue<string>("Username1"));
+            return await Chart.SaveData(count, Type, Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701");
         }
 
         private static int DOXML(string url, ILogger log)
