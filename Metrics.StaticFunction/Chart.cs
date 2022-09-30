@@ -47,7 +47,7 @@ namespace Metrics.StaticFunction
             log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
-                if (type == MetricType.Gas || type == MetricType.Electricity)
+                if ((type == MetricType.Gas || type == MetricType.Electricity) && day == MyChartType.Monthly)
                 {
                     var result = await GetChartDetailsPaged(type, day, OffSet, username, log);
                     if (result == null)
@@ -137,6 +137,10 @@ namespace Metrics.StaticFunction
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
+            if (type == MetricType.Gas || type == MetricType.Electricity)
+            {
+                OffSet++;
+            }
 
             if (day == MyChartType.Hourly)
             {
