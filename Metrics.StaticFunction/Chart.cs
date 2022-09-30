@@ -83,7 +83,7 @@ namespace Metrics.StaticFunction
             };
             var typeParameter = (int)type;
             List<Metric> metrics = new();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i <= Configuration.GetValue<int>("MaxPages"); i++)
             {
                 using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum={i}");
                 string result = await httpResponse.Content.ReadAsStringAsync();
