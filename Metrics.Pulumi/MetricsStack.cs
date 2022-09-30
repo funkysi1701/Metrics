@@ -251,7 +251,7 @@ namespace Metrics.Pulumi
                                                     { "DatabaseName", $"Metrics-{config.Require("env")}" },
                                                     { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" },
                                                     { "MaxRecords", 20000 },
-                                                    { "MaxPages", 5 }
+                                                    { "MaxPages", 16 }
                                                 }
                                             }
                                         }
