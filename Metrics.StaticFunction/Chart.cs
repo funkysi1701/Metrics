@@ -47,18 +47,79 @@ namespace Metrics.StaticFunction
             log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
-                var result = await GetChartDetails(type, day, OffSet, username, log);
-                if (result == null)
+                if (type == MetricType.Gas || type == MetricType.Electricity)
                 {
-                    log.LogError("Null Error in Chart::GetChart");
+                    var result = await GetChartDetailsPaged(type, day, OffSet, username, log);
+                    if (result == null)
+                    {
+                        log.LogError($"Null Error in Chart::GetChart type: {type}");
+                    }
+                    log.LogInformation($"GetChart OK");
+                    return new OkObjectResult(result);
                 }
-                log.LogInformation($"GetChart OK");
-                return new OkObjectResult(result);
+                else
+                {
+                    var result = await GetChartDetails(type, day, OffSet, username, log);
+                    if (result == null)
+                    {
+                        log.LogError("Null Error in Chart::GetChart");
+                    }
+                    log.LogInformation($"GetChart OK");
+                    return new OkObjectResult(result);
+                }
             }
             catch (Exception e)
             {
                 log.LogError($"Exception {e.Message} in Chart::GetChart");
                 return new BadRequestResult();
+            }
+        }
+
+        private async Task<IList<IList<ChartViewWithType>>> GetChartDetailsPaged(MetricType type, MyChartType day, int OffSet, string username, ILogger log)
+        {
+            var client = new HttpClient
+            {
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
+            };
+            var typeParameter = (int)type;
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum=0");
+            string result = await httpResponse.Content.ReadAsStringAsync();
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                log.LogError($"Error {result} for Get {typeParameter}");
+                return null;
+            }
+            var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
+            using var httpResponse2 = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum=1");
+            string result2 = await httpResponse2.Content.ReadAsStringAsync();
+            if (!httpResponse2.IsSuccessStatusCode)
+            {
+                log.LogError($"Error {result2} for Get {typeParameter}");
+                return null;
+            }
+            var metrics2 = JsonConvert.DeserializeObject<List<Metric>>(result2);
+            metrics.AddRange(metrics2);
+            List<Metric> LiveMetrics;
+            List<Metric> PrevMetrics;
+            OffSet++;
+
+            if (day == MyChartType.Hourly)
+            {
+                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.AddHours(-24 * (OffSet + 1)) && x.Date <= DateTime.Now.AddHours(-24 * OffSet)).ToList();
+                PrevMetrics = metrics.Where(x => x.Date > DateTime.Now.AddHours(-24 * (OffSet + 2)) && x.Date <= DateTime.Now.AddHours(-24 * (OffSet + 1))).ToList();
+                return GetResult(LiveMetrics, PrevMetrics);
+            }
+            else if (day == MyChartType.Daily)
+            {
+                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.Date.AddDays(-14)).ToList();
+                PrevMetrics = metrics.Where(x => x.Date <= DateTime.Now.Date.AddDays(-14) && x.Date > DateTime.Now.Date.AddDays(-29)).ToList();
+                return GetResult(LiveMetrics, PrevMetrics);
+            }
+            else
+            {
+                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-11)).ToList();
+                PrevMetrics = metrics.Where(x => x.Date <= DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-11) && x.Date > DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-23)).ToList();
+                return GetResult(LiveMetrics, PrevMetrics);
             }
         }
 
@@ -79,10 +140,6 @@ namespace Metrics.StaticFunction
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
-            if (type == MetricType.Gas || type == MetricType.Electricity)
-            {
-                OffSet++;
-            }
 
             if (day == MyChartType.Hourly)
             {
