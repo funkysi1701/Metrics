@@ -69,7 +69,7 @@ namespace Metrics.StaticFunction
                 BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
             };
             var typeParameter = (int)type;
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}&username={username}&maxRecords=20000");
+            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}&username={username}&maxRecords={Configuration.GetValue<int>("MaxRecords")}");
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
