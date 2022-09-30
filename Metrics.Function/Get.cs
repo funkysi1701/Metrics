@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace Metrics.Function
 {
-    public class GetMongo
+    public class Get
     {
         private readonly MongoService _mongoService;
 
-        public GetMongo(MongoService mongoService)
+        public Get(MongoService mongoService)
         {
             _mongoService = mongoService;
         }
@@ -41,7 +41,7 @@ namespace Metrics.Function
                 string username = req.Query["username"];
                 int maxRecords = int.Parse(req.Query["maxRecords"]);
                 log.LogInformation($"Get, type: {type}, username: {username}, maxRecords: {maxRecords}");
-                var result = await Get(type, username, maxRecords);
+                var result = await GetMongo(type, username, maxRecords, 0);
                 return new OkObjectResult(result);
             }
             catch (Exception e)
@@ -51,9 +51,9 @@ namespace Metrics.Function
             }
         }
 
-        public async Task<List<Metric>> Get(int type, string username, int maxRecords)
+        public async Task<List<Metric>> GetMongo(int type, string username, int PageSize, int PageNum)
         {
-            return await _mongoService.GetAsync(type, username, maxRecords);
+            return await _mongoService.GetAsync(type, username, PageSize, PageNum);
         }
     }
 }

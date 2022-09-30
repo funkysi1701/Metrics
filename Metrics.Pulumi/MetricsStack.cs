@@ -249,7 +249,9 @@ namespace Metrics.Pulumi
                                                     { "APPLICATIONINSIGHTS_CONNECTION_STRING", appInsights.ConnectionString },
                                                     { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
                                                     { "DatabaseName", $"Metrics-{config.Require("env")}" },
-                                                    { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" }
+                                                    { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" },
+                                                    { "MaxRecords", 20000 },
+                                                    { "MaxPages", 16 }
                                                 }
                                             }
                                         }
