@@ -32,7 +32,7 @@ namespace Metrics.Function
         [OpenApiParameter(name: "maxRecords", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **maxRecords** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "The OK response")]
         public async Task<IActionResult> GetFn(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "Get")] HttpRequest req,
             ILogger log)
         {
             try
@@ -60,7 +60,7 @@ namespace Metrics.Function
         [OpenApiParameter(name: "PageNum", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **PageNum** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IActionResult), Description = "The OK response")]
         public async Task<IActionResult> GetFnPaged(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = "GetPaged")] HttpRequest req,
             ILogger log)
         {
             try

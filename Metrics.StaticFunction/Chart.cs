@@ -86,7 +86,7 @@ namespace Metrics.StaticFunction
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
-                log.LogError($"Error {result} for Get {typeParameter}");
+                log.LogError($"Error {result} for GetPaged {typeParameter}");
                 return null;
             }
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
@@ -94,7 +94,7 @@ namespace Metrics.StaticFunction
             string result2 = await httpResponse2.Content.ReadAsStringAsync();
             if (!httpResponse2.IsSuccessStatusCode)
             {
-                log.LogError($"Error {result2} for Get {typeParameter}");
+                log.LogError($"Error {result2} for GetPaged {typeParameter}");
                 return null;
             }
             var metrics2 = JsonConvert.DeserializeObject<List<Metric>>(result2);
