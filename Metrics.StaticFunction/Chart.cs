@@ -98,7 +98,10 @@ namespace Metrics.StaticFunction
                 return null;
             }
             var metrics2 = JsonConvert.DeserializeObject<List<Metric>>(result2);
+            log.LogInformation($"page 0 {metrics.Count}");
+            log.LogInformation($"page 1 {metrics2.Count}");
             metrics.AddRange(metrics2);
+            log.LogInformation($"total {metrics.Count}");
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
             OffSet++;
