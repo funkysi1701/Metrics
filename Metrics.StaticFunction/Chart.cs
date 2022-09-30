@@ -82,26 +82,20 @@ namespace Metrics.StaticFunction
                 BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
             };
             var typeParameter = (int)type;
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum=0");
-            string result = await httpResponse.Content.ReadAsStringAsync();
-            if (!httpResponse.IsSuccessStatusCode)
+            List<Metric> metrics = new();
+            for (int i = 0; i < 5; i++)
             {
-                log.LogError($"Error {result} for GetPaged {typeParameter}");
-                return null;
+                using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum={i}");
+                string result = await httpResponse.Content.ReadAsStringAsync();
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    log.LogError($"Error {result} for GetPaged {typeParameter}");
+                    return null;
+                }
+                var submetrics = JsonConvert.DeserializeObject<List<Metric>>(result);
+                metrics.AddRange(submetrics);
             }
-            var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
-            using var httpResponse2 = await client.GetAsync($"{client.BaseAddress}api/GetPaged?type={typeParameter}&username={username}&PageSize={Configuration.GetValue<int>("MaxRecords")}&PageNum=1");
-            string result2 = await httpResponse2.Content.ReadAsStringAsync();
-            if (!httpResponse2.IsSuccessStatusCode)
-            {
-                log.LogError($"Error {result2} for GetPaged {typeParameter}");
-                return null;
-            }
-            var metrics2 = JsonConvert.DeserializeObject<List<Metric>>(result2);
-            log.LogInformation($"page 0 {metrics.Count}");
-            log.LogInformation($"page 1 {metrics2.Count}");
-            metrics.AddRange(metrics2);
-            log.LogInformation($"total {metrics.Count}");
+
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
             OffSet++;
