@@ -6,11 +6,30 @@
 
 The Raw Data
 
+<div class="row">
+    <div class="col">
+        <div class="collapse multi-collapse show" id="Filters">
+            <div class="card-group">
+                <div class="card card-body">
+                    <h5 class="card-title">Select Type</h5>
+                    <MatAutocompleteList FullWidth="false" Id="Type" Items="@types" Outlined="true" TItem="MetricType" ShowClearButton="true" Label="Select Type" @bind-Value="@SelectedType"></MatAutocompleteList>
+                </div>
+            </div>
+            <div class="card-group">
+                <div class="card card-body">
+                    <button class="btn btn-primary" type="button" @onclick="@(async () => await Refresh())"><span class="oi oi-reload"></span> Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (chartViews != null)
 {
-    <table border="1" cellpadding="5px">
+    <table border="1" cellpadding="5">
         <tr>
             <td>Date</td>
+            <td>Type</td>
             <td>Value</td>
         </tr>
         @foreach (var item in listoflists)
