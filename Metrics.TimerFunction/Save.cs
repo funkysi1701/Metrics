@@ -324,11 +324,15 @@ namespace Metrics.TimerFunction
         public async Task Run13([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var feedList = new List<SaveBlog>
+            var feedList = new List<SaveBlog>();
+            if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
             {
-                new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog },
-                new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog }
-            };
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog });
+            }
+            if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
+            {
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog });
+            }
 
             foreach (var item in feedList)
             {
