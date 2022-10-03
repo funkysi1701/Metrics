@@ -358,7 +358,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "OldRSSFeed",
-                            Value = "https://www.pwnedpass.com/feed/",
+                            Value = "",
                         },
                         new NameValuePairArgs{
                             Name = "ConnectionString",
