@@ -8,17 +8,28 @@ The Raw Data
 
 <div class="row">
     <div class="col">
-        <div class="collapse multi-collapse show" id="Filters">
-            <div class="card-group">
-                <div class="card card-body">
-                    <h5 class="card-title">Select Type</h5>
-                    <MatAutocompleteList FullWidth="false" Id="Type" Items="@types" Outlined="true" TItem="MetricType" ShowClearButton="true" Label="Select Type" @bind-Value="@SelectedType"></MatAutocompleteList>
-                </div>
+        <div class="card-group">
+            <div class="card card-body">
+                <h5 class="card-title">Select Type</h5>
+                <MatAutocompleteList FullWidth="false" Id="Type" Items="@Types" Outlined="true" TItem="MetricType" ShowClearButton="true" Label="Select Type" @bind-Value="@SelectedType"></MatAutocompleteList>
             </div>
-            <div class="card-group">
-                <div class="card card-body">
-                    <button class="btn btn-primary" type="button" @onclick="@(async () => await Refresh())"><span class="oi oi-reload"></span> Refresh</button>
-                </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card-group">
+            <div class="card card-body">
+                <h5 class="card-title">Select Offset</h5>
+                <MatDatePicker FullWidth="false" Id="Type" Outlined="true" ShowClearButton="true" Label="Select Offset" @bind-Value="@SelectedOffsetDate"></MatDatePicker>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card-group">
+            <div class="card card-body">
+                <button class="btn btn-primary" type="button" @onclick="@(async () => await Refresh())"><span class="oi oi-reload"></span> Refresh</button>
             </div>
         </div>
     </div>

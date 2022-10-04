@@ -3,7 +3,6 @@ using Metrics.Core.Enum;
 using Metrics.Core.Model;
 using Metrics.Static.Services;
 using Microsoft.AspNetCore.Components;
-using System.Reflection.Metadata;
 
 namespace Metrics.Static.Pages
 {
@@ -15,11 +14,14 @@ namespace Metrics.Static.Pages
         protected IList<IList<ChartViewWithType>> chartViews;
         protected List<IList<IList<ChartViewWithType>>> listoflists;
         protected MetricType SelectedType { get; set; }
-        protected List<MetricType> types { get; set; }
+        protected int SelectedOffset { get; set; }
+        protected DateTime SelectedOffsetDate { get; set; }
+        protected List<MetricType> Types { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            types = new List<MetricType>
+            SelectedOffset = 0;
+            Types = new List<MetricType>
             {
                 MetricType.TwitterFollowers,
                 MetricType.TwitterFollowing,
@@ -45,31 +47,15 @@ namespace Metrics.Static.Pages
                 MetricType.OPSReactions,
                 MetricType.OPSComments
             };
-            await Load();
-        }
-
-        private async Task Load()
-        {
-            listoflists = new List<IList<IList<ChartViewWithType>>>();
-            for (int i = 0; i <= (int)MetricType.OPSComments; i++)
-            {
-                chartViews = await BlogService.GetChart(i, (int)MyChartType.Hourly, 0, "funkysi1701");
-                listoflists.Add(chartViews);
-                await AppInsights.TrackEvent($"LoadRawData MetricType: {i}, OffSet: 0, User: funkysi1701");
-            }
         }
 
         protected async Task Refresh()
         {
+            SelectedOffset = (int)(DateTime.UtcNow - SelectedOffsetDate).TotalDays;
             listoflists = new List<IList<IList<ChartViewWithType>>>();
-            chartViews = await BlogService.GetChart((int)SelectedType, (int)MyChartType.Hourly, 0, "funkysi1701");
+            chartViews = await BlogService.GetChart((int)SelectedType, (int)MyChartType.Hourly, SelectedOffset, "funkysi1701");
             listoflists.Add(chartViews);
             await AppInsights.TrackEvent($"LoadRawData MetricType: {(int)SelectedType}, OffSet: 0, User: funkysi1701");
-        }
-
-        public void RefreshMe()
-        {
-            StateHasChanged();
         }
     }
 }
