@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Metrics.StaticFunction
@@ -165,7 +166,8 @@ namespace Metrics.StaticFunction
         private static IList<IList<ChartViewWithType>> GetResult(List<Metric> metrics, List<Metric> Prevmetrics)
         {
             var result = new List<ChartViewWithType>();
-            foreach (var item in metrics.Where(x => x.Date != null))
+            metrics = metrics.Where(x => x.Date != null).ToList();
+            foreach (var item in CollectionsMarshal.AsSpan(metrics))
             {
                 var c = new ChartViewWithType
                 {
@@ -175,8 +177,10 @@ namespace Metrics.StaticFunction
                 };
                 result.Add(c);
             }
+
             var prevresult = new List<ChartViewWithType>();
-            foreach (var previtem in Prevmetrics.Where(x => x.Date != null))
+            Prevmetrics = Prevmetrics.Where(x => x.Date != null).ToList();
+            foreach (var previtem in CollectionsMarshal.AsSpan(Prevmetrics))
             {
                 var c = new ChartViewWithType
                 {
