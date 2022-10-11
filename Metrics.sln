@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.StaticFunction", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Console", "Metrics.Console\Metrics.Console.csproj", "{8B75223F-9731-434A-AF9B-EA580B1F4682}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrics.Benchmark", "Metrics.Benchmark\Metrics.Benchmark.csproj", "{6EA4CE4C-1ACC-4ADC-8E17-A4342B9AB987}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core.MVC", "Metrics.Core.MVC\Metrics.Core.MVC.csproj", "{EB11ECC2-66AF-43D0-8079-7DC7BE104083}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8ACB7BC9-F8D3-47B8-ACD4-4149087A67ED}"
@@ -68,6 +70,10 @@ Global
 		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B75223F-9731-434A-AF9B-EA580B1F4682}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EA4CE4C-1ACC-4ADC-8E17-A4342B9AB987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA4CE4C-1ACC-4ADC-8E17-A4342B9AB987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA4CE4C-1ACC-4ADC-8E17-A4342B9AB987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA4CE4C-1ACC-4ADC-8E17-A4342B9AB987}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Release|Any CPU.ActiveCfg = Release|Any CPU
