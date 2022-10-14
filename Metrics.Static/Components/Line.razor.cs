@@ -6,15 +6,9 @@ using ChartJs.Blazor.ChartJS.Common.Time;
 using ChartJs.Blazor.ChartJS.LineChart;
 using ChartJs.Blazor.Charts;
 using ChartJs.Blazor.Util;
-using Metrics.Static.Services;
-using Microsoft.AspNetCore.Components;
-using System.ComponentModel;
-using System.Reflection;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
 using Metrics.Core.Enum;
+using Microsoft.AspNetCore.Components;
+using System.Drawing;
 
 namespace Metrics.Static.Components
 {

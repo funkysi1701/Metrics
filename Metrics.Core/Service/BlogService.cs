@@ -1,9 +1,10 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Errors;
 using Metrics.Core.Model;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
-namespace Metrics.Static.Services
+namespace Metrics.Core.Service
 {
     public class BlogService
     {
