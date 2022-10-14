@@ -2,22 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Parameters;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.MVC
 {
     public class TwitterService
     {
-        private readonly Chart Chart;
+        private readonly ChartService Chart;
         private TwitterClient TwitterClient { get; set; }
 
         public TwitterService(IConfiguration configuration, MongoService mongoService)
         {
-            Chart = new Chart(mongoService);
+            Chart = new ChartService(mongoService);
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
         }
 

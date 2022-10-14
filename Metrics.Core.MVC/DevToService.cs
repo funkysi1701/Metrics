@@ -3,21 +3,18 @@ using Metrics.Core.Model;
 using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.MVC
 {
     public class DevToService
     {
-        private readonly Chart Chart;
+        private readonly ChartService Chart;
         private IConfiguration Configuration { get; set; }
 
         public DevToService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new ChartService(mongoService);
         }
 
         public async Task<IActionResult> GetOps(string username)
