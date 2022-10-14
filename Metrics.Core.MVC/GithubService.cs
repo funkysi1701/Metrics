@@ -7,13 +7,13 @@ namespace Metrics.Core.MVC
 {
     public class GithubService
     {
-        private readonly ChartService Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         public GithubService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new ChartService(mongoService);
+            Chart = new MongoDataService(mongoService);
         }
 
         public GitHubClient GitHub()

@@ -8,13 +8,13 @@ namespace Metrics.Core.MVC
 {
     public class DevToService
     {
-        private readonly ChartService Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         public DevToService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new ChartService(mongoService);
+            Chart = new MongoDataService(mongoService);
         }
 
         public async Task<IActionResult> GetOps(string username)

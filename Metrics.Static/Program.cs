@@ -10,7 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-builder.Services.AddScoped<BlogService>();
+builder.Services.AddScoped<ChartService>();
 builder.Services.AddBlazorApplicationInsights(async applicationInsights =>
 {
     await applicationInsights.SetInstrumentationKey(builder.Configuration.GetValue<string>("InstrumentationKey"));
