@@ -25,7 +25,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = null;
 
             List<BlogPosts> blogs = new();
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < 100; i++)
             {
                 blogs.AddRange(await GetAllBlogs.GetAllOps(Configuration, 10, i));
             }
