@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.MVC
 {
     public class PowerService
     {
-        private readonly Chart Chart;
+        private readonly ChartService Chart;
         private IConfiguration Configuration { get; set; }
 
         private readonly string Key;
@@ -19,7 +19,7 @@ namespace Metrics.TimerFunction.Services
         public PowerService(IConfiguration configuration, IOctopusEnergyClient client, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new ChartService(mongoService);
             Client = client;
             Key = Configuration.GetValue<string>("OctopusKey");
         }
