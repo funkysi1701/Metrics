@@ -1,7 +1,7 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Enum;
 using Metrics.Core.Model;
-using Metrics.Static.Services;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Components;
 
 namespace Metrics.Static.Pages

@@ -1,6 +1,6 @@
 using BlazorApplicationInsights;
 using Metrics.Static;
-using Metrics.Static.Services;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System.Net.Http;
+using BlogService = Metrics.TimerFunction.Services.BlogService;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 
