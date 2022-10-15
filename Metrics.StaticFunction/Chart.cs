@@ -78,10 +78,7 @@ namespace Metrics.StaticFunction
 
         private async Task<IList<IList<ChartViewWithType>>> GetChartDetailsPaged(MetricType type, MyChartType day, int OffSet, string username, ILogger log)
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
-            };
+            var client = CreateClient();
             var typeParameter = (int)type;
             List<Metric> metrics = new();
             for (int i = 0; i <= Configuration.GetValue<int>("MaxPages"); i++)
@@ -97,10 +94,22 @@ namespace Metrics.StaticFunction
                 metrics.AddRange(submetrics);
             }
 
+            OffSet++;
+            return TimePeriodCheck(day, OffSet, metrics);
+        }
+
+        public HttpClient CreateClient()
+        {
+            return new HttpClient
+            {
+                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
+            };
+        }
+
+        public static IList<IList<ChartViewWithType>> TimePeriodCheck(MyChartType day, int OffSet, List<Metric> metrics)
+        {
             List<Metric> LiveMetrics;
             List<Metric> PrevMetrics;
-            OffSet++;
-
             if (day == MyChartType.Hourly)
             {
                 LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.AddHours(-24 * (OffSet + 1)) && x.Date <= DateTime.Now.AddHours(-24 * OffSet)).ToList();
@@ -123,10 +132,7 @@ namespace Metrics.StaticFunction
 
         private async Task<IList<IList<ChartViewWithType>>> GetChartDetails(MetricType type, MyChartType day, int OffSet, string username, ILogger log)
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(Configuration.GetValue<string>("FunctionAPI")),
-            };
+            var client = CreateClient();
             var typeParameter = (int)type;
             using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Get?type={typeParameter}&username={username}&maxRecords={Configuration.GetValue<int>("MaxRecords")}");
             string result = await httpResponse.Content.ReadAsStringAsync();
@@ -136,31 +142,13 @@ namespace Metrics.StaticFunction
                 return null;
             }
             var metrics = JsonConvert.DeserializeObject<List<Metric>>(result);
-            List<Metric> LiveMetrics;
-            List<Metric> PrevMetrics;
+
             if (type == MetricType.Gas || type == MetricType.Electricity)
             {
                 OffSet++;
             }
 
-            if (day == MyChartType.Hourly)
-            {
-                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.AddHours(-24 * (OffSet + 1)) && x.Date <= DateTime.Now.AddHours(-24 * OffSet)).ToList();
-                PrevMetrics = metrics.Where(x => x.Date > DateTime.Now.AddHours(-24 * (OffSet + 2)) && x.Date <= DateTime.Now.AddHours(-24 * (OffSet + 1))).ToList();
-                return GetResult(LiveMetrics, PrevMetrics);
-            }
-            else if (day == MyChartType.Daily)
-            {
-                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.Date.AddDays(-14)).ToList();
-                PrevMetrics = metrics.Where(x => x.Date <= DateTime.Now.Date.AddDays(-14) && x.Date > DateTime.Now.Date.AddDays(-29)).ToList();
-                return GetResult(LiveMetrics, PrevMetrics);
-            }
-            else
-            {
-                LiveMetrics = metrics.Where(x => x.Date > DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-11)).ToList();
-                PrevMetrics = metrics.Where(x => x.Date <= DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-11) && x.Date > DateTime.Now.AddDays(-1 * (DateTime.Now.Day - 1)).Date.AddMonths(-23)).ToList();
-                return GetResult(LiveMetrics, PrevMetrics);
-            }
+            return TimePeriodCheck(day, OffSet, metrics);
         }
 
         private static IList<IList<ChartViewWithType>> GetResult(List<Metric> metrics, List<Metric> Prevmetrics)
