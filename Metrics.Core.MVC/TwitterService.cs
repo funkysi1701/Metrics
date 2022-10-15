@@ -9,12 +9,12 @@ namespace Metrics.Core.MVC
 {
     public class TwitterService
     {
-        private readonly ChartService Chart;
+        private readonly MongoDataService Chart;
         private TwitterClient TwitterClient { get; set; }
 
         public TwitterService(IConfiguration configuration, MongoService mongoService)
         {
-            Chart = new ChartService(mongoService);
+            Chart = new MongoDataService(mongoService);
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
         }
 

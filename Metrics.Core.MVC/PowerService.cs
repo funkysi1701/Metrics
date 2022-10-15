@@ -10,7 +10,7 @@ namespace Metrics.Core.MVC
 {
     public class PowerService
     {
-        private readonly ChartService Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         private readonly string Key;
@@ -19,7 +19,7 @@ namespace Metrics.Core.MVC
         public PowerService(IConfiguration configuration, IOctopusEnergyClient client, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new ChartService(mongoService);
+            Chart = new MongoDataService(mongoService);
             Client = client;
             Key = Configuration.GetValue<string>("OctopusKey");
         }

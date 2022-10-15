@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Metrics.Core.MVC
 {
-    public class ChartService
+    public class MongoDataService
     {
         private readonly MongoService _mongoService;
 
-        public ChartService(MongoService mongoService)
+        public MongoDataService(MongoService mongoService)
         {
             _mongoService = mongoService;
         }

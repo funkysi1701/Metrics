@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
@@ -11,13 +9,13 @@ namespace Metrics.Core.MVC
 {
     public class BlogService
     {
-        private readonly ChartService Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         public BlogService(IConfiguration Configuration, MongoService mongoService)
         {
             this.Configuration = Configuration;
-            Chart = new ChartService(mongoService);
+            Chart = new MongoDataService(mongoService);
         }
 
         public async Task<IActionResult> GetBlogCount(ILogger log, string url, int Type)
