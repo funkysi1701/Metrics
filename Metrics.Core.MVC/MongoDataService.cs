@@ -1,18 +1,14 @@
-using Metrics.Core.Model;
+﻿using Metrics.Core.Model;
 using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction
+namespace Metrics.Core.MVC
 {
-    public class Chart
+    public class MongoDataService
     {
         private readonly MongoService _mongoService;
 
-        public Chart(MongoService mongoService)
+        public MongoDataService(MongoService mongoService)
         {
             _mongoService = mongoService;
         }

@@ -2,7 +2,7 @@
 using Metrics.Core.Model;
 using Metrics.Core.Service;
 using Metrics.TimerFunction;
-using Metrics.TimerFunction.Services;
+using Metrics.Core.MVC;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +26,7 @@ namespace Metrics.TimerFunction
             builder.Services.AddScoped<TwitterService>();
             builder.Services.AddScoped<DevToService>();
             builder.Services.AddScoped<PowerService>();
-            builder.Services.AddScoped<BlogService>();
+            builder.Services.AddScoped<Core.MVC.BlogService>();
             builder.Services.Configure<MyMongoDatabaseSettings>(config);
             builder.Services.AddSingleton<MongoService>();
             builder.Services.AddHttpClient<IOctopusEnergyClient, OctopusEnergyClient>()

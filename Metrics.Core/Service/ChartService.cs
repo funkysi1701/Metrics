@@ -1,16 +1,17 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Errors;
 using Metrics.Core.Model;
+using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
-namespace Metrics.Static.Services
+namespace Metrics.Core.Service
 {
-    public class BlogService
+    public class ChartService
     {
         private HttpClient Client { get; set; }
         private IApplicationInsights AppInsights { get; set; }
 
-        public BlogService(HttpClient httpClient, IConfiguration config, IApplicationInsights AppInsights)
+        public ChartService(HttpClient httpClient, IConfiguration config, IApplicationInsights AppInsights)
         {
             Client = httpClient;
             this.AppInsights = AppInsights;
@@ -20,7 +21,7 @@ namespace Metrics.Static.Services
             }
         }
 
-        public async Task<IList<IList<ChartViewWithType>>> GetChart(int type, int day, int offSet, string username)
+        public async Task<IList<IList<ChartViewWithType>>> Get(int type, int day, int offSet, string username)
         {
             try
             {
