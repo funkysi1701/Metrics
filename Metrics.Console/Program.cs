@@ -1,6 +1,6 @@
-﻿using Metrics.Core.Model;
+﻿using Metrics.Console;
+using Metrics.Core.Model;
 using Metrics.Core.Service;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -25,6 +25,7 @@ var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
 Console.WriteLine("Enter 0 - 22, or A for All, Q for Quit");
 var type = Console.ReadLine();
+var kp = new KeyPress();
 if (type != null)
 {
     if (type == "Q")
@@ -35,37 +36,11 @@ if (type != null)
     {
         for (int i = 0; i < 23; i++)
         {
-            await CheckKey(i.ToString());
+            await kp.CheckKey(i.ToString(), containerOld, mongoService);
         }
     }
-    else await CheckKey(type);
+    else await kp.CheckKey(type, containerOld, mongoService);
 }
-if(Environment.ProcessPath!=null)
+if (Environment.ProcessPath != null)
     System.Diagnostics.Process.Start(Environment.ProcessPath);
 Environment.Exit(0);
-
-async Task CheckKey(string? type)
-{
-    if (int.TryParse(type, out int Mtype) && Mtype >= 0 && Mtype <= 22)
-    {
-        var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == Mtype).OrderByDescending(x => x.Date).ToList();
-        Console.WriteLine($"Type = {Mtype}");
-        foreach (var item in m)
-        {
-            try
-            {
-                await mongoService.CreateAsync(item);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString().Substring(0, 200));
-            }
-            Console.WriteLine($"{item.Date?.ToString("yyyy-MM-dd HH:mm")} {item.Type}");
-        }
-        Console.WriteLine($"Type = {Mtype}");
-    }
-    else
-    {
-        Environment.Exit(1);
-    }
-}
