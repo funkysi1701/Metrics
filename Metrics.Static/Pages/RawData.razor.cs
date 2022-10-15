@@ -1,14 +1,14 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Enum;
 using Metrics.Core.Model;
-using Metrics.Static.Services;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Components;
 
 namespace Metrics.Static.Pages
 {
     public class RawDataBase : ComponentBase
     {
-        [Inject] private BlogService BlogService { get; set; }
+        [Inject] private ChartService BlogService { get; set; }
         [Inject] private IApplicationInsights AppInsights { get; set; }
 
         protected IList<IList<ChartViewWithType>> chartViews;
@@ -53,7 +53,7 @@ namespace Metrics.Static.Pages
         {
             SelectedOffset = (int)(DateTime.UtcNow - SelectedOffsetDate).TotalDays;
             listoflists = new List<IList<IList<ChartViewWithType>>>();
-            chartViews = await BlogService.GetChart((int)SelectedType, (int)MyChartType.Hourly, SelectedOffset, "funkysi1701");
+            chartViews = await BlogService.Get((int)SelectedType, (int)MyChartType.Hourly, SelectedOffset, "funkysi1701");
             listoflists.Add(chartViews);
             await AppInsights.TrackEvent($"LoadRawData MetricType: {(int)SelectedType}, OffSet: 0, User: funkysi1701");
         }

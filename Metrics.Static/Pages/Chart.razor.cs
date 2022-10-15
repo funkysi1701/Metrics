@@ -1,7 +1,7 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Enum;
 using Metrics.Core.Model;
-using Metrics.Static.Services;
+using Metrics.Core.Service;
 using Microsoft.AspNetCore.Components;
 using System.ComponentModel;
 using System.Reflection;
@@ -10,7 +10,7 @@ namespace Metrics.Static.Pages
 {
     public class ChartBase : ComponentBase
     {
-        [Inject] private BlogService BlogService { get; set; }
+        [Inject] private ChartService BlogService { get; set; }
         [Inject] private IApplicationInsights AppInsights { get; set; }
 
         [Parameter]
@@ -59,7 +59,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartViewWithType>> hourlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Hourly, OffSet, Username);
+                IList<IList<ChartViewWithType>> hourlyChart = await BlogService.Get((int)Type, (int)MyChartType.Hourly, OffSet, Username);
                 if (hourlyChart == null)
                 {
                     return;
@@ -96,7 +96,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartViewWithType>> dailyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Daily, OffSet, Username);
+                IList<IList<ChartViewWithType>> dailyChart = await BlogService.Get((int)Type, (int)MyChartType.Daily, OffSet, Username);
                 if (dailyChart == null)
                 {
                     return;
@@ -155,7 +155,7 @@ namespace Metrics.Static.Pages
 
             async Task Load(string Username)
             {
-                IList<IList<ChartViewWithType>> monthlyChart = await BlogService.GetChart((int)Type, (int)MyChartType.Monthly, OffSet, Username);
+                IList<IList<ChartViewWithType>> monthlyChart = await BlogService.Get((int)Type, (int)MyChartType.Monthly, OffSet, Username);
                 if (monthlyChart == null)
                 {
                     return;

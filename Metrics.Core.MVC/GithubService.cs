@@ -2,21 +2,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Octokit;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.MVC
 {
     public class GithubService
     {
-        private readonly Chart Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         public GithubService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new MongoDataService(mongoService);
         }
 
         public GitHubClient GitHub()

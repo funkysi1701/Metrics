@@ -3,21 +3,18 @@ using Metrics.Core.Model;
 using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Metrics.TimerFunction.Services
+namespace Metrics.Core.MVC
 {
     public class DevToService
     {
-        private readonly Chart Chart;
+        private readonly MongoDataService Chart;
         private IConfiguration Configuration { get; set; }
 
         public DevToService(IConfiguration configuration, MongoService mongoService)
         {
             Configuration = configuration;
-            Chart = new Chart(mongoService);
+            Chart = new MongoDataService(mongoService);
         }
 
         public async Task<IActionResult> GetOps(string username)
@@ -25,7 +22,7 @@ namespace Metrics.TimerFunction.Services
             IActionResult result = null;
 
             List<BlogPosts> blogs = new();
-            for (int i = 0; i < 21; i++)
+            for (int i = 0; i < 100; i++)
             {
                 blogs.AddRange(await GetAllBlogs.GetAllOps(Configuration, 10, i));
             }
