@@ -33,12 +33,12 @@ namespace Metrics.Core.MVC
                     var page = await followers.NextPageAsync();
                     count.AddRange(page);
                 }
-                log.LogInformation($"{count.Count} {username}");
+                log.LogInformation("{0} {1}", count.Count, username);
                 return await Chart.SaveData(count.Count, 0, username);
             }
             catch (Exception e)
             {
-                log.LogError($"Failed to save for {username} Exception {e.Message}");
+                log.LogError("Failed to save for {0} Exception {1}", username, e.Message);
                 return new BadRequestObjectResult(e.Message);
             }
         }
@@ -64,7 +64,7 @@ namespace Metrics.Core.MVC
             }
             catch (Exception e)
             {
-                log.LogError($"Failed to save for {username} Exception {e.Message}");
+                log.LogError("Failed to save for {0} Exception {1}", username, e.Message);
                 return new BadRequestObjectResult(e.Message);
             }
         }
