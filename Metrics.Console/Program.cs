@@ -25,7 +25,7 @@ var iopt = Options.Create(opt);
 var mongoService = new MongoService(iopt);
 Console.WriteLine("Enter 0 - 22, or A for All, Q for Quit");
 var type = Console.ReadLine();
-var kp = new KeyPress();
+
 if (type != null)
 {
     if (type == "Q")
@@ -36,10 +36,10 @@ if (type != null)
     {
         for (int i = 0; i < 23; i++)
         {
-            await kp.CheckKey(i.ToString(), containerOld, mongoService);
+            await KeyPress.CheckKey(i.ToString(), containerOld, mongoService);
         }
     }
-    else await kp.CheckKey(type, containerOld, mongoService);
+    else await KeyPress.CheckKey(type, containerOld, mongoService);
 }
 if (Environment.ProcessPath != null)
     System.Diagnostics.Process.Start(Environment.ProcessPath);

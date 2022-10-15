@@ -4,9 +4,9 @@ using Microsoft.Azure.Cosmos;
 
 namespace Metrics.Console
 {
-    public class KeyPress
+    public static class KeyPress
     {
-        public async Task CheckKey(string? type, Container containerOld, MongoService mongoService)
+        public static async Task CheckKey(string? type, Container containerOld, MongoService mongoService)
         {
             if (int.TryParse(type, out int Mtype) && Mtype >= 0 && Mtype <= 22)
             {
