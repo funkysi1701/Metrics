@@ -44,4 +44,4 @@ jobs:
           args: >
                 -Dsonar.organization=funkysi1701
                 -Dsonar.projectKey=funkysi1701_Metrics
-                -Dsonar.cs.vscoveragexml.reportsPaths=coverage.opencover.xml
+                -Dsonar.cs.vscoveragexml.reportsPaths=Metrics.Core.Tests/coverage.opencover.xml
