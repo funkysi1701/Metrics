@@ -30,7 +30,7 @@ namespace Metrics.Core.MVC
                 .Load(url)
                 .XPathSelectElements("//item")
                 .Count();
-            log.LogInformation("{0} posts found", count);
+            log.LogInformation("{count} posts found", count);
             return count;
         }
     }
