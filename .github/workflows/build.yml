@@ -28,24 +28,17 @@ jobs:
       - name: Test
         working-directory: ./Metrics.Core.Tests
         run: dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
-
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md     
       - name: Install SonarCloud scanner
         run: |
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner    
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-                -Dsonar.organization=funkysi1701
-                -Dsonar.projectKey=funkysi1701_Metrics
-                -Dsonar.cs.vscoveragexml.reportsPaths=Metrics.Core.Tests/coverage.opencover.xml
-                -Dsonar.cs.opencover.reportsPaths=Metrics.Core.Tests/coverage.opencover.xml
+        run: |
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"funkysi1701_Metrics" /o:"funkysi1701" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet build Metrics.sln
+          cd Metrics.Core.Tests
+          dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+
