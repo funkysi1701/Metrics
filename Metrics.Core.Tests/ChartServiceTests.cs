@@ -60,9 +60,9 @@ namespace Metrics.Core.Tests
                 .Build();
             var insights = new Mock<IApplicationInsights>();
             var chart = new ChartService(http, config, insights.Object);
-
+            insights.Setup(x => x.TrackException(It.IsAny<Error>(), null, null, null));
             var response = await chart.Get(0, 0, 0, "funkysi1701");
-
+            insights.Verify(x => x.TrackException(It.IsAny<Error>(), null, null, null));
             Assert.Null(response);
         }
     }
