@@ -2,6 +2,8 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=funkysi1701_Metrics&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=funkysi1701_Metrics)
 
+[![codecov](https://codecov.io/gh/funkysi1701/Metrics/branch/main/graph/badge.svg?token=HPYqPbjhPQ)](https://codecov.io/gh/funkysi1701/Metrics)
+
 This is an application that logs various metrics about a user. 
 
 Intended to be both useful and an exercise in architecture and building something.
