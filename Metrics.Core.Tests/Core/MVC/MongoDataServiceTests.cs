@@ -62,6 +62,24 @@ namespace Metrics.Core.Tests.Core.MVC
         }
 
         [Fact]
+        public async Task Delete_ReturnsOK_NoMatch()
+        {
+            var dt = DateTime.Now;
+            var response = new List<Metric>
+            {
+                new Metric()
+            };
+            response[0].Date = dt;
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
+            _mongoService.Setup(x => x.RemoveAsync(It.IsAny<string>()));
+
+            await service.Delete(0, dt.AddDays(1), "username");
+
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
         public async Task SaveData_Date_ReturnsOK()
         {
             var dt = DateTime.Now;
