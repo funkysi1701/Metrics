@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Metrics.Core.MVC\Metrics.Core.MVC.csproj" />
     <ProjectReference Include="..\Metrics.Core\Metrics.Core.csproj" />
   </ItemGroup>
 
