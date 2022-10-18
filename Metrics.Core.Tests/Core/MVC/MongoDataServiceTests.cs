@@ -14,6 +14,7 @@ namespace Metrics.Core.Tests.Core.MVC
     {
         private readonly MongoDataService service;
         private readonly Mock<IMongoService> _mongoService;
+
         public MongoDataServiceTests()
         {
             _mongoService = new Mock<IMongoService>();
@@ -24,7 +25,7 @@ namespace Metrics.Core.Tests.Core.MVC
         public async Task GetAll_ReturnsOK()
         {
             _mongoService.Setup(x => x.GetAsync()).ReturnsAsync(new List<Metric>());
-            
+
             var response = await service.GetAll();
 
             _mongoService.Verify(x => x.GetAsync());
@@ -61,7 +62,7 @@ namespace Metrics.Core.Tests.Core.MVC
         }
 
         [Fact]
-        public async Task SaveData_ReturnsOK()
+        public async Task SaveData_Date_ReturnsOK()
         {
             var dt = DateTime.Now;
             _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>()));
@@ -71,6 +72,43 @@ namespace Metrics.Core.Tests.Core.MVC
             _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
 
             Assert.IsType<OkObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task SaveData_Date_ReturnsBadRequest()
+        {
+            var dt = DateTime.Now;
+            _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>())).Throws<Exception>();
+
+            var response = await service.SaveData(0, 0, dt, "username");
+
+            _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
+
+            Assert.IsType<BadRequestObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task SaveData_ReturnsOK()
+        {
+            _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>()));
+
+            var response = await service.SaveData(0, 0, "username");
+
+            _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
+
+            Assert.IsType<OkObjectResult>(response);
+        }
+
+        [Fact]
+        public async Task SaveData_ReturnsBadRequest()
+        {
+            _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>())).Throws<Exception>();
+
+            var response = await service.SaveData(0, 0, "username");
+
+            _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
+
+            Assert.IsType<BadRequestObjectResult>(response);
         }
     }
 }
