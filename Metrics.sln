@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\azure-static-web-apps-black-bush-07f129003.yml = .github\workflows\azure-static-web-apps-black-bush-07f129003.yml
 		.github\workflows\azure-static-web-apps-brave-forest-07c444403.yml = .github\workflows\azure-static-web-apps-brave-forest-07c444403.yml
 		.github\workflows\azure-static-web-apps-lively-flower-0ac84b003.yml = .github\workflows\azure-static-web-apps-lively-flower-0ac84b003.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\deploy-dev.yml = .github\workflows\deploy-dev.yml
 		.github\workflows\deploy-prod.yml = .github\workflows\deploy-prod.yml
@@ -35,7 +36,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.StaticFunction", "M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Console", "Metrics.Console\Metrics.Console.csproj", "{8B75223F-9731-434A-AF9B-EA580B1F4682}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrics.Core.MVC", "Metrics.Core.MVC\Metrics.Core.MVC.csproj", "{EB11ECC2-66AF-43D0-8079-7DC7BE104083}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core.MVC", "Metrics.Core.MVC\Metrics.Core.MVC.csproj", "{EB11ECC2-66AF-43D0-8079-7DC7BE104083}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8ACB7BC9-F8D3-47B8-ACD4-4149087A67ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core.Tests", "Metrics.Core.Tests\Metrics.Core.Tests.csproj", "{76E84843-6CF4-4427-A4EF-6968F04516DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,9 +84,16 @@ Global
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB11ECC2-66AF-43D0-8079-7DC7BE104083}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E84843-6CF4-4427-A4EF-6968F04516DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E84843-6CF4-4427-A4EF-6968F04516DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E84843-6CF4-4427-A4EF-6968F04516DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E84843-6CF4-4427-A4EF-6968F04516DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{76E84843-6CF4-4427-A4EF-6968F04516DE} = {8ACB7BC9-F8D3-47B8-ACD4-4149087A67ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {75DC4A2D-AB9C-4C27-860A-E6006CB22064}
