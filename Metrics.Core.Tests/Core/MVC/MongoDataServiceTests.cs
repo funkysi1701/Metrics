@@ -12,8 +12,8 @@ namespace Metrics.Core.Tests.Core.MVC
 {
     public class MongoDataServiceTests
     {
-        private MongoDataService service;
-        private Mock<IMongoService> _mongoService;
+        private readonly MongoDataService service;
+        private readonly Mock<IMongoService> _mongoService;
         public MongoDataServiceTests()
         {
             _mongoService = new Mock<IMongoService>();
