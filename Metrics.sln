@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\azure-static-web-apps-black-bush-07f129003.yml = .github\workflows\azure-static-web-apps-black-bush-07f129003.yml
 		.github\workflows\azure-static-web-apps-brave-forest-07c444403.yml = .github\workflows\azure-static-web-apps-brave-forest-07c444403.yml
 		.github\workflows\azure-static-web-apps-lively-flower-0ac84b003.yml = .github\workflows\azure-static-web-apps-lively-flower-0ac84b003.yml
+		.github\workflows\build.yml = .github\workflows\build.yml
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		.github\workflows\deploy-dev.yml = .github\workflows\deploy-dev.yml
 		.github\workflows\deploy-prod.yml = .github\workflows\deploy-prod.yml
@@ -39,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core.MVC", "Metrics
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{8ACB7BC9-F8D3-47B8-ACD4-4149087A67ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metrics.Core.Tests", "Metrics.Core.Tests\Metrics.Core.Tests.csproj", "{76E84843-6CF4-4427-A4EF-6968F04516DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Metrics.Core.Tests", "Metrics.Core.Tests\Metrics.Core.Tests.csproj", "{76E84843-6CF4-4427-A4EF-6968F04516DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
