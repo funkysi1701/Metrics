@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Metrics.Core.Tests
+namespace Metrics.Core.Tests.Core.Service
 {
     public class ChartServiceTests
     {

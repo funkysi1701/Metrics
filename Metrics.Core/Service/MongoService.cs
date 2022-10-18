@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace Metrics.Core.Service
 {
-    public class MongoService
+    public class MongoService : IMongoService
     {
         private readonly IMongoCollection<Metric> _collection;
 
