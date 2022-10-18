@@ -46,7 +46,7 @@ jobs:
         with:
           reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml' 
           targetdir: 'coveragereport' 
-          reporttypes: 'HtmlInline;Cobertura'
+          reporttypes: 'HtmlSummary;Cobertura'
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v2.2.3
         with:
