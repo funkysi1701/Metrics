@@ -6,9 +6,9 @@ namespace Metrics.Core.MVC
 {
     public class MongoDataService
     {
-        private readonly MongoService _mongoService;
+        private readonly IMongoService _mongoService;
 
-        public MongoDataService(MongoService mongoService)
+        public MongoDataService(IMongoService mongoService)
         {
             _mongoService = mongoService;
         }
