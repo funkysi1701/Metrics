@@ -43,5 +43,28 @@ namespace Metrics.Core.Service
                 return null;
             }
         }
+
+        public async Task<IList<Metric>> GetData(int type, string username, DateTime date)
+        {
+            try
+            {
+                var response = await Client.GetAsync(new Uri($"{Client.BaseAddress}api/GetData?type={type}&username={username}&date={date}"));
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                    throw new HttpStatusCodeException(response.StatusCode, $"Reason: {response.ReasonPhrase}, Message: {content}");
+
+                return JsonSerializer.Deserialize<IList<Metric>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (Exception ex)
+            {
+                var er = new Error
+                {
+                    Message = ex.Message,
+                    Stack = ex.StackTrace
+                };
+                await AppInsights.TrackException(er);
+                return null;
+            }
+        }
     }
 }

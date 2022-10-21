@@ -11,16 +11,13 @@ namespace Metrics.Static.Pages
         [Inject] private ChartService BlogService { get; set; }
         [Inject] private IApplicationInsights AppInsights { get; set; }
 
-        protected IList<IList<ChartViewWithType>> chartViews;
-        protected List<IList<IList<ChartViewWithType>>> listoflists;
+        protected IList<Metric> data;
         protected MetricType SelectedType { get; set; }
-        protected int SelectedOffset { get; set; }
         protected DateTime SelectedOffsetDate { get; set; }
         protected List<MetricType> Types { get; set; }
 
         protected override void OnInitialized()
         {
-            SelectedOffset = 0;
             Types = new List<MetricType>
             {
                 MetricType.TwitterFollowers,
@@ -51,11 +48,8 @@ namespace Metrics.Static.Pages
 
         protected async Task Refresh()
         {
-            SelectedOffset = (int)(DateTime.UtcNow - SelectedOffsetDate).TotalDays;
-            listoflists = new List<IList<IList<ChartViewWithType>>>();
-            chartViews = await BlogService.Get((int)SelectedType, (int)MyChartType.Hourly, SelectedOffset, "funkysi1701");
-            listoflists.Add(chartViews);
-            await AppInsights.TrackEvent($"LoadRawData MetricType: {(int)SelectedType}, OffSet: 0, User: funkysi1701");
+            data = await BlogService.GetData((int)SelectedType, "funkysi1701", SelectedOffsetDate);
+            await AppInsights.TrackEvent($"LoadRawData MetricType: {(int)SelectedType}, SelectedOffsetDate: {SelectedOffsetDate}, User: funkysi1701");
         }
     }
 }
