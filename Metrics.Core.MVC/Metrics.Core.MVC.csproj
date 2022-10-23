@@ -9,7 +9,7 @@
     <PackageReference Include="ImpSoft.OctopusEnergy.Api" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Octokit" Version="4.0.0" />
+    <PackageReference Include="Octokit" Version="4.0.1" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
   </ItemGroup>
 
