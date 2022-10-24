@@ -49,7 +49,7 @@ The Raw Data
                 <td>@item.Date.Value.ToString("dd/MM/yy HH:mm")</td>
                 <td>@item.Type</td>
                 <td>@item.Value</td>
-                <td>@Delete(item.id)</td>
+                <td><button @onclick="@(async () => await Delete(item.id))">Delete</button></td>
             </tr>
         }
     </table>
