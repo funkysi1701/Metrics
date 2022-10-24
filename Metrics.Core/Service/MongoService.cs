@@ -38,5 +38,15 @@ namespace Metrics.Core.Service
                 .Limit(PageSize)
                 .ToListAsync();
         }
+
+        public async Task<List<Metric>> GetAsync(int? type, string username, int PageSize, int PageNum, DateTime Date)
+        {
+            return await _collection
+                .Find(i => i.Type == type && i.Username == username && i.Date > Date.AddDays(-1) && i.Date < Date.AddDays(1))
+                .SortByDescending(x => x.Date)
+                .Skip(PageNum * PageSize)
+                .Limit(PageSize)
+                .ToListAsync();
+        }
     }
 }
