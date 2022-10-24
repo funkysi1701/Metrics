@@ -70,7 +70,7 @@ namespace Metrics.StaticFunction
         private async Task<string> DeleteCall(string Id, ILogger log)
         {
             var client = CreateClient();
-            using var httpResponse = await client.GetAsync($"{client.BaseAddress}api/Delete?Id={Id}");
+            using var httpResponse = await client.DeleteAsync($"{client.BaseAddress}api/Delete?Id={Id}");
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
