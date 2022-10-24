@@ -116,5 +116,52 @@ namespace Metrics.Core.Tests.Core.Service
             insights.Verify(x => x.TrackException(It.IsAny<Error>(), null, null, null));
             Assert.Null(response);
         }
+
+        [Fact]
+        public async Task Delete_ReturnsData()
+        {
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            var res = new List<IList<ChartViewWithType>>();
+            var bpp = JsonConvert.SerializeObject(res);
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(bpp) });
+            var http = new HttpClient(mockHttpMessageHandler.Object);
+            var inMemorySettings = new Dictionary<string, string> {
+                {"BaseURL", "http://example.com"},
+            };
+
+            IConfiguration config = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+            var insights = new Mock<IApplicationInsights>();
+            var chart = new ChartService(http, config, insights.Object);
+
+            await chart.Delete("1");
+        }
+
+        [Fact]
+        public async Task Delete_RetunsError()
+        {
+            var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
+            var res = new List<IList<ChartViewWithType>>();
+            var bpp = JsonConvert.SerializeObject(res);
+            mockHttpMessageHandler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.BadRequest, Content = new StringContent(bpp) });
+            var http = new HttpClient(mockHttpMessageHandler.Object);
+            var inMemorySettings = new Dictionary<string, string> {
+                {"BaseURL", "http://example.com"},
+            };
+
+            IConfiguration config = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+            var insights = new Mock<IApplicationInsights>();
+            var chart = new ChartService(http, config, insights.Object);
+            insights.Setup(x => x.TrackException(It.IsAny<Error>(), null, null, null));
+            await chart.Delete("1");
+            insights.Verify(x => x.TrackException(It.IsAny<Error>(), null, null, null));
+        }
     }
 }
