@@ -26,7 +26,8 @@
     "CollectionName": "Metrics",
     "FunctionAPI": "http://localhost:7238",
     "MaxRecords": 20000,
-    "MaxPages": 5
+    "MaxPages": 5,
+    "DeleteEnabled": false
   },
   "Host": {
     "LocalHttpPort": 7237,

@@ -51,5 +51,11 @@ namespace Metrics.Static.Pages
             data = await BlogService.GetData((int)SelectedType, "funkysi1701", SelectedOffsetDate);
             await AppInsights.TrackEvent($"LoadRawData MetricType: {(int)SelectedType}, SelectedOffsetDate: {SelectedOffsetDate}, User: funkysi1701");
         }
+
+        protected async Task Delete(string Id)
+        {
+            await BlogService.Delete(Id);
+            await AppInsights.TrackEvent($"Delete Id: {Id}");
+        }
     }
 }

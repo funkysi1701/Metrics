@@ -44,6 +44,26 @@ namespace Metrics.Core.Service
             }
         }
 
+        public async Task Delete(string Id)
+        {
+            try
+            {
+                var response = await Client.DeleteAsync(new Uri($"{Client.BaseAddress}api/Delete?Id={Id}"));
+                var content = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                    throw new HttpStatusCodeException(response.StatusCode, $"Reason: {response.ReasonPhrase}, Message: {content}");
+            }
+            catch (Exception ex)
+            {
+                var er = new Error
+                {
+                    Message = ex.Message,
+                    Stack = ex.StackTrace
+                };
+                await AppInsights.TrackException(er);
+            }
+        }
+
         public async Task<IList<Metric>> GetData(int type, string username, DateTime date)
         {
             try
