@@ -48,6 +48,7 @@ namespace Metrics.StaticFunction
                 }
                 else
                 {
+                    log.LogError("Delete disabled");
                     return new OkObjectResult("Delete disabled");
                 }
             }
