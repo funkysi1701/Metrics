@@ -48,7 +48,7 @@ namespace Metrics.Core.Service
         {
             try
             {
-                var response = await Client.GetAsync(new Uri($"{Client.BaseAddress}api/GetData?type={type}&username={username}&date={date}"));
+                var response = await Client.GetAsync(new Uri($"{Client.BaseAddress}api/GetData?type={type}&username={username}&date={date:yyyy-MM-dd HH:mm:ss}"));
                 var content = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                     throw new HttpStatusCodeException(response.StatusCode, $"Reason: {response.ReasonPhrase}, Message: {content}");
