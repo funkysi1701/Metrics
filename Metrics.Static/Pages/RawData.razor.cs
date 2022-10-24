@@ -56,6 +56,7 @@ namespace Metrics.Static.Pages
         {
             var res = await BlogService.Delete(Id);
             await AppInsights.TrackEvent($"Delete Id: {Id}, response: {res}");
+            await Refresh();
         }
     }
 }
