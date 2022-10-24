@@ -35,7 +35,7 @@ The Raw Data
     </div>
 </div>
 
-@if (chartViews != null)
+@if (data != null)
 {
     <table border="1" cellpadding="5">
         <tr>
@@ -43,19 +43,14 @@ The Raw Data
             <td>Type</td>
             <td>Value</td>
         </tr>
-        @foreach (var item in listoflists)
+        @foreach (var item in data)
         {
-            @foreach (var subitem in item)
-            {
-                @foreach (var subsubitem in subitem)
-                {
-                    <tr>
-                        <td>@subsubitem.Date.ToString("dd/MM/yy HH:mm")</td>
-                        <td>@subsubitem.Type</td>
-                        <td>@subsubitem.Total</td>
-                    </tr>
-                }
-            }
+            <tr>
+                <td>@item.Date.Value.ToString("dd/MM/yy HH:mm")</td>
+                <td>@item.Type</td>
+                <td>@item.Value</td>
+                <td>@item.id</td>
+            </tr>
         }
     </table>
 }
