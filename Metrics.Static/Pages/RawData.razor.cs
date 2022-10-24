@@ -54,8 +54,8 @@ namespace Metrics.Static.Pages
 
         protected async Task Delete(string Id)
         {
-            await BlogService.Delete(Id);
-            await AppInsights.TrackEvent($"Delete Id: {Id}");
+            var res = await BlogService.Delete(Id);
+            await AppInsights.TrackEvent($"Delete Id: {Id}, response: {res}");
         }
     }
 }

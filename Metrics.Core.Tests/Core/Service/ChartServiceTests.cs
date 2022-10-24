@@ -136,8 +136,9 @@ namespace Metrics.Core.Tests.Core.Service
                 .Build();
             var insights = new Mock<IApplicationInsights>();
             var chart = new ChartService(http, config, insights.Object);
-
-            await chart.Delete("1");
+            
+            var response = await chart.Delete("1");
+            Assert.Equal("ok", response);
         }
 
         [Fact]
@@ -160,8 +161,9 @@ namespace Metrics.Core.Tests.Core.Service
             var insights = new Mock<IApplicationInsights>();
             var chart = new ChartService(http, config, insights.Object);
             insights.Setup(x => x.TrackException(It.IsAny<Error>(), null, null, null));
-            await chart.Delete("1");
+            var response = await chart.Delete("1");
             insights.Verify(x => x.TrackException(It.IsAny<Error>(), null, null, null));
+            Assert.Equal("error", response);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Metrics.Core.Service
             }
         }
 
-        public async Task Delete(string Id)
+        public async Task<string> Delete(string Id)
         {
             try
             {
@@ -52,6 +52,7 @@ namespace Metrics.Core.Service
                 var content = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                     throw new HttpStatusCodeException(response.StatusCode, $"Reason: {response.ReasonPhrase}, Message: {content}");
+                return "ok";
             }
             catch (Exception ex)
             {
@@ -61,6 +62,7 @@ namespace Metrics.Core.Service
                     Stack = ex.StackTrace
                 };
                 await AppInsights.TrackException(er);
+                return "error";
             }
         }
 
