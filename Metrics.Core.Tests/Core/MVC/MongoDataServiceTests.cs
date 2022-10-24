@@ -80,6 +80,24 @@ namespace Metrics.Core.Tests.Core.MVC
         }
 
         [Fact]
+        public async Task Delete_ReturnsOK_DateNull()
+        {
+            var dt = DateTime.Now;
+            var response = new List<Metric>
+            {
+                new Metric()
+            };
+            response[0].Date = null;
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
+            _mongoService.Setup(x => x.RemoveAsync(It.IsAny<string>()));
+
+            await service.Delete(0, dt, "username");
+
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
         public async Task SaveData_Date_ReturnsOK()
         {
             var dt = DateTime.Now;
