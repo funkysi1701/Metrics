@@ -34,7 +34,7 @@ namespace Metrics.StaticFunction
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiParameter(name: "type", In = ParameterLocation.Query, Required = true, Type = typeof(int), Description = "The **type** parameter")]
         [OpenApiParameter(name: "username", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **username** parameter")]
-        [OpenApiParameter(name: "date", In = ParameterLocation.Query, Required = true, Type = typeof(DateTime), Description = "The **date** parameter")]
+        [OpenApiParameter(name: "date", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **date** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(IList<Metric>), Description = "The OK response")]
         public async Task<IActionResult> GetData(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -42,7 +42,7 @@ namespace Metrics.StaticFunction
         {
             MetricType type = (MetricType)int.Parse(req.Query["type"]);
             string username = req.Query["username"];
-            DateTime date = DateTime.Parse(req.Query["date"]);
+            string date = req.Query["date"];
             log.LogInformation($"GetChart, type: {type}, username: {username}");
             try
             {
@@ -61,7 +61,7 @@ namespace Metrics.StaticFunction
             }
         }
 
-        private async Task<IList<Metric>> GetDetails(MetricType type, string username, ILogger log, DateTime date)
+        private async Task<IList<Metric>> GetDetails(MetricType type, string username, ILogger log, string date)
         {
             var client = CreateClient();
             var typeParameter = (int)type;
