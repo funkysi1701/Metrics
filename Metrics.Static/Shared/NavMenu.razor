@@ -19,7 +19,7 @@
             </NavLink>
         </li>
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="https://metrics.funkysi1701.com/" style="color: white">
+            <NavLink class="nav-link" href="@env" style="color: white">
                 <span class="oi oi-graph" aria-hidden="true"></span> Metrics
             </NavLink>
         </li>
@@ -34,6 +34,13 @@
 
 @code {
     private bool collapseNavMenu = true;
+    private string env;
+    [Inject] public IConfiguration config { get; set; }
+
+    protected override void OnInitialized()
+    {
+        env = $"https://metrics-{config.GetValue<string>("env")}.funkysi1701.com/";
+    }
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
