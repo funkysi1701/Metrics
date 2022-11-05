@@ -10,12 +10,18 @@ namespace Metrics.Core.MVC
     public class TwitterService
     {
         private readonly MongoDataService Chart;
-        private TwitterClient TwitterClient { get; set; }
+        private ITwitterClient TwitterClient { get; set; }
 
-        public TwitterService(IConfiguration configuration, MongoService mongoService)
+        public TwitterService(IConfiguration configuration, IMongoService mongoService)
         {
             Chart = new MongoDataService(mongoService);
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
+        }
+
+        public TwitterService(ITwitterClient TwitterClient, IMongoService mongoService)
+        {
+            Chart = new MongoDataService(mongoService);
+            this.TwitterClient = TwitterClient;
         }
 
         public async Task<IActionResult> GetTwitterFollowers(ILogger log, string username)
