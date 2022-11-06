@@ -94,7 +94,16 @@ namespace Metrics.TimerFunction
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             foreach (var user in twusers)
             {
-                var result = await mastodonService.GetMastodonFollowers(log, user);
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFollowers(log, user);
+                }
+                catch(Exception e)
+                {
+                    log.LogError($"SaveMastodonFollowers {e.Message}");
+                    throw;
+                }
                 try
                 {
                     var okMessage = result as OkObjectResult;
