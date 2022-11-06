@@ -14,6 +14,7 @@ namespace Metrics.TimerFunction
     public class Save
     {
         private readonly TwitterService twitterService;
+        private readonly MastodonService mastodonService;
         private readonly PowerService powerService;
         private readonly GithubService githubService;
         private readonly DevToService devToService;
@@ -22,7 +23,7 @@ namespace Metrics.TimerFunction
         private readonly List<string> ghusers;
         private readonly List<string> twusers;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
@@ -40,6 +41,7 @@ namespace Metrics.TimerFunction
             this.githubService = githubService;
             this.devToService = devToService;
             this.blogService = blogService;
+            this.mastodonService = mastodonService;
         }
 
         [FunctionName("SaveTwitterFav")]
@@ -71,6 +73,130 @@ namespace Metrics.TimerFunction
             foreach (var user in twusers)
             {
                 var result = await twitterService.GetTwitterFollowers(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        [FunctionName("SaveMastodonFollowers")]
+        public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFollowers(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFollowers {e.Message}");
+                    throw;
+                }
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        [FunctionName("SaveMastodonFollowing")]
+        public async Task Run15([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFollowing(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFollowing {e.Message}");
+                    throw;
+                }
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        [FunctionName("SaveMastodonFavourites")]
+        public async Task Run16([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFavourites(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFavourites {e.Message}");
+                    throw;
+                }
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        [FunctionName("SaveMastodonToots")]
+        public async Task Run17([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonToots(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonToots {e.Message}");
+                    throw;
+                }
                 try
                 {
                     var okMessage = result as OkObjectResult;

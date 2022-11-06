@@ -72,5 +72,17 @@ namespace Metrics.Core.Enum
 
         [Description("OPS Comments")]
         OPSComments,
+
+        [Description("Mastodon Followers")]
+        MastodonFollowers,
+
+        [Description("Mastodon Following")]
+        MastodonFollowing,
+
+        [Description("Number Of Toots")]
+        NumberOfToots,
+
+        [Description("Mastodon Favourites")]
+        MastodonFavourites,
     }
 }

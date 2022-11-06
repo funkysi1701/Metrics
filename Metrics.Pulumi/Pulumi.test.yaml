@@ -12,6 +12,12 @@ config:
     secure: AAABAPYnoCtqrEu6T77k+AGxzBRW9xH3pAbJrUYS3PR6up5hH5OJwgIe355iVJbo3gBSZ443Y+g=
   metrics-pulumi:GitHubToken:
     secure: AAABACiL/uzgn2wYAV0xHotJXONEjqfJkixsiEABa2I6aXO4WAHXfsGyRAd2yMS3hGr8BgIvndyNa6P8RC2w5aWlCvg6DhCw
+  metrics-pulumi:MastodonPass:
+    secure: AAABAOcmpvk8McUqfv9i6u1yI8KAJz9LyyuHxLrAWXKkw7mchipZotYZ90c7eef2m4oFSw==
+  metrics-pulumi:MastodonServer:
+    secure: AAABAPvH3vouj0ubtYOSFwYwg/aUXR+70dOyMZRDFYhpomuba1omL2/1SYI=
+  metrics-pulumi:MastodonUser:
+    secure: AAABAC54HQYmBKhtrtV8Zf5pcuzzC72AfFAtfFRW5W6BHRZhp7ZcJ6lrG3vxnRQnwf2mGZw=
   metrics-pulumi:OPSAPI:
     secure: AAABAGldrgTPKc3aIOQfplaZ4W8I5xs/d1nesNsevq8psc4IarExY74EwTy7FR3mmgFDU6fhoCc=
   metrics-pulumi:OctopusElecMPAN:
