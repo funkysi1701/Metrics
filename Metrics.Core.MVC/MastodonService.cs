@@ -19,7 +19,7 @@ namespace Metrics.Core.MVC
         private Auth token;
         private Account user;
 
-        public MastodonService(IConfiguration configuration, MongoService mongoService)
+        public MastodonService(IConfiguration configuration, IMongoService mongoService)
         {
             this.configuration = configuration;
             Chart = new MongoDataService(mongoService);
