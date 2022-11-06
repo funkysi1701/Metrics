@@ -25,26 +25,21 @@ namespace Metrics.Core.MVC
         public async Task<IActionResult> GetMastodonFollowers(ILogger log, string username)
         {
             await Setup();
-            var followers = await Accounts.Followers(domain, token.AccessToken, user.Id, limit: 79);
-
-            log.LogInformation("{Count} {username}", followers.Count, username);
-            return await Chart.SaveData(followers.Count, (int)MetricType.MastodonFollowers, username);
+            log.LogInformation("{Count} {username}", user.FollowersCount, username);
+            return await Chart.SaveData(user.FollowersCount, (int)MetricType.MastodonFollowers, username);
         }
 
         public async Task<IActionResult> GetMastodonFollowing(ILogger log, string username)
         {
             await Setup();
-            var following = await Accounts.Following(domain, token.AccessToken, user.Id);
-
-            log.LogInformation("{Count} {username}", following.Count, username);
-            return await Chart.SaveData(following.Count, (int)MetricType.MastodonFollowing, username);
+            log.LogInformation("{Count} {username}", user.FollowingCount, username);
+            return await Chart.SaveData(user.FollowingCount, (int)MetricType.MastodonFollowing, username);
         }
 
         public async Task<IActionResult> GetMastodonFavourites(ILogger log, string username)
         {
             await Setup();
             var favs = await Favourites.Fetching(domain, token.AccessToken, user.Id);
-
             log.LogInformation("{Count} {username}", favs.Count, username);
             return await Chart.SaveData(favs.Count, (int)MetricType.MastodonFavourites, username);
         }
@@ -52,10 +47,8 @@ namespace Metrics.Core.MVC
         public async Task<IActionResult> GetMastodonToots(ILogger log, string username)
         {
             await Setup();
-            var toots = await Accounts.Statuses(domain, token.AccessToken, user.Id);
-
-            log.LogInformation("{Count} {username}", toots.Count, username);
-            return await Chart.SaveData(toots.Count, (int)MetricType.NumberOfToots, username);
+            log.LogInformation("{Count} {username}", user.StatusesCount, username);
+            return await Chart.SaveData(user.StatusesCount, (int)MetricType.NumberOfToots, username);
         }
 
         private async Task Setup()

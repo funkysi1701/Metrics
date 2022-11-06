@@ -92,14 +92,14 @@ namespace Metrics.TimerFunction
         public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
+            foreach (var user in ghusers)
             {
                 IActionResult result;
                 try
                 {
                     result = await mastodonService.GetMastodonFollowers(log, user);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     log.LogError($"SaveMastodonFollowers {e.Message}");
                     throw;
@@ -123,7 +123,7 @@ namespace Metrics.TimerFunction
         public async Task Run15([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
+            foreach (var user in ghusers)
             {
                 IActionResult result;
                 try
@@ -154,7 +154,7 @@ namespace Metrics.TimerFunction
         public async Task Run16([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
+            foreach (var user in ghusers)
             {
                 IActionResult result;
                 try
@@ -185,7 +185,7 @@ namespace Metrics.TimerFunction
         public async Task Run17([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
+            foreach (var user in ghusers)
             {
                 IActionResult result;
                 try
