@@ -12,6 +12,9 @@ namespace Metrics.Core.MVC
     {
         private readonly MongoDataService Chart;
         private readonly IConfiguration configuration;
+        private string domain;
+        private Auth token;
+        private Account user;
 
         public MastodonService(IConfiguration configuration, MongoService mongoService)
         {
@@ -21,15 +24,7 @@ namespace Metrics.Core.MVC
 
         public async Task<IActionResult> GetMastodonFollowers(ILogger log, string username)
         {
-            var domain = configuration.GetValue<string>("MastodonServer");
-            var clientName = "Mastodon.Net";
-            var userName = configuration.GetValue<string>("MastodonUser");
-            var password = configuration.GetValue<string>("MastodonPass");
-
-            var oauth = await Apps.Register(domain, clientName, scopes: new[] { Scope.Read, Scope.Write, Scope.Follow });
-            var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
-
-            var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
+            await Setup();
             var followers = await Accounts.Followers(domain, token.AccessToken, user.Id, limit: 79);
 
             log.LogInformation("{Count} {username}", followers.Count, username);
@@ -38,15 +33,7 @@ namespace Metrics.Core.MVC
 
         public async Task<IActionResult> GetMastodonFollowing(ILogger log, string username)
         {
-            var domain = configuration.GetValue<string>("MastodonServer");
-            var clientName = "Mastodon.Net";
-            var userName = configuration.GetValue<string>("MastodonUser");
-            var password = configuration.GetValue<string>("MastodonPass");
-
-            var oauth = await Apps.Register(domain, clientName, scopes: new[] { Scope.Read, Scope.Write, Scope.Follow });
-            var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
-
-            var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
+            await Setup();
             var following = await Accounts.Following(domain, token.AccessToken, user.Id);
 
             log.LogInformation("{Count} {username}", following.Count, username);
@@ -55,15 +42,7 @@ namespace Metrics.Core.MVC
 
         public async Task<IActionResult> GetMastodonFavourites(ILogger log, string username)
         {
-            var domain = configuration.GetValue<string>("MastodonServer");
-            var clientName = "Mastodon.Net";
-            var userName = configuration.GetValue<string>("MastodonUser");
-            var password = configuration.GetValue<string>("MastodonPass");
-
-            var oauth = await Apps.Register(domain, clientName, scopes: new[] { Scope.Read, Scope.Write, Scope.Follow });
-            var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
-
-            var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
+            await Setup();
             var favs = await Favourites.Fetching(domain, token.AccessToken, user.Id);
 
             log.LogInformation("{Count} {username}", favs.Count, username);
@@ -72,19 +51,24 @@ namespace Metrics.Core.MVC
 
         public async Task<IActionResult> GetMastodonToots(ILogger log, string username)
         {
-            var domain = configuration.GetValue<string>("MastodonServer");
+            await Setup();
+            var toots = await Accounts.Statuses(domain, token.AccessToken, user.Id);
+
+            log.LogInformation("{Count} {username}", toots.Count, username);
+            return await Chart.SaveData(toots.Count, (int)MetricType.NumberOfToots, username);
+        }
+
+        private async Task Setup()
+        {
+            domain = configuration.GetValue<string>("MastodonServer");
             var clientName = "Mastodon.Net";
             var userName = configuration.GetValue<string>("MastodonUser");
             var password = configuration.GetValue<string>("MastodonPass");
 
             var oauth = await Apps.Register(domain, clientName, scopes: new[] { Scope.Read, Scope.Write, Scope.Follow });
-            var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
+            token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
 
-            var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
-            var toots = await Accounts.Statuses(domain, token.AccessToken, user.Id);
-
-            log.LogInformation("{Count} {username}", toots.Count, username);
-            return await Chart.SaveData(toots.Count, (int)MetricType.NumberOfToots, username);
+            user = await Accounts.VerifyCredentials(domain, token.AccessToken);
         }
     }
 }
