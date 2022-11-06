@@ -288,6 +288,21 @@ namespace Metrics.Pulumi
                             Name = "FUNCTIONS_WORKER_RUNTIME",
                             Value = "dotnet",
                         },
+                        new NameValuePairArgs
+                        {
+                            Name = "MastodonServer",
+                            Value = config.RequireSecret("MastodonServer"),
+                        },
+                        new NameValuePairArgs
+                        {
+                            Name = "MastodonUser",
+                            Value = config.RequireSecret("MastodonUser"),
+                        },
+                        new NameValuePairArgs
+                        {
+                            Name = "MastodonPass",
+                            Value = config.RequireSecret("MastodonPass"),
+                        },
                         new NameValuePairArgs{
                             Name = "TWConsumerKey",
                             Value = config.RequireSecret("TWConsumerKey"),
