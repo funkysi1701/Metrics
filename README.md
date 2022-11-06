@@ -8,7 +8,7 @@ This is an application that logs various metrics about a user.
 
 Intended to be both useful and an exercise in architecture and building something.
 
-v1 is currently running at [metrics.funkysi1701.com](https://metrics.funkysi1701.com/) this repo will be a rebuild/rearchitecture with the following features.
+v1 is currently running at [metrics-prod.funkysi1701.com](https://metrics-prod.funkysi1701.com/) this repo will be a rebuild/rearchitecture with the following features.
 
 - Backend DB to be as cheap as possible, currently using CosmosDB but suspect something like MongoDB may be cheaper
 - Ability to track mutiple users on multiple platforms
