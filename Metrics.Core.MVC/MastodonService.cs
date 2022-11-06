@@ -30,7 +30,7 @@ namespace Metrics.Core.MVC
             var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
 
             var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
-            var followers = await Accounts.Followers(domain, token.AccessToken, user.Id);
+            var followers = await Accounts.Followers(domain, token.AccessToken, user.Id, limit: 79);
 
             log.LogInformation("{Count} {username}", followers.Count, username);
             return await Chart.SaveData(followers.Count, (int)MetricType.MastodonFollowers, username);
@@ -81,10 +81,10 @@ namespace Metrics.Core.MVC
             var token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
 
             var user = await Accounts.VerifyCredentials(domain, token.AccessToken);
-            var favs = await Accounts.Statuses(domain, token.AccessToken, user.Id);
+            var toots = await Accounts.Statuses(domain, token.AccessToken, user.Id);
 
-            log.LogInformation("{Count} {username}", favs.Count, username);
-            return await Chart.SaveData(favs.Count, (int)MetricType.NumberOfToots, username);
+            log.LogInformation("{Count} {username}", toots.Count, username);
+            return await Chart.SaveData(toots.Count, (int)MetricType.NumberOfToots, username);
         }
     }
 }
