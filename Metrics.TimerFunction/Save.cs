@@ -284,6 +284,7 @@ namespace Metrics.TimerFunction
             catch (Exception e)
             {
                 log.LogError(e.Message);
+                throw;
             }
         }
 
@@ -298,6 +299,7 @@ namespace Metrics.TimerFunction
             catch (Exception e)
             {
                 log.LogError(e.Message);
+                throw;
             }
         }
 
