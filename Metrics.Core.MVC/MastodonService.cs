@@ -39,7 +39,7 @@ namespace Metrics.Core.MVC
         public async Task<IActionResult> GetMastodonFavourites(ILogger log, string username)
         {
             await Setup();
-            var favs = await Favourites.Fetching(domain, token.AccessToken, user.Id);
+            var favs = await Favourites.Fetching(domain, token.AccessToken, user.Id, limit: 100);
             log.LogInformation("{Count} {username}", favs.Count, username);
             return await Chart.SaveData(favs.Count, (int)MetricType.MastodonFavourites, username);
         }
