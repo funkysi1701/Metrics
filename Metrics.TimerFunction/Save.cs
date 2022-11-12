@@ -128,6 +128,55 @@ namespace Metrics.TimerFunction
             }
         }
 
+        [FunctionName("SaveFollowFriday")]
+        public async Task Run18([TimerTrigger("0 59 12 5 * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                try
+                {
+                    await mastodonService.GetFollowFriday(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveFollowFriday {e.Message}");
+                    throw;
+                }
+            }
+        }
+
+        [FunctionName("SaveMastodonFavourites")]
+        public async Task Run16([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFavourites(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFavourites {e.Message}");
+                    throw;
+                }
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
         [FunctionName("SaveMastodonToots")]
         public async Task Run17([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
