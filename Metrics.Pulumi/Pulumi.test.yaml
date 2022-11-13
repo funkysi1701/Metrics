@@ -31,13 +31,13 @@ config:
   metrics-pulumi:OctopusKey:
     secure: AAABAJwFVbj1hCzqls8fBcD4+cZudlFvl00tg8THTOiLNHPfnkN85KeQtLSrjPBIuFqxdsYzyxSoDlukKh+Cqg==
   metrics-pulumi:TWAccessSecret:
-    secure: AAABAIngWxgzqxudUgR4PhkabYrmbAjDyYxeimm2pnRBBhkaNg9KIYcyGulcjj/VxSICzkpDspsaT8uDdHmb+uBwNMj58UW5jCP6Bv8=
+    secure: AAABAGd5NjHOGgoagxU9iqRtqfRJK5WivT+nxL0eNZSTL7wuLaLyRLbVGnpuIptcmMfkeBldT8hM9bFFD9uQtNvrKEli1vaAHv1Q2vM=
   metrics-pulumi:TWAccessToken:
-    secure: AAABAKMZ3okaivt5IX8EkKPs2AuzycJVOzaEIEb0eQ1qUsdQq7T6VVUw9XaPUBUKcNnHu0YWAxsZwr4/lxfAFntPT2vQ2HuHmNyMAFbdElnh0g==
+    secure: AAABAJQP2ENKywsB9imVjc2BcMMtmKGmqOYRe38T4LB282rfSv26wRQDVTWcmpNfZwDIhNXkEPW6dAoG+n7lzkmM06ahBD97YQXOo/SqmKA0dw==
   metrics-pulumi:TWConsumerKey:
-    secure: AAABAIXf8dKA+/bjb9RI0/7wJlO2+XRED/i5uG6yu2A+8EQVcfRuQLaptod6Rhns+wj3CBVBnwpj
+    secure: AAABAC0QJ0CRLsd3y7m8u3YxxV0uDQ83eXXfXkO2qnZ+9Op1GsoqkqqDcg2QseZhRCRcjAID7N0i
   metrics-pulumi:TWConsumerSecret:
-    secure: AAABANesd/MM45Q7/TeoVgvarCf0SVfeCUqAA1qUX8QEbd0FcYmKyGx/uEsZeZWNIQM9puiNtMXWKQtxajpM6W6nHTX6jiaIkT/PAzq7w1w0dg==
+    secure: AAABACTqb0ppeg67T+W7DmDyEj+7c9BekWlj9AusMkoQwBoy8mvu79ufkckQ6LuyZ5VcNEEVndRk8j/KzokEsFCT0YuCKAaeurcZOxHE4u6kJQ==
   metrics-pulumi:accountId:
     secure: AAABAFPfS6w9G/vLSewGmWQj16NAbZspRpsC8PWqEI+jO7gaGkmMZLYz6bDL6LNTbShk1iUkmwd5tD3Vii3hNg==
   metrics-pulumi:branch: test
