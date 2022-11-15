@@ -51,7 +51,7 @@ namespace Metrics.Pulumi
                 ContainerName = container.Name,
                 ResourceGroupName = resourceGroup.Name,
                 Type = BlobType.Block,
-                Source = new FileArchive($"..\\Metrics.TimerFunction\\bin\\Release\\net6.0\\publish")
+                Source = new FileArchive($"..\\Metrics.TimerFunction\\bin\\Release\\net7.0\\publish")
             });
 
             var blobhttp = new Blob($"Metrics.Function.zip", new BlobArgs
@@ -60,7 +60,7 @@ namespace Metrics.Pulumi
                 ContainerName = container.Name,
                 ResourceGroupName = resourceGroup.Name,
                 Type = BlobType.Block,
-                Source = new FileArchive($"..\\Metrics.Function\\bin\\Release\\net6.0\\publish")
+                Source = new FileArchive($"..\\Metrics.Function\\bin\\Release\\net7.0\\publish")
             });
 
             var deploymentZipBlobtimerSasUrl = SignedBlobReadUrl(blobtimer, container, storageAccount, resourceGroup);
