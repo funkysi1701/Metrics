@@ -7,9 +7,6 @@
       "rewrite": "/index.html"
     }
   },
-  "platform": {
-    "apiRuntime": "dotnet-isolated:7.0"
-  }
   "globalHeaders": {
     "content-security-policy": "base-uri 'self' ; frame-src 'self' https://www.googletagmanager.com https://www.youtube.com ; img-src 'self' data: https://c.bing.com https://c.clarity.ms https://www.google-analytics.com https://storageaccountblog9f5d.blob.core.windows.net https://res.cloudinary.com https://www.googletagmanager.com ; connect-src 'self' https://dc.services.visualstudio.com https://a.clarity.ms https://b.clarity.ms https://c.clarity.ms https://d.clarity.ms https://e.clarity.ms https://f.clarity.ms https://g.clarity.ms https://h.clarity.ms https://i.clarity.ms https://l.clarity.ms https://m.clarity.ms https://www.clarity.ms https://www.google-analytics.com ; child-src 'self' https://www.youtube.com; object-src none ; report-uri https://funkysi1701.report-uri.com/r/d/csp/reportOnly",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",

@@ -20,7 +20,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 6.0.x
       - name: Restore Dependencies
         run: dotnet restore Metrics.sln
       - name: Build
@@ -44,7 +44,7 @@ jobs:
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.1.11
         with:
-          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.json' 
+          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml' 
           targetdir: 'coveragereport' 
           reporttypes: 'HtmlSummary;Cobertura'
       - name: CodeCov
