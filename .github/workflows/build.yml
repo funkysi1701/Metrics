@@ -42,7 +42,7 @@ jobs:
           dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       - name: ReportGenerator
-        uses: danielpalme/ReportGenerator-GitHub-Action@5.1.11
+        uses: danielpalme/ReportGenerator-GitHub-Action@5.1.12
         with:
           reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml' 
           targetdir: 'coveragereport' 
