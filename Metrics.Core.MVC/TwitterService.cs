@@ -43,30 +43,16 @@ namespace Metrics.Core.MVC
             }
         }
 
-        public async Task<IActionResult> GetTwitterFollowing(ILogger log, string username)
+        public async Task<IActionResult> GetTwitterFollowing(string username)
         {
             var friends = (await TwitterClient.Users.GetFriendIdsAsync(username)).Length;
             return await Chart.SaveData(friends, 1, username);
         }
 
-        public async Task<IActionResult> GetNumberOfTweets(ILogger log, string username)
+        public async Task<IActionResult> GetNumberOfTweets(string username)
         {
             var friends = await TwitterClient.Users.GetUserAsync(username);
             return await Chart.SaveData(friends.StatusesCount, 2, username);
-        }
-
-        public async Task<IActionResult> GetTwitterFav(ILogger log, string username)
-        {
-            try
-            {
-                var friends = await TwitterClient.Users.GetUserAsync(username);
-                return await Chart.SaveData(friends.FavoritesCount, 3, username);
-            }
-            catch (Exception e)
-            {
-                log.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
-                return new BadRequestObjectResult(e.Message);
-            }
         }
     }
 }
