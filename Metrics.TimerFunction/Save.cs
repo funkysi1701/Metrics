@@ -44,28 +44,6 @@ namespace Metrics.TimerFunction
             this.mastodonService = mastodonService;
         }
 
-        [FunctionName("SaveTwitterFav")]
-        public async Task Run1([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFav(log, user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
         [FunctionName("SaveTwitterFollowers")]
         public async Task Run2([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
@@ -187,7 +165,7 @@ namespace Metrics.TimerFunction
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             foreach (var user in twusers)
             {
-                var result = await twitterService.GetTwitterFollowing(log, user);
+                var result = await twitterService.GetTwitterFollowing(user);
                 try
                 {
                     var okMessage = result as OkObjectResult;
@@ -209,7 +187,7 @@ namespace Metrics.TimerFunction
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             foreach (var user in twusers)
             {
-                var result = await twitterService.GetNumberOfTweets(log, user);
+                var result = await twitterService.GetNumberOfTweets(user);
                 try
                 {
                     if (result is OkObjectResult okMessage)
