@@ -60,16 +60,19 @@ namespace Metrics.Core.MVC
                 }
                 foreach (var item in acc)
                 {
-                    s.Append($"@{item}");
-                    s.Append(", ");
+                    if(s.Length < 450)
+                    {
+                        s.Append($"@{item}");
+                        s.Append(", ");
+                    }
                 }
 
                 result = s.ToString();
                 result = result.Trim();
                 result = result.Remove(result.Length - 1, 1);
-                var msg = $"FollowFriday {result}";
+                var msg = $"#FollowFriday {result}";
                 log.LogInformation("{msg}", msg);
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Friday && configuration.GetValue<bool>("EnableToot"))
                 {
                     await Statuses.Posting(domain, token.AccessToken, msg);
                 }
