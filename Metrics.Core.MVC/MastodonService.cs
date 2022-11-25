@@ -50,17 +50,21 @@ namespace Metrics.Core.MVC
                 foreach (var tootId in listoftoots.Select(x => x.Id))
                 {
                     var fav = await Statuses.FavouritedBy(domain, tootId);
+                    var replies = await Statuses.Context(domain, tootId);
                     var retoot = await Statuses.RebloggedBy(domain, tootId);
                     acc.AddRange(from item in fav
                                  where !acc.Contains(item.AccountName)
                                  select item.AccountName);
+                    acc.AddRange(from item in replies.Descendants
+                                 where !acc.Contains(item.Account.AccountName)
+                                 select item.Account.AccountName);
                     acc.AddRange(from item in retoot
                                  where !acc.Contains(item.AccountName)
                                  select item.AccountName);
                 }
                 foreach (var item in acc)
                 {
-                    if(s.Length < 450)
+                    if (s.Length < 450)
                     {
                         s.Append($"@{item}");
                         s.Append(", ");
