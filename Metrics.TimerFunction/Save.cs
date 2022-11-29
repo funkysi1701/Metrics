@@ -129,7 +129,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveFollowFriday")]
-        public async Task Run18([TimerTrigger("0 59 12 5 * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task Run18([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             foreach (var user in ghusers)
