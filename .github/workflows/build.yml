@@ -44,7 +44,7 @@ jobs:
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.1.12
         with:
-          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.json' 
+          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml' 
           targetdir: 'coveragereport' 
           reporttypes: 'HtmlSummary;Cobertura'
       - name: CodeCov
