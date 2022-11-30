@@ -38,35 +38,33 @@ namespace Metrics.Core.MVC
             return await Chart.SaveData(user.FollowingCount, (int)MetricType.MastodonFollowing, username);
         }
 
-        public async Task GetFollowFriday(ILogger log, string username)
+        public async Task GetFollowFriday(ILogger log)
         {
             await Setup();
             var listoftoots = await Accounts.Statuses(domain, token.AccessToken, user.Id, limit: 20);
             string result = string.Empty;
             var s = new StringBuilder();
-            var acc = new List<string>();
+            var acc = new List<FollowFriday>();
             try
             {
                 foreach (var tootId in listoftoots.Select(x => x.Id))
                 {
-                    var fav = await Statuses.FavouritedBy(domain, tootId);
-                    var replies = await Statuses.Context(domain, tootId);
-                    var retoot = await Statuses.RebloggedBy(domain, tootId);
-                    acc.AddRange(from item in fav
-                                 where !acc.Contains(item.AccountName)
-                                 select item.AccountName);
-                    acc.AddRange(from item in replies.Descendants
-                                 where !acc.Contains(item.Account.AccountName)
-                                 select item.Account.AccountName);
-                    acc.AddRange(from item in retoot
-                                 where !acc.Contains(item.AccountName)
-                                 select item.AccountName);
+                    acc = await CalcFav(tootId, acc);
+                    acc = await CalcReplies(tootId, acc);
+                    acc = await CalcRetoot(tootId, acc);
                 }
-                foreach (var item in acc)
+
+                var groupedResults = acc.GroupBy(x => x.Name).Select(q => new FollowFriday
+                {
+                    Name = q.Key,
+                    Score = q.Sum(x => x.Score),
+                }).OrderByDescending(y => y.Score);
+
+                foreach (var item in groupedResults)
                 {
                     if (s.Length < 450)
                     {
-                        s.Append($"@{item}");
+                        s.Append($"@{item.Name}");
                         s.Append(", ");
                     }
                 }
@@ -85,6 +83,48 @@ namespace Metrics.Core.MVC
             {
                 log.LogError("FollowFriday Error {Message}", ex.Message);
             }
+        }
+
+        private async Task<List<FollowFriday>> CalcFav(long tootId, List<FollowFriday> acc)
+        {
+            var fav = await Statuses.FavouritedBy(domain, tootId);
+            var favNames = from item in fav
+                           select item.AccountName;
+            foreach (var name in favNames)
+            {
+                var n = new FollowFriday { Name = name, Score = 1.0 };
+                acc.Add(n);
+            }
+
+            return acc;
+        }
+
+        private async Task<List<FollowFriday>> CalcReplies(long tootId, List<FollowFriday> acc)
+        {
+            var replies = await Statuses.Context(domain, tootId);
+            var repliesNames = from item in replies.Descendants
+                               select item.Account.AccountName;
+            foreach (var name in repliesNames)
+            {
+                var n = new FollowFriday { Name = name, Score = 1.1 };
+                acc.Add(n);
+            }
+
+            return acc;
+        }
+
+        private async Task<List<FollowFriday>> CalcRetoot(long tootId, List<FollowFriday> acc)
+        {
+            var retoot = await Statuses.RebloggedBy(domain, tootId);
+            var retootNames = from item in retoot
+                              select item.AccountName;
+            foreach (var name in retootNames)
+            {
+                var n = new FollowFriday { Name = name, Score = 1.3 };
+                acc.Add(n);
+            }
+
+            return acc;
         }
 
         public async Task<IActionResult> GetMastodonToots(ILogger log, string username)
