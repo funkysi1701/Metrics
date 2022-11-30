@@ -27,7 +27,7 @@ jobs:
         run: dotnet build Metrics.sln --configuration Release --no-restore
       - name: Test
         working-directory: ./Metrics.Core.Tests
-        run: dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
+        run: dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=coverage --results-directory ./coverage
       - name: Install SonarCloud scanner
         run: |
           dotnet tool update dotnet-sonarscanner --global
@@ -39,7 +39,7 @@ jobs:
           cd Metrics.Core.Tests
           dotnet-sonarscanner begin /k:"funkysi1701_Metrics" /o:"funkysi1701" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.json"
           dotnet build ../Metrics.sln
-          dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
+          dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=coverage --results-directory ./coverage
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.1.12
