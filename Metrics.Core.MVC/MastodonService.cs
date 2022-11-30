@@ -54,11 +54,15 @@ namespace Metrics.Core.MVC
                     acc = await CalcRetoot(tootId, acc);
                 }
 
-                var groupedResults = acc.GroupBy(x => x.Name).Select(q => new FollowFriday
-                {
-                    Name = q.Key,
-                    Score = q.Sum(x => x.Score),
-                }).OrderByDescending(y => y.Score);
+                var groupedResults = acc
+                    .GroupBy(x => x.Name)
+                    .Select(q => new FollowFriday
+                    {
+                        Name = q.Key,
+                        Score = q.Sum(x => x.Score),
+                    })
+                    .Where(x => !x.Name.Contains("funkysi1701"))
+                    .OrderByDescending(y => y.Score);
 
                 foreach (var item in groupedResults)
                 {
