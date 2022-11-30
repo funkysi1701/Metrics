@@ -37,14 +37,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd Metrics.Core.Tests
-          dotnet-sonarscanner begin /k:"funkysi1701_Metrics" /o:"funkysi1701" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml"
+          dotnet-sonarscanner begin /k:"funkysi1701_Metrics" /o:"funkysi1701" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.json"
           dotnet build ../Metrics.sln
           dotnet test --logger trx --configuration Release --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --results-directory ./coverage
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       - name: ReportGenerator
         uses: danielpalme/ReportGenerator-GitHub-Action@5.1.12
         with:
-          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.opencover.xml' 
+          reports: '/home/runner/work/Metrics/Metrics/Metrics.Core.Tests/coverage.json' 
           targetdir: 'coveragereport' 
           reporttypes: 'HtmlSummary;Cobertura'
       - name: CodeCov
