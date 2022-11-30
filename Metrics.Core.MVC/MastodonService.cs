@@ -55,13 +55,13 @@ namespace Metrics.Core.MVC
                 }
 
                 var groupedResults = acc
+                    .Where(x => !x.Name.Contains("funkysi1701"))
                     .GroupBy(x => x.Name)
                     .Select(q => new FollowFriday
                     {
                         Name = q.Key,
                         Score = q.Sum(x => x.Score),
                     })
-                    .Where(x => !x.Name.Contains("funkysi1701"))
                     .OrderByDescending(y => y.Score);
 
                 foreach (var item in groupedResults)
