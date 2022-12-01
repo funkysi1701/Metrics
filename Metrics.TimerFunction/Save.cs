@@ -128,6 +128,24 @@ namespace Metrics.TimerFunction
             }
         }
 
+        [FunctionName("SaveFollowFriday")]
+        public async Task Run18([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in ghusers)
+            {
+                try
+                {
+                    await mastodonService.GetFollowFriday(log);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveFollowFriday {e.Message}");
+                    throw;
+                }
+            }
+        }
+
         [FunctionName("SaveMastodonToots")]
         public async Task Run17([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
