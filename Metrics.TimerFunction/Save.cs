@@ -48,15 +48,15 @@ namespace Metrics.TimerFunction
         public async Task Run2([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "Dev" && DateTime.Now.Minute == 39)
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
                 await GetTwitterFollowers(log);
             }
-            else if (Configuration.GetValue<string>("Env") == "Test" && DateTime.Now.Minute == 49)
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
             {
                 await GetTwitterFollowers(log);
             }
-            else if (Configuration.GetValue<string>("Env") == "Test" && DateTime.Now.Minute == 59)
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
                 await GetTwitterFollowers(log);
             }
@@ -148,15 +148,15 @@ namespace Metrics.TimerFunction
         public async Task Run18([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "Dev" && DateTime.Now.Minute == 39)
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
                 await GetFollowFriday(log);
             }
-            else if (Configuration.GetValue<string>("Env") == "Test" && DateTime.Now.Minute == 49)
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
             {
                 await GetFollowFriday(log);
             }
-            else if (Configuration.GetValue<string>("Env") == "Test" && DateTime.Now.Minute == 59)
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
                 await GetFollowFriday(log);
             }
