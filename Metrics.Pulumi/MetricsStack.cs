@@ -332,6 +332,10 @@ namespace Metrics.Pulumi
                             Value = config.RequireSecret("DEVTOAPI"),
                         },
                         new NameValuePairArgs{
+                            Name = "Env",
+                            Value = config.Require("env"),
+                        },
+                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
                         },
