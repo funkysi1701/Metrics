@@ -336,6 +336,10 @@ namespace Metrics.Pulumi
                             Value = config.Require("env"),
                         },
                         new NameValuePairArgs{
+                            Name = "EnableToot",
+                            Value = config.Require("env") == "prod" ? "true" : "false",
+                        },
+                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
                         },
