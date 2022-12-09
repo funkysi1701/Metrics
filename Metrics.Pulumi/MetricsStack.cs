@@ -250,7 +250,7 @@ namespace Metrics.Pulumi
                                                     { "APPINSIGHTS_INSTRUMENTATIONKEY", appInsights.InstrumentationKey },
                                                     { "DatabaseName", $"Metrics-{config.Require("env")}" },
                                                     { "FunctionAPI", $"https://metrics-pulumi-function-{config.Require("env")}.azurewebsites.net" },
-                                                    { "MaxRecords", 20000 },
+                                                    { "MaxRecords", 80000 },
                                                     { "MaxPages", 16 }
                                                 }
                                             }
@@ -334,6 +334,10 @@ namespace Metrics.Pulumi
                         new NameValuePairArgs{
                             Name = "Env",
                             Value = config.Require("env"),
+                        },
+                        new NameValuePairArgs{
+                            Name = "EnableToot",
+                            Value = config.Require("env") == "prod" ? "true" : "false",
                         },
                         new NameValuePairArgs{
                             Name = "DEVTOURL",
