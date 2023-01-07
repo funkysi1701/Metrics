@@ -59,7 +59,7 @@ namespace Metrics.Core.MVC
             result = result.Remove(result.Length - 1, 1);
             var msg = $"#FollowFriday {result}";
             log.LogInformation("{msg}", msg);
-            if (DateTime.UtcNow.DayOfWeek == DayOfWeek.Friday && DateTime.UtcNow.Hour == 12 && configuration.GetValue<bool>("EnableToot"))
+            if (DateTime.UtcNow.DayOfWeek == DayOfWeek.Friday && DateTime.UtcNow.Hour == 12 && configuration.GetValue<bool>("EnableTweet"))
             {
                 await TwitterClient.Tweets.PublishTweetAsync(msg);
             }
