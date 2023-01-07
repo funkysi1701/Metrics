@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using System.Text;
 using Tweetinvi;
 using Tweetinvi.Parameters;
 
@@ -10,12 +12,57 @@ namespace Metrics.Core.MVC
     public class TwitterService
     {
         private readonly MongoDataService Chart;
+        private readonly IConfiguration configuration;
         private TwitterClient TwitterClient { get; set; }
 
         public TwitterService(IConfiguration configuration, MongoService mongoService)
         {
             Chart = new MongoDataService(mongoService);
+            this.configuration = configuration;
             TwitterClient = new TwitterClient(configuration.GetValue<string>("TWConsumerKey"), configuration.GetValue<string>("TWConsumerSecret"), configuration.GetValue<string>("TWAccessToken"), configuration.GetValue<string>("TWAccessSecret"));
+        }
+
+        public async Task GetFollowFriday(ILogger log)
+        {
+            var listoftoots = await TwitterClient.Timelines.GetUserTimelineAsync("funkysi1701");
+            string result = string.Empty;
+            var s = new StringBuilder();
+            var acc = new List<FollowFriday>();
+
+            foreach (var tootId in listoftoots.Select(x => x.Id))
+            {
+                //acc = await CalcFav(tootId, acc);
+                //acc = await CalcReplies(tootId, acc);
+                //acc = await CalcRetoot(tootId, acc);
+            }
+
+            var groupedResults = acc
+                .Where(x => !x.Name.Contains("funkysi1701"))
+                .GroupBy(x => x.Name)
+                .Select(q => new FollowFriday
+                {
+                    Name = q.Key,
+                    Score = q.Sum(x => x.Score),
+                })
+                .OrderByDescending(y => y.Score);
+
+            foreach (var item in groupedResults)
+            {
+                if (s.Length < 450)
+                {
+                    s.Append($"@{item.Name}");
+                    s.Append(", ");
+                }
+            }
+            result = s.ToString();
+            result = result.Trim();
+            result = result.Remove(result.Length - 1, 1);
+            var msg = $"#FollowFriday {result}";
+            log.LogInformation("{msg}", msg);
+            if (DateTime.UtcNow.DayOfWeek == DayOfWeek.Friday && DateTime.UtcNow.Hour == 12 && configuration.GetValue<bool>("EnableToot"))
+            {
+                await TwitterClient.Tweets.PublishTweetAsync(msg);
+            }
         }
 
         public async Task<IActionResult> GetTwitterFollowers(ILogger log, string username)
