@@ -164,17 +164,14 @@ namespace Metrics.TimerFunction
 
         private async Task GetFollowFriday(ILogger log)
         {
-            foreach (var user in ghusers)
+            try
             {
-                try
-                {
-                    await mastodonService.GetFollowFriday(log);
-                }
-                catch (Exception e)
-                {
-                    log.LogError($"SaveFollowFriday {e.Message}");
-                    throw;
-                }
+                await mastodonService.GetFollowFriday(log);
+            }
+            catch (Exception e)
+            {
+                log.LogError($"SaveFollowFriday {e.Message}");
+                throw;
             }
         }
 
