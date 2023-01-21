@@ -48,7 +48,7 @@ jobs:
           dotnet publish Metrics.StaticFunction/Metrics.StaticFunction.csproj --configuration Release
           popd
 
-      - uses: pulumi/actions@v3
+      - uses: pulumi/actions@v4
         with:
           command: refresh
           stack-name: funkysi1701/metrics-pulumi/dev
@@ -63,7 +63,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
 
-      - uses: pulumi/actions@v3
+      - uses: pulumi/actions@v4
         id: pulumi-up
         with:
           command: up
