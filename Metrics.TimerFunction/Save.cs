@@ -583,6 +583,7 @@ namespace Metrics.TimerFunction
             try
             {
                 await mastodonService.GetFollowFriday(log);
+                await twitterService.GetFollowFriday(log);
             }
             catch (Exception e)
             {
