@@ -340,6 +340,10 @@ namespace Metrics.Pulumi
                             Value = config.Require("env") == "prod" ? "true" : "false",
                         },
                         new NameValuePairArgs{
+                            Name = "EnableTweet",
+                            Value = "false",
+                        },
+                        new NameValuePairArgs{
                             Name = "DEVTOURL",
                             Value = "https://dev.to/api/",
                         },

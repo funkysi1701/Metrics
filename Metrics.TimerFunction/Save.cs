@@ -62,160 +62,281 @@ namespace Metrics.TimerFunction
             }
         }
 
-        private async Task GetTwitterFollowers(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFollowers(log, user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
         [FunctionName("SaveMastodonFollowers")]
-        public async Task Run14([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in ghusers)
-            {
-                IActionResult result;
-                try
-                {
-                    result = await mastodonService.GetMastodonFollowers(log, user);
-                }
-                catch (Exception e)
-                {
-                    log.LogError($"SaveMastodonFollowers {e.Message}");
-                    throw;
-                }
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
-        [FunctionName("SaveMastodonFollowing")]
-        public async Task Run15([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in ghusers)
-            {
-                IActionResult result;
-                try
-                {
-                    result = await mastodonService.GetMastodonFollowing(log, user);
-                }
-                catch (Exception e)
-                {
-                    log.LogError($"SaveMastodonFollowing {e.Message}");
-                    throw;
-                }
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
-        [FunctionName("SaveFollowFriday")]
-        public async Task Run18([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task Run14([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                await GetFollowFriday(log);
+                await SaveMastodonFollowers(log);
             }
             else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
             {
-                await GetFollowFriday(log);
+                await SaveMastodonFollowers(log);
             }
             else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
-                await GetFollowFriday(log);
+                await SaveMastodonFollowers(log);
             }
         }
 
-        private async Task GetFollowFriday(ILogger log)
+        [FunctionName("SaveMastodonFollowing")]
+        public async Task Run15([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
-            foreach (var user in ghusers)
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                try
-                {
-                    await mastodonService.GetFollowFriday(log);
-                }
-                catch (Exception e)
-                {
-                    log.LogError($"SaveFollowFriday {e.Message}");
-                    throw;
-                }
+                await SaveMastodonFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveMastodonFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveMastodonFollowing(log);
+            }
+        }
+
+        [FunctionName("SaveFollowFriday")]
+        public async Task Run18([TimerTrigger("0 * * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "Dev")
+            {
+                await SaveFollowFriday(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveFollowFriday(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveFollowFriday(log);
             }
         }
 
         [FunctionName("SaveMastodonToots")]
-        public async Task Run17([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task Run17([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in ghusers)
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                IActionResult result;
-                try
-                {
-                    result = await mastodonService.GetMastodonToots(log, user);
-                }
-                catch (Exception e)
-                {
-                    log.LogError($"SaveMastodonToots {e.Message}");
-                    throw;
-                }
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
+                await SaveMastodonToots(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveMastodonToots(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveMastodonToots(log);
             }
         }
 
         [FunctionName("SaveTwitterFollowing")]
-        public async Task Run3([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task Run3([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var user in twusers)
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                var result = await twitterService.GetTwitterFollowing(user);
+                await SaveTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveTwitterFollowing(log);
+            }
+        }
+
+        [FunctionName("SaveNumberOfTweets")]
+        public async Task Run4([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveNumberOfTweets(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveNumberOfTweets(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveNumberOfTweets(log);
+            }
+        }
+
+        [FunctionName("SaveGas")]
+        public async Task Run5([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveGas(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveGas(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveGas(log);
+            }
+        }
+
+        [FunctionName("SaveElec")]
+        public async Task Run6([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveElec(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveElec(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveElec(log);
+            }
+        }
+
+        [FunctionName("SaveCommits")]
+        public async Task Run7([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveCommits(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveCommits(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveCommits(log);
+            }
+        }
+
+        [FunctionName("SaveGitHubFollowers")]
+        public async Task Run8([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveGitHubFollowers(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveGitHubFollowers(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveGitHubFollowers(log);
+            }
+        }
+
+        [FunctionName("SaveGitHubFollowing")]
+        public async Task Run9([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveGitHubFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveGitHubFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveGitHubFollowing(log);
+            }
+        }
+
+        [FunctionName("SaveGitHubRepo")]
+        public async Task Run10([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveGitHubRepo(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveGitHubRepo(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveGitHubRepo(log);
+            }
+        }
+
+        [FunctionName("SaveGitHubStars")]
+        public async Task Run11([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveGitHubStars(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveGitHubStars(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveGitHubStars(log);
+            }
+        }
+
+        [FunctionName("SaveDevTo")]
+        public async Task Run12([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveDevTo(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveDevTo(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveDevTo(log);
+            }
+        }
+
+        [FunctionName("SaveBlog")]
+        public async Task Run13([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await SaveBlog(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await SaveBlog(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await SaveBlog(log);
+            }
+        }
+
+        private async Task SaveGitHubFollowers(ILogger log)
+        {
+            foreach (var username in ghusers)
+            {
+                var result = await githubService.GetGitHubFollowers(username);
                 try
                 {
                     var okMessage = result as OkObjectResult;
@@ -231,10 +352,177 @@ namespace Metrics.TimerFunction
             }
         }
 
-        [FunctionName("SaveNumberOfTweets")]
-        public async Task Run4([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task SaveGitHubFollowing(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var username in ghusers)
+            {
+                var result = await githubService.GetGitHubFollowing(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveGitHubRepo(ILogger log)
+        {
+            foreach (var username in ghusers)
+            {
+                var result = await githubService.GetGitHubRepo(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveGitHubStars(ILogger log)
+        {
+            foreach (var username in ghusers)
+            {
+                var result = await githubService.GetGitHubStars(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveDevTo(ILogger log)
+        {
+            foreach (var username in ghusers)
+            {
+                var result = await devToService.GetDevTo(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+                result = await devToService.GetOps(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveBlog(ILogger log)
+        {
+            var feedList = new List<SaveBlog>();
+            if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
+            {
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog });
+            }
+            if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
+            {
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog });
+            }
+
+            foreach (var item in feedList)
+            {
+                var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveCommits(ILogger log)
+        {
+            foreach (var username in ghusers)
+            {
+                var result = await githubService.GetCommits(username);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveElec(ILogger log)
+        {
+            try
+            {
+                await powerService.GetElec();
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                throw;
+            }
+        }
+
+        private async Task SaveGas(ILogger log)
+        {
+            try
+            {
+                await powerService.GetGas();
+            }
+            catch (Exception e)
+            {
+                log.LogError(e.Message);
+                throw;
+            }
+        }
+
+        private async Task SaveNumberOfTweets(ILogger log)
+        {
             foreach (var user in twusers)
             {
                 var result = await twitterService.GetNumberOfTweets(user);
@@ -270,43 +558,44 @@ namespace Metrics.TimerFunction
             }
         }
 
-        [FunctionName("SaveGas")]
-        public async Task Run5([TimerTrigger("0 59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task SaveTwitterFollowing(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowing(user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task SaveFollowFriday(ILogger log)
+        {
             try
             {
-                await powerService.GetGas();
+                await mastodonService.GetFollowFriday(log);
             }
             catch (Exception e)
             {
-                log.LogError(e.Message);
+                log.LogError($"SaveFollowFriday {e.Message}");
                 throw;
             }
         }
 
-        [FunctionName("SaveElec")]
-        public async Task Run6([TimerTrigger("0 59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task GetTwitterFollowers(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            try
+            foreach (var user in twusers)
             {
-                await powerService.GetElec();
-            }
-            catch (Exception e)
-            {
-                log.LogError(e.Message);
-                throw;
-            }
-        }
-
-        [FunctionName("SaveCommits")]
-        public async Task Run7([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
-            {
-                var result = await githubService.GetCommits(username);
+                var result = await twitterService.GetTwitterFollowers(log, user);
                 try
                 {
                     var okMessage = result as OkObjectResult;
@@ -322,13 +611,20 @@ namespace Metrics.TimerFunction
             }
         }
 
-        [FunctionName("SaveGitHubFollowers")]
-        public async Task Run8([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task SaveMastodonFollowing(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
+            foreach (var user in ghusers)
             {
-                var result = await githubService.GetGitHubFollowers(username);
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFollowing(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFollowing {e.Message}");
+                    throw;
+                }
                 try
                 {
                     var okMessage = result as OkObjectResult;
@@ -344,13 +640,20 @@ namespace Metrics.TimerFunction
             }
         }
 
-        [FunctionName("SaveGitHubFollowing")]
-        public async Task Run9([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task SaveMastodonFollowers(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
+            foreach (var user in ghusers)
             {
-                var result = await githubService.GetGitHubFollowing(username);
+                IActionResult result;
+                try
+                {
+                    result = await mastodonService.GetMastodonFollowers(log, user);
+                }
+                catch (Exception e)
+                {
+                    log.LogError($"SaveMastodonFollowers {e.Message}");
+                    throw;
+                }
                 try
                 {
                     var okMessage = result as OkObjectResult;
@@ -366,102 +669,20 @@ namespace Metrics.TimerFunction
             }
         }
 
-        [FunctionName("SaveGitHubRepo")]
-        public async Task Run10([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        private async Task SaveMastodonToots(ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
+            foreach (var user in ghusers)
             {
-                var result = await githubService.GetGitHubRepo(username);
+                IActionResult result;
                 try
                 {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
+                    result = await mastodonService.GetMastodonToots(log, user);
                 }
                 catch (Exception e)
                 {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
+                    log.LogError($"SaveMastodonToots {e.Message}");
                     throw;
                 }
-            }
-        }
-
-        [FunctionName("SaveGitHubStars")]
-        public async Task Run11([TimerTrigger("0 59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
-            {
-                var result = await githubService.GetGitHubStars(username);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
-        [FunctionName("SaveDevTo")]
-        public async Task Run12([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            foreach (var username in ghusers)
-            {
-                var result = await devToService.GetDevTo(username);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-                result = await devToService.GetOps(username);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
-        [FunctionName("SaveBlog")]
-        public async Task Run13([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var feedList = new List<SaveBlog>();
-            if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
-            {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog });
-            }
-            if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
-            {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog });
-            }
-
-            foreach (var item in feedList)
-            {
-                var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
                 try
                 {
                     var okMessage = result as OkObjectResult;
