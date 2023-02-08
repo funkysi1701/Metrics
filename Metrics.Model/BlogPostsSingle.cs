@@ -11,6 +11,5 @@
         public DateTime? Last_Comment_At { get; set; }
         public List<string> Tags { get; set; }
         public string Body_Html { get; set; }
-        public string Body_Markdown { get; set; }
     }
 }

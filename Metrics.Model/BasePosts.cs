@@ -17,6 +17,7 @@
         public string Cover_Image { get; set; }
         public string Canonical_Url { get; set; }
         public List<string> Tag_List { get; set; }
+        public string Body_Markdown { get; set; }
         public User User { get; set; }
     }
 }
