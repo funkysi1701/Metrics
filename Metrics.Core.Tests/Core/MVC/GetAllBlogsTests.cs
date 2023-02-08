@@ -15,8 +15,8 @@ namespace Metrics.Core.Tests.Core.MVC
 {
     public class GetAllBlogsTests
     {
-        private IConfiguration? config;
-        private Mock<IHttpClientFactory>? factory;
+        private IConfiguration? config = new ConfigurationBuilder().Build();
+        private readonly Mock<IHttpClientFactory> factory = new();
 
         private void SharedStuff(List<BlogPosts> posts)
         {
@@ -29,7 +29,6 @@ namespace Metrics.Core.Tests.Core.MVC
                 .AddInMemoryCollection(inMemorySettings)
                 .Build();
 
-            factory = new Mock<IHttpClientFactory>();
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             var content = new StringContent(JsonConvert.SerializeObject(posts));
             mockHttpMessageHandler.Protected()
