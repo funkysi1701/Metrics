@@ -7,9 +7,9 @@ namespace Metrics.Core.MVC
 {
     public static class GetAllBlogs
     {
-        public static async Task<List<BlogPosts>> GetAll(IConfiguration config, int n)
+        public static async Task<List<BlogPosts>> GetAll(IConfiguration config, int n, IHttpClientFactory factory)
         {
-            var Client = new HttpClient();
+            var Client = factory.CreateClient("blog");
             Client.DefaultRequestHeaders.Add("api-key", config.GetValue<string>("DEVTOAPI"));
             var productValue = new ProductInfoHeaderValue("Funkysi1701Blog", "1.0");
             var commentValue = new ProductInfoHeaderValue("(+https://www.funkysi1701.com)");
