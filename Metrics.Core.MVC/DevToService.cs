@@ -1,6 +1,6 @@
 ﻿using Metrics.Core.Enum;
-using Metrics.Core.Model;
 using Metrics.Core.Service;
+using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -84,11 +84,11 @@ namespace Metrics.Core.MVC
             return result;
         }
 
-        public async Task<IActionResult> GetDevTo(string username)
+        public async Task<IActionResult> GetDevTo(string username, IHttpClientFactory factory)
         {
             IActionResult result = null;
 
-            var blogs = await GetAllBlogs.GetAll(Configuration, 200);
+            var blogs = await GetAllBlogs.GetAll(Configuration, 200, factory);
             result = await Chart.SaveData(blogs.Count, (int)MetricType.DevToPosts, username);
             try
             {

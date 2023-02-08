@@ -1,4 +1,4 @@
-﻿namespace Metrics.Core.Model
+﻿namespace Metrics.Model
 {
     public class MyMongoDatabaseSettings
     {
