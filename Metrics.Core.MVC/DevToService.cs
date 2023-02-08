@@ -1,6 +1,6 @@
 ﻿using Metrics.Core.Enum;
-using Metrics.Core.Model;
 using Metrics.Core.Service;
+using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 

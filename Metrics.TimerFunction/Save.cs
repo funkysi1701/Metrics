@@ -1,6 +1,6 @@
 ﻿using Metrics.Core.Enum;
-using Metrics.Core.Model;
 using Metrics.Core.MVC;
+using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;

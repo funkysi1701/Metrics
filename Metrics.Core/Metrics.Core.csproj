@@ -13,4 +13,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Metrics.Model\Metrics.Model.csproj" />
+  </ItemGroup>
+
 </Project>

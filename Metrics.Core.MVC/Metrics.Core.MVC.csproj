@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Metrics.Core\Metrics.Core.csproj" />
+    <ProjectReference Include="..\Metrics.Model\Metrics.Model.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿using Metrics.Core.Model;
+﻿using Metrics.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
