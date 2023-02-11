@@ -1,4 +1,4 @@
-﻿namespace Metrics.Core
+﻿namespace Metrics.Model
 {
     public class FollowFriday
     {
