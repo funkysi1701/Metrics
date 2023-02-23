@@ -1,5 +1,5 @@
-﻿using Metrics.Core.Model;
-using Metrics.Core.Service;
+﻿using Metrics.Core.Service;
+using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Metrics.Core.MVC

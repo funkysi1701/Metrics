@@ -1,6 +1,6 @@
 ﻿using BlazorApplicationInsights;
 using Metrics.Core.Errors;
-using Metrics.Core.Model;
+using Metrics.Model;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 
