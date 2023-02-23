@@ -1,5 +1,5 @@
-﻿using Metrics.Core.Service;
-using Metrics.Model;
+﻿using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Microsoft.Azure.Cosmos;
 
 namespace Metrics.Console

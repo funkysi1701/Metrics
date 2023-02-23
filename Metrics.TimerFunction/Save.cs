@@ -1,13 +1,12 @@
 ﻿using Metrics.Core.Enum;
+using Metrics.Core.Model;
 using Metrics.Core.MVC;
-using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Metrics.TimerFunction
@@ -23,9 +22,8 @@ namespace Metrics.TimerFunction
         private readonly IConfiguration Configuration;
         private readonly List<string> ghusers;
         private readonly List<string> twusers;
-        private readonly IHttpClientFactory httpClientFactory;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
@@ -44,7 +42,6 @@ namespace Metrics.TimerFunction
             this.devToService = devToService;
             this.blogService = blogService;
             this.mastodonService = mastodonService;
-            this.httpClientFactory = httpClientFactory;
         }
 
         [FunctionName("SaveTwitterFollowers")]
@@ -305,15 +302,15 @@ namespace Metrics.TimerFunction
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                await SaveDevTo(log, httpClientFactory);
+                await SaveDevTo(log);
             }
             else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
             {
-                await SaveDevTo(log, httpClientFactory);
+                await SaveDevTo(log);
             }
             else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
-                await SaveDevTo(log, httpClientFactory);
+                await SaveDevTo(log);
             }
         }
 
@@ -415,11 +412,11 @@ namespace Metrics.TimerFunction
             }
         }
 
-        private async Task SaveDevTo(ILogger log, IHttpClientFactory factory)
+        private async Task SaveDevTo(ILogger log)
         {
             foreach (var username in ghusers)
             {
-                var result = await devToService.GetDevTo(username, factory);
+                var result = await devToService.GetDevTo(username);
                 try
                 {
                     var okMessage = result as OkObjectResult;

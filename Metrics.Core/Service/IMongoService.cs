@@ -1,4 +1,4 @@
-﻿using Metrics.Model;
+﻿using Metrics.Core.Model;
 
 namespace Metrics.Core.Service
 {

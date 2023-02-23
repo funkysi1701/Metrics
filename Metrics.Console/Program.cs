@@ -1,6 +1,6 @@
 ﻿using Metrics.Console;
+using Metrics.Core.Model;
 using Metrics.Core.Service;
-using Metrics.Model;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;

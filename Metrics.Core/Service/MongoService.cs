@@ -1,4 +1,4 @@
-﻿using Metrics.Model;
+﻿using Metrics.Core.Model;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

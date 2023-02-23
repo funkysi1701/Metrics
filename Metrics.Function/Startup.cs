@@ -1,6 +1,6 @@
-﻿using Metrics.Core.Service;
+﻿using Metrics.Core.Model;
+using Metrics.Core.Service;
 using Metrics.Function;
-using Metrics.Model;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

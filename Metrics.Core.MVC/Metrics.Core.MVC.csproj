@@ -10,14 +10,12 @@
     <PackageReference Include="Mastodon.Net" Version="1.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Octokit" Version="5.0.0" />
     <PackageReference Include="TweetinviAPI" Version="5.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Metrics.Core\Metrics.Core.csproj" />
-    <ProjectReference Include="..\Metrics.Model\Metrics.Model.csproj" />
   </ItemGroup>
 
 </Project>

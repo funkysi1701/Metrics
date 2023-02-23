@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Linq;
-using Metrics.Model;
 
 namespace Metrics.Core.MVC
 {

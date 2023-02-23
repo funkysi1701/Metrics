@@ -1,6 +1,6 @@
 ﻿using BlazorApplicationInsights;
+using Metrics.Core.Model;
 using Metrics.Core.Service;
-using Metrics.Model;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.Protected;

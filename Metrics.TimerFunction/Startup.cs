@@ -1,8 +1,8 @@
 ﻿using ImpSoft.OctopusEnergy.Api;
-using Metrics.Core.MVC;
+using Metrics.Core.Model;
 using Metrics.Core.Service;
-using Metrics.Model;
 using Metrics.TimerFunction;
+using Metrics.Core.MVC;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

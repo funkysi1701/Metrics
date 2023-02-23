@@ -1,20 +1,22 @@
-﻿using Metrics.Core.Enum;
-using Metrics.Model;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Metrics.Core.Model;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Xml.Linq;
+using System;
+using Metrics.Core.Enum;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Metrics.StaticFunction
 {

@@ -1,6 +1,6 @@
-﻿using Metrics.Core.MVC;
+﻿using Metrics.Core.Model;
+using Metrics.Core.MVC;
 using Metrics.Core.Service;
-using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;

@@ -1,4 +1,4 @@
-﻿using Metrics.Model;
+﻿using Metrics.Core.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -7,9 +7,9 @@ namespace Metrics.Core.MVC
 {
     public static class GetAllBlogs
     {
-        public static async Task<List<BlogPosts>> GetAll(IConfiguration config, int n, IHttpClientFactory factory)
+        public static async Task<List<BlogPosts>> GetAll(IConfiguration config, int n)
         {
-            var Client = factory.CreateClient("blog");
+            var Client = new HttpClient();
             Client.DefaultRequestHeaders.Add("api-key", config.GetValue<string>("DEVTOAPI"));
             var productValue = new ProductInfoHeaderValue("Funkysi1701Blog", "1.0");
             var commentValue = new ProductInfoHeaderValue("(+https://www.funkysi1701.com)");
