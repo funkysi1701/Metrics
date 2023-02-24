@@ -2,12 +2,11 @@
 using Mastodon.Model;
 using Metrics.Core.Enum;
 using Metrics.Core.Service;
+using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text;
-using System.Linq;
-using Metrics.Model;
 
 namespace Metrics.Core.MVC
 {
@@ -145,8 +144,8 @@ namespace Metrics.Core.MVC
             var clientName = "Mastodon.Net";
             var userName = configuration.GetValue<string>("MastodonUser");
             var password = configuration.GetValue<string>("MastodonPass");
-
-            var oauth = await Apps.Register(domain, clientName, scopes: new[] { Scope.Read, Scope.Write, Scope.Follow });
+            var scopes = new[] { Scope.Read, Scope.Write, Scope.Follow };
+            var oauth = await Apps.Register(domain, clientName, scopes: scopes);
             token = await OAuth.GetAccessTokenByPassword(domain, oauth.ClientId, oauth.ClientSecret, userName, password, Scope.Read, Scope.Write, Scope.Follow);
 
             user = await Accounts.VerifyCredentials(domain, token.AccessToken);
