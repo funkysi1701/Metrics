@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
@@ -14,13 +13,6 @@ namespace Metrics.StaticFunction
 {
     public class ProMetric
     {
-        private readonly IConfiguration Configuration;
-
-        public ProMetric(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         [FunctionName("ProMetrics")]
         [OpenApiOperation(operationId: "ProMetrics", tags: new[] { "api" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
@@ -29,7 +21,7 @@ namespace Metrics.StaticFunction
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            return new OkObjectResult("testing");
+            return new OkObjectResult("testing 5");
         }
     }
 }
