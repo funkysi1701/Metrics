@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Metrics.StaticFunction
 {
-    public class Metric
+    public class ProMetric
     {
         private readonly IConfiguration Configuration;
 
-        public Metric(IConfiguration configuration)
+        public ProMetric(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        [FunctionName("Metrics")]
-        public async Task<IActionResult> Metrics(
+        [FunctionName("ProMetrics")]
+        public async Task<IActionResult> ProMetrics(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
