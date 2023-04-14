@@ -9,12 +9,12 @@
     <PackageReference Include="BlazorApplicationInsights" Version="2.2.0" />
     <PackageReference Include="ChartJs.Blazor" Version="1.1.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.15" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.15" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.16" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.1" />
-    <PackageReference Include="MatBlazor" Version="2.8.0" />
+    <PackageReference Include="MatBlazor" Version="2.10.0" />
   </ItemGroup>
 
   <ItemGroup>
