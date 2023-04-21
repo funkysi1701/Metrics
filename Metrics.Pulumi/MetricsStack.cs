@@ -337,7 +337,7 @@ namespace Metrics.Pulumi
                         },
                         new NameValuePairArgs{
                             Name = "EnableToot",
-                            Value = config.Require("env") == "prod" ? "true" : "false",
+                            Value = "false",
                         },
                         new NameValuePairArgs{
                             Name = "EnableTweet",
