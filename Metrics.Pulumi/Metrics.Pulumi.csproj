@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pulumi.Azure" Version="5.41.0" />
-    <PackageReference Include="Pulumi.AzureNative" Version="1.100.1" />
+    <PackageReference Include="Pulumi.Azure" Version="5.42.0" />
+    <PackageReference Include="Pulumi.AzureNative" Version="1.101.0" />
     <PackageReference Include="Pulumi.Cloudflare" Version="5.0.0" />
     <PackageReference Include="Pulumi.Mongodbatlas" Version="3.7.2" />
   </ItemGroup>
