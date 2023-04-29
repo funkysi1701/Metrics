@@ -16,7 +16,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageReference Include="Octokit" Version="5.0.4" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.1" />
-    <PackageReference Include="TweetinviAPI" Version="5.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Metrics.Core.MVC\Metrics.Core.MVC.csproj" />
