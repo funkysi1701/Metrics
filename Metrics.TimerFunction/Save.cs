@@ -1,24 +1,20 @@
-﻿using HtmlAgilityPack;
-using Metrics.Core.Enum;
+﻿using Metrics.Core.Enum;
 using Metrics.Core.MVC;
 using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Metrics.TimerFunction
 {
     public class Save
     {
+        private readonly TwitterService twitterService;
         private readonly MastodonService mastodonService;
         private readonly PowerService powerService;
         private readonly GithubService githubService;
@@ -26,15 +22,23 @@ namespace Metrics.TimerFunction
         private readonly BlogService blogService;
         private readonly IConfiguration Configuration;
         private readonly List<string> ghusers;
+        private readonly List<string> twusers;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public Save(PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
             {
                 Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
+            twusers = new List<string>
+            {
+                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701",
+                "zogface",
+                "juliankay"
+            };
+            this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
             this.devToService = devToService;
@@ -281,46 +285,38 @@ namespace Metrics.TimerFunction
         public async Task Run2([TimerTrigger("0 * * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            var html = GetHtml();
-            var data = ParseHtmlUsingHtmlAgilityPack(html);
-        }
-
-        private static List<(string RepositoryName, string Description)> ParseHtmlUsingHtmlAgilityPack(string html)
-        {
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(html);
-
-            var repositories =
-                htmlDoc
-                    .DocumentNode
-                    .SelectNodes("//div/div/div/div/main/div/div/div/div/div/div/div/div/div/div/div");
-
-            List<(string RepositoryName, string Description)> data = new();
-
-            var repo = repositories[6];
-            var nodes = repo.SelectNodes("div");
-            foreach (var item in nodes)
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
             {
-                var values = item?.InnerText.Split(" ");
-                data.Add((values[1], values[0]));
+                await GetTwitterFollowers(log);
             }
-
-            return data;
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await GetTwitterFollowers(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await GetTwitterFollowers(log);
+            }
         }
 
-        private static string GetHtml()
+        private async Task GetTwitterFollowers(ILogger log)
         {
-            var options = new ChromeOptions
+            foreach (var user in twusers)
             {
-                BinaryLocation = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
-            };
-
-            options.AddArguments("headless");
-
-            var chrome = new ChromeDriver(options);
-            chrome.Navigate().GoToUrl("https://twitter.com/funkysi1701");
-
-            return chrome.PageSource;
+                var result = await twitterService.GetTwitterFollowers(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
         }
 
         private async Task SaveGitHubFollowers(ILogger log)

@@ -23,6 +23,7 @@ namespace Metrics.TimerFunction
                 .AddEnvironmentVariables()
                 .Build();
             builder.Services.AddScoped<GithubService>();
+            builder.Services.AddScoped<TwitterService>();
             builder.Services.AddScoped<DevToService>();
             builder.Services.AddScoped<PowerService>();
             builder.Services.AddScoped<BlogService>();
