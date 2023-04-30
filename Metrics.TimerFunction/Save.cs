@@ -1,14 +1,19 @@
-﻿using Metrics.Core.Enum;
+﻿using HtmlAgilityPack;
+using Metrics.Core.Enum;
 using Metrics.Core.MVC;
 using Metrics.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
+using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Metrics.TimerFunction
 {
@@ -270,6 +275,52 @@ namespace Metrics.TimerFunction
             {
                 await SaveBlog(log);
             }
+        }
+
+        [FunctionName("SaveTwitterFollowers")]
+        public async Task Run2([TimerTrigger("0 * * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            var html = GetHtml();
+            var data = ParseHtmlUsingHtmlAgilityPack(html);
+        }
+
+        private static List<(string RepositoryName, string Description)> ParseHtmlUsingHtmlAgilityPack(string html)
+        {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+
+            var repositories =
+                htmlDoc
+                    .DocumentNode
+                    .SelectNodes("//div/div/div/div/main/div/div/div/div/div/div/div/div/div/div/div");
+
+            List<(string RepositoryName, string Description)> data = new();
+
+            var repo = repositories[6];
+            var nodes = repo.SelectNodes("div");
+            foreach (var item in nodes)
+            {
+                var values = item?.InnerText.Split(" ");
+                data.Add((values[1], values[0]));
+            }
+
+            return data;
+        }
+
+        private static string GetHtml()
+        {
+            var options = new ChromeOptions
+            {
+                BinaryLocation = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+            };
+
+            options.AddArguments("headless");
+
+            var chrome = new ChromeDriver(options);
+            chrome.Navigate().GoToUrl("https://twitter.com/funkysi1701");
+
+            return chrome.PageSource;
         }
 
         private async Task SaveGitHubFollowers(ILogger log)
