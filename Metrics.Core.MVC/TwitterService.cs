@@ -3,11 +3,6 @@ using Metrics.Core.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium.Chrome;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Metrics.Core.MVC
 {
@@ -26,8 +21,17 @@ namespace Metrics.Core.MVC
             {
                 var html = GetHtml(username);
                 var data = ParseHtmlUsingHtmlAgilityPack(html);
-                log.LogInformation("{Count} {username}", Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers")), username);
-                return await Chart.SaveData(Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers")), 0, username);
+                decimal value;
+                try
+                {
+                    value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers"));
+                }
+                catch (Exception ex)
+                {
+                    value = 0;
+                }
+                log.LogInformation("{Count} {username}", value, username);
+                return await Chart.SaveData(value, 0, username);
             }
             catch (Exception e)
             {
@@ -44,16 +48,22 @@ namespace Metrics.Core.MVC
             var repositories =
                 htmlDoc
                     .DocumentNode
-                    .SelectNodes("//div/div/div/div/main/div/div/div/div/div/div/div/div/div/div/div");
+                    .SelectNodes("//div[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]");
 
             List<(string RepositoryName, string Description)> data = new();
 
-            var repo = repositories[6];
-            var nodes = repo.SelectNodes("div");
-            foreach (var item in nodes)
+            if (repositories is not null)
             {
-                var values = item?.InnerText.Split(" ");
-                data.Add((values[1], values[0]));
+                var repo = repositories[0];
+                var nodes = repo.SelectNodes("div/a");
+                foreach (var item in nodes)
+                {
+                    var values = item?.InnerText.Split(" ");
+                    if (values != null)
+                    {
+                        data.Add((values[1], values[0]));
+                    }
+                }
             }
 
             return data;
