@@ -14,6 +14,7 @@ namespace Metrics.TimerFunction
 {
     public class Save
     {
+        private readonly TwitterService twitterService;
         private readonly MastodonService mastodonService;
         private readonly PowerService powerService;
         private readonly GithubService githubService;
@@ -21,15 +22,23 @@ namespace Metrics.TimerFunction
         private readonly BlogService blogService;
         private readonly IConfiguration Configuration;
         private readonly List<string> ghusers;
+        private readonly List<string> twusers;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public Save(PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
+        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
             {
                 Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
+            twusers = new List<string>
+            {
+                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701",
+                "zogface",
+                "juliankay"
+            };
+            this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
             this.devToService = devToService;
@@ -269,6 +278,82 @@ namespace Metrics.TimerFunction
             else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
                 await SaveBlog(log);
+            }
+        }
+
+        [FunctionName("SaveTwitterFollowers")]
+        public async Task SaveTwitterFollowers([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await GetTwitterFollowers(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await GetTwitterFollowers(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await GetTwitterFollowers(log);
+            }
+        }
+
+        [FunctionName("SaveTwitterFollowing")]
+        public async Task SaveTwitterFollowing([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await GetTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await GetTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await GetTwitterFollowing(log);
+            }
+        }
+
+        private async Task GetTwitterFollowers(ILogger log)
+        {
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowers(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task GetTwitterFollowing(ILogger log)
+        {
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowing(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
             }
         }
 
