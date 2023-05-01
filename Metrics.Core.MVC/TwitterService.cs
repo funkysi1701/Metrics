@@ -30,7 +30,7 @@ namespace Metrics.Core.MVC
                     }
                     catch (Exception ex)
                     {
-                        value = 0;
+                        log.LogError("Error: {Message}", ex.Message);
                     }
                 }
 
@@ -59,7 +59,7 @@ namespace Metrics.Core.MVC
                     }
                     catch (Exception ex)
                     {
-                        value = 0;
+                        log.LogError("Error: {Message}", ex.Message);
                     }
                 }
 
@@ -87,8 +87,10 @@ namespace Metrics.Core.MVC
 
             if (repositories is not null)
             {
-                data.Add(("Following", repositories[1].InnerText));
-                data.Add(("Followers", repositories[3].InnerText));
+                if (type == "Following")
+                    data.Add(("Following", repositories[1].InnerText));
+                if (type == "Followers")
+                    data.Add(("Followers", repositories[3].InnerText));
             }
 
             return data;
