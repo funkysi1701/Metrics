@@ -20,16 +20,20 @@ namespace Metrics.Core.MVC
             try
             {
                 var html = GetHtml(username);
-                var data = ParseHtmlUsingHtmlAgilityPack(html);
-                decimal value;
-                try
+                var data = ParseHtmlUsingHtmlAgilityPack(html, "Followers");
+                decimal value = 0;
+                if (data != null && data.Count > 0)
                 {
-                    value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers"));
+                    try
+                    {
+                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers"));
+                    }
+                    catch (Exception ex)
+                    {
+                        value = 0;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    value = 0;
-                }
+
                 log.LogInformation("{Count} {username}", value, username);
                 return await Chart.SaveData(value, 0, username);
             }
@@ -40,7 +44,36 @@ namespace Metrics.Core.MVC
             }
         }
 
-        private static List<(string RepositoryName, string Description)> ParseHtmlUsingHtmlAgilityPack(string html)
+        public async Task<IActionResult> GetTwitterFollowing(ILogger log, string username)
+        {
+            try
+            {
+                var html = GetHtml(username);
+                var data = ParseHtmlUsingHtmlAgilityPack(html, "Following");
+                decimal value = 0;
+                if (data != null && data.Count > 0)
+                {
+                    try
+                    {
+                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Following"));
+                    }
+                    catch (Exception ex)
+                    {
+                        value = 0;
+                    }
+                }
+
+                log.LogInformation("{Count} {username}", value, username);
+                return await Chart.SaveData(value, 0, username);
+            }
+            catch (Exception e)
+            {
+                log.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
+                return new BadRequestObjectResult(e.Message);
+            }
+        }
+
+        private static List<(string RepositoryName, string Description)> ParseHtmlUsingHtmlAgilityPack(string html, string type)
         {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
@@ -48,22 +81,14 @@ namespace Metrics.Core.MVC
             var repositories =
                 htmlDoc
                     .DocumentNode
-                    .SelectNodes("//div[@id=\"react-root\"]/div/div/div[2]/main/div/div/div/div[1]/div/div[3]/div/div/div/div/div[5]");
+                    .SelectNodes($"//span[contains(text(), {type})]/ancestor::a/span");
 
             List<(string RepositoryName, string Description)> data = new();
 
             if (repositories is not null)
             {
-                var repo = repositories[0];
-                var nodes = repo.SelectNodes("div/a");
-                foreach (var item in nodes)
-                {
-                    var values = item?.InnerText.Split(" ");
-                    if (values != null)
-                    {
-                        data.Add((values[1], values[0]));
-                    }
-                }
+                data.Add(("Following", repositories[1].InnerText));
+                data.Add(("Followers", repositories[3].InnerText));
             }
 
             return data;

@@ -282,7 +282,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveTwitterFollowers")]
-        public async Task Run2([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveTwitterFollowers([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -299,11 +299,49 @@ namespace Metrics.TimerFunction
             }
         }
 
+        [FunctionName("SaveTwitterFollowing")]
+        public async Task SaveTwitterFollowing([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        {
+            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
+            {
+                await GetTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
+            {
+                await GetTwitterFollowing(log);
+            }
+            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
+            {
+                await GetTwitterFollowing(log);
+            }
+        }
+
         private async Task GetTwitterFollowers(ILogger log)
         {
             foreach (var user in twusers)
             {
                 var result = await twitterService.GetTwitterFollowers(log, user);
+                try
+                {
+                    var okMessage = result as OkObjectResult;
+                    log.LogInformation(okMessage.Value.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.LogError(e.Message);
+                    var badMessage = result as BadRequestObjectResult;
+                    log.LogError(badMessage.Value.ToString());
+                    throw;
+                }
+            }
+        }
+
+        private async Task GetTwitterFollowing(ILogger log)
+        {
+            foreach (var user in twusers)
+            {
+                var result = await twitterService.GetTwitterFollowing(log, user);
                 try
                 {
                     var okMessage = result as OkObjectResult;
