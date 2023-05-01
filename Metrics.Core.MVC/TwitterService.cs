@@ -26,7 +26,7 @@ namespace Metrics.Core.MVC
                 {
                     try
                     {
-                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers"));
+                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers").Description);
                     }
                     catch (Exception ex)
                     {
@@ -55,7 +55,7 @@ namespace Metrics.Core.MVC
                 {
                     try
                     {
-                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Following"));
+                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Following").Description);
                     }
                     catch (Exception ex)
                     {
