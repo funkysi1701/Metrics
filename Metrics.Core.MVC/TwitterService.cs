@@ -87,10 +87,15 @@ namespace Metrics.Core.MVC
 
             if (repositories is not null)
             {
-                if (type == "Following")
-                    data.Add(("Following", repositories[1].InnerText));
-                if (type == "Followers")
-                    data.Add(("Followers", repositories[3].InnerText));
+                int result;
+                if (int.TryParse(repositories[1].InnerText.Replace(",", ""), out result))
+                    data.Add(("Following", result.ToString()));
+                if (int.TryParse(repositories[2].InnerText.Replace(",",""), out result))
+                    data.Add(("Following", result.ToString()));
+                if (int.TryParse(repositories[3].InnerText.Replace(",", ""), out result))
+                    data.Add(("Followers", result.ToString()));
+                if (int.TryParse(repositories[4].InnerText.Replace(",", ""), out result))
+                    data.Add(("Followers", result.ToString()));
             }
 
             return data;
