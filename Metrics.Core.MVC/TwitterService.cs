@@ -35,12 +35,12 @@ namespace Metrics.Core.MVC
                     }
                 }
 
-                log.LogInformation("{Count} {username}", value, username);
+                log?.LogInformation("{Count} {username}", value, username);
                 return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
             }
             catch (Exception e)
             {
-                log.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
+                log?.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
                 return new BadRequestObjectResult(e.Message);
             }
         }
@@ -64,12 +64,12 @@ namespace Metrics.Core.MVC
                     }
                 }
 
-                log.LogInformation("{Count} {username}", value, username);
+                log?.LogInformation("{Count} {username}", value, username);
                 return await Chart.SaveData(value, MetricType.TwitterFollowing, username);
             }
             catch (Exception e)
             {
-                log.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
+                log?.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
                 return new BadRequestObjectResult(e.Message);
             }
         }
@@ -106,7 +106,7 @@ namespace Metrics.Core.MVC
         {
             var options = new ChromeOptions
             {
-                BinaryLocation = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+
             };
 
             options.AddArguments("headless");
