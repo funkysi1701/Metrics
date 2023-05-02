@@ -280,39 +280,17 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveTwitterFollowers")]
-        public async Task SaveTwitterFollowers([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveTwitterFollowers([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
-            {
-                await GetTwitterFollowers(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
-            {
-                await GetTwitterFollowers(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
-            {
-                await GetTwitterFollowers(log);
-            }
+            await GetTwitterFollowers(log);
         }
 
         [FunctionName("SaveTwitterFollowing")]
-        public async Task SaveTwitterFollowing([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveTwitterFollowing([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
-            {
-                await GetTwitterFollowing(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
-            {
-                await GetTwitterFollowing(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
-            {
-                await GetTwitterFollowing(log);
-            }
+            await GetTwitterFollowing(log);
         }
 
         private async Task GetTwitterFollowers(ILogger log)
