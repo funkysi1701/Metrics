@@ -1,6 +1,6 @@
-﻿using Metrics.Core.Enum;
-using Metrics.Core.MVC;
+﻿using Metrics.Core.MVC;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
@@ -34,9 +34,7 @@ namespace Metrics.TimerFunction
             };
             twusers = new List<string>
             {
-                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701",
-                "zogface",
-                "juliankay"
+                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
             this.twitterService = twitterService;
             this.powerService = powerService;
@@ -475,11 +473,11 @@ namespace Metrics.TimerFunction
             var feedList = new List<SaveBlog>();
             if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
             {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog });
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = MetricType.Blog });
             }
             if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
             {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog });
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = MetricType.OldBlog });
             }
 
             foreach (var item in feedList)

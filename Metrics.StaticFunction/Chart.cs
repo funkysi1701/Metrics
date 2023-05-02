@@ -1,5 +1,6 @@
 using Metrics.Core.Enum;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -159,7 +160,7 @@ namespace Metrics.StaticFunction
             {
                 var c = new ChartViewWithType
                 {
-                    Type = item.Type.Value,
+                    Type = item.Type,
                     Date = item.Date.Value,
                     Total = item.Value
                 };
@@ -172,7 +173,7 @@ namespace Metrics.StaticFunction
             {
                 var c = new ChartViewWithType
                 {
-                    Type = previtem.Type.Value,
+                    Type = previtem.Type,
                     Date = previtem.Date.Value,
                     Total = previtem.Value
                 };

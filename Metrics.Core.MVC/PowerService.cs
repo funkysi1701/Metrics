@@ -1,5 +1,6 @@
 ﻿using ImpSoft.OctopusEnergy.Api;
 using Metrics.Core.Service;
+using Metrics.Model.Enum;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace Metrics.Core.MVC
             DateTimeOffset To = new(DateTime.UtcNow.AddMinutes(-1 * DateTime.UtcNow.AddMinutes(-30).Minute), TimeSpan.FromHours(0));
 
             var consumption = await Client.GetGasConsumptionAsync(Key, Configuration.GetValue<string>("OctopusGasMPAN"), Configuration.GetValue<string>("OctopusGasSerial"), From, To, Interval.HalfHour);
-            await CheckConsumption(14, consumption);
+            await CheckConsumption(MetricType.Gas, consumption);
         }
 
         public async Task GetElec()
@@ -39,19 +40,19 @@ namespace Metrics.Core.MVC
             DateTimeOffset To = new(DateTime.UtcNow.AddMinutes(-1 * DateTime.UtcNow.AddMinutes(-30).Minute), TimeSpan.FromHours(0));
 
             var consumption = await Client.GetElectricityConsumptionAsync(Key, Configuration.GetValue<string>("OctopusElecMPAN"), Configuration.GetValue<string>("OctopusElecSerial"), From, To, Interval.HalfHour);
-            await CheckConsumption(15, consumption);
+            await CheckConsumption(MetricType.Electricity, consumption);
         }
 
-        public async Task CheckConsumption(int Id, IEnumerable<Consumption> consumption)
+        public async Task CheckConsumption(MetricType type, IEnumerable<Consumption> consumption)
         {
-            var exist = await Chart.Get(Id, Configuration.GetValue<string>("Username1"));
+            var exist = await Chart.Get(type, Configuration.GetValue<string>("Username1"));
             foreach (var item in consumption)
             {
                 if (exist.Any(x => x.Date.Value == item.Start.UtcDateTime.Date))
                 {
-                    await Chart.Delete(Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
+                    await Chart.Delete(type, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
                 }
-                await Chart.SaveData(item.Quantity, Id, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701");
+                await Chart.SaveData(item.Quantity, type, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701");
             }
         }
     }

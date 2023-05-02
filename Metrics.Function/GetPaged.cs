@@ -1,5 +1,6 @@
 using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -38,7 +39,7 @@ namespace Metrics.Function
         {
             try
             {
-                int type = int.Parse(req.Query["type"]);
+                MetricType type = (MetricType)int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
                 int PageSize = int.Parse(req.Query["PageSize"]);
                 int PageNum = int.Parse(req.Query["PageNum"]);
@@ -53,7 +54,7 @@ namespace Metrics.Function
             }
         }
 
-        public async Task<List<Metric>> GetMongo(int type, string username, int PageSize, int PageNum)
+        public async Task<List<Metric>> GetMongo(MetricType type, string username, int PageSize, int PageNum)
         {
             return await _mongoService.GetAsync(type, username, PageSize, PageNum);
         }

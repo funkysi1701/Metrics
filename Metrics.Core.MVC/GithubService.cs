@@ -1,4 +1,5 @@
 ﻿using Metrics.Core.Service;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Octokit;
@@ -28,7 +29,7 @@ namespace Metrics.Core.MVC
         {
             var github = GitHub();
             var user = await github.User.Get(username);
-            IActionResult result = await Chart.SaveData(user.Followers, 4, username);
+            IActionResult result = await Chart.SaveData(user.Followers, MetricType.GitHubFollowers, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -45,7 +46,7 @@ namespace Metrics.Core.MVC
         {
             var github = GitHub();
             var user = await github.User.Get(username);
-            IActionResult result = await Chart.SaveData(user.Following, 5, username);
+            IActionResult result = await Chart.SaveData(user.Following, MetricType.GitHubFollowing, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -62,7 +63,7 @@ namespace Metrics.Core.MVC
         {
             var github = GitHub();
             var user = await github.User.Get(username);
-            IActionResult result = await Chart.SaveData(user.PublicRepos, 6, username);
+            IActionResult result = await Chart.SaveData(user.PublicRepos, MetricType.GitHubRepo, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -79,7 +80,7 @@ namespace Metrics.Core.MVC
         {
             var github = GitHub();
             var stars = await github.Activity.Starring.GetAllForUser(username);
-            IActionResult result = await Chart.SaveData(stars.Count, 7, username);
+            IActionResult result = await Chart.SaveData(stars.Count, MetricType.GitHubStars, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -98,11 +99,11 @@ namespace Metrics.Core.MVC
             IActionResult result;
             var events = await github.Activity.Events.GetAllUserPerformed(username);
             var today = events.Where(x => x.Type == "PushEvent" && x.CreatedAt > DateTime.Now.Date).ToList();
-            var sofar = await Chart.Get(8, username);
+            var sofar = await Chart.Get(MetricType.GitHubCommits, username);
             sofar = sofar.Where(x => x.Date != null && x.Date < DateTime.Now.Date).OrderBy(y => y.Date).ToList();
             if (sofar.Count == 0)
             {
-                result = await Chart.SaveData(today.Count, 8, username);
+                result = await Chart.SaveData(today.Count, MetricType.GitHubCommits, username);
                 try
                 {
                     _ = result as OkObjectResult;
@@ -112,7 +113,7 @@ namespace Metrics.Core.MVC
                     return result;
                 }
             }
-            else result = await Chart.SaveData(today.Count + sofar.Last().Value.Value, 8, username);
+            else result = await Chart.SaveData(today.Count + sofar.Last().Value.Value, MetricType.GitHubCommits, username);
             try
             {
                 _ = result as OkObjectResult;

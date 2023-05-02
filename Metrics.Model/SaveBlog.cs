@@ -1,8 +1,10 @@
-﻿namespace Metrics.Model
+﻿using Metrics.Model.Enum;
+
+namespace Metrics.Model
 {
     public class SaveBlog
     {
         public string Feed { get; set; }
-        public int Type { get; set; }
+        public MetricType Type { get; set; }
     }
 }

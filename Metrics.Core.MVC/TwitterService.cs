@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Metrics.Core.Service;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenQA.Selenium.Chrome;
@@ -35,7 +36,7 @@ namespace Metrics.Core.MVC
                 }
 
                 log.LogInformation("{Count} {username}", value, username);
-                return await Chart.SaveData(value, 0, username);
+                return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
             }
             catch (Exception e)
             {
@@ -64,7 +65,7 @@ namespace Metrics.Core.MVC
                 }
 
                 log.LogInformation("{Count} {username}", value, username);
-                return await Chart.SaveData(value, 0, username);
+                return await Chart.SaveData(value, MetricType.TwitterFollowing, username);
             }
             catch (Exception e)
             {
@@ -90,7 +91,7 @@ namespace Metrics.Core.MVC
                 int result;
                 if (int.TryParse(repositories[1].InnerText.Replace(",", ""), out result))
                     data.Add(("Following", result.ToString()));
-                if (int.TryParse(repositories[2].InnerText.Replace(",",""), out result))
+                if (int.TryParse(repositories[2].InnerText.Replace(",", ""), out result))
                     data.Add(("Following", result.ToString()));
                 if (int.TryParse(repositories[3].InnerText.Replace(",", ""), out result))
                     data.Add(("Followers", result.ToString()));
