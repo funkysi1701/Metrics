@@ -13,12 +13,7 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'Metrics.IIS/Metrics.IIS.csproj'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Publishing API App'
+  displayName: 'Publishing IIS App'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -26,8 +21,8 @@ steps:
     arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory) --runtime win-x64 --self-contained true'
 
 - task: PublishPipelineArtifact@1
-  displayName: 'Publishing API'
+  displayName: 'Publishing IIS'
   inputs:
     targetPath: '$(Pipeline.Workspace)/a/Metrics.IIS.zip'
-    artifact: 'API'
+    artifact: 'IIS'
     publishLocation: 'pipeline'     
