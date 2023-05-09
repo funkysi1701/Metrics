@@ -2,6 +2,7 @@
 using Metrics.Core.MVC;
 using Metrics.Core.Service;
 using Metrics.Model.Enum;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium.Chrome;
 
@@ -16,7 +17,7 @@ namespace Metrics.IIS.Services
             Chart = new MongoDataService(mongoService);
         }
 
-        public async Task<IActionResult> GetTwitterFollowers(ILogger log, string username)
+        public async Task<IActionResult> GetTwitterFollowers(TelemetryClient telemetry, string username)
         {
             try
             {
@@ -31,21 +32,21 @@ namespace Metrics.IIS.Services
                     }
                     catch (Exception ex)
                     {
-                        log.LogError("Error: {Message}", ex.Message);
+                        telemetry.TrackException(ex);
                     }
                 }
 
-                log?.LogInformation("{Count} {username}", value, username);
+                telemetry?.TrackEvent($"{value} {username}");
                 return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
             }
             catch (Exception e)
             {
-                log?.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
+                telemetry.TrackException(e);
                 return new BadRequestObjectResult(e.Message);
             }
         }
 
-        public async Task<IActionResult> GetTwitterFollowing(ILogger log, string username)
+        public async Task<IActionResult> GetTwitterFollowing(TelemetryClient telemetry, string username)
         {
             try
             {
@@ -60,16 +61,16 @@ namespace Metrics.IIS.Services
                     }
                     catch (Exception ex)
                     {
-                        log.LogError("Error: {Message}", ex.Message);
+                        telemetry.TrackException(ex);
                     }
                 }
 
-                log?.LogInformation("{Count} {username}", value, username);
+                telemetry?.TrackEvent($"{value} {username}");
                 return await Chart.SaveData(value, MetricType.TwitterFollowing, username);
             }
             catch (Exception e)
             {
-                log?.LogError("Failed to save for {username} Exception {Message}", username, e.Message);
+                telemetry.TrackException(e);
                 return new BadRequestObjectResult(e.Message);
             }
         }
@@ -110,7 +111,7 @@ namespace Metrics.IIS.Services
 
             options.AddArguments("headless");
 
-            var chrome = new ChromeDriver(@"C:\inetpub\sites\metrics-iis.funkysi1701.com\selenium-manager\windows", options);
+            var chrome = new ChromeDriver(options);
             chrome.Navigate().GoToUrl($"https://twitter.com/{username}");
 
             return chrome.PageSource;

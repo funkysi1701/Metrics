@@ -43,7 +43,7 @@ namespace Metrics.IIS.Controllers
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowers(null, "funkysi1701");
+                var result = await twitterService.GetTwitterFollowers(telemetry, "funkysi1701");
                 return result;
             }
             catch (Exception e)
@@ -57,7 +57,7 @@ namespace Metrics.IIS.Controllers
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowing(null, "funkysi1701");
+                var result = await twitterService.GetTwitterFollowing(telemetry, "funkysi1701");
                 return result;
             }
             catch (Exception e)
