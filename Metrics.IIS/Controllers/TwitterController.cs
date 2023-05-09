@@ -1,4 +1,5 @@
 using Metrics.IIS.Services;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Metrics.IIS.Controllers
@@ -8,10 +9,12 @@ namespace Metrics.IIS.Controllers
     public class TwitterController : ControllerBase
     {
         private readonly TwitterService twitterService;
+        private readonly TelemetryClient telemetry;
 
-        public TwitterController(TwitterService twitterService)
+        public TwitterController(TwitterService twitterService, TelemetryClient telemetry)
         {
             this.twitterService = twitterService;
+            this.telemetry = telemetry;
         }
 
         /// <summary>
@@ -38,30 +41,28 @@ namespace Metrics.IIS.Controllers
 
         private async Task<IActionResult> GetTwitterFollowers()
         {
-            var result = await twitterService.GetTwitterFollowers(null, "funkysi1701");
             try
             {
-                var okMessage = result as OkObjectResult;
+                var result = await twitterService.GetTwitterFollowers(null, "funkysi1701");
                 return result;
             }
             catch (Exception e)
             {
-                var badMessage = result as BadRequestObjectResult;
+                telemetry.TrackException(e);
                 throw;
             }
         }
 
         private async Task<IActionResult> GetTwitterFollowing()
         {
-            var result = await twitterService.GetTwitterFollowing(null, "funkysi1701");
             try
             {
-                var okMessage = result as OkObjectResult;
+                var result = await twitterService.GetTwitterFollowing(null, "funkysi1701");
                 return result;
             }
             catch (Exception e)
             {
-                var badMessage = result as BadRequestObjectResult;
+                telemetry.TrackException(e);
                 throw;
             }
         }
