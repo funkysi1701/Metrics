@@ -8,22 +8,28 @@ namespace Metrics.IIS.Controllers
     public class TwitterController : ControllerBase
     {
         private readonly TwitterService twitterService;
-        private readonly List<string> twusers;
-        public TwitterController(TwitterService twitterService, IConfiguration Configuration)
+
+        public TwitterController(TwitterService twitterService)
         {
             this.twitterService = twitterService;
-            twusers = new List<string>
-            {
-                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
-            };
         }
 
+        /// <summary>
+        /// SaveTwitterFollowers
+        /// </summary>
+        /// <remarks>SaveTwitterFollowers</remarks>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> SaveTwitterFollowers()
         {
             return await GetTwitterFollowers();
         }
 
+        /// <summary>
+        /// SaveTwitterFollowing
+        /// </summary>
+        /// <remarks>SaveTwitterFollowing</remarks>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> SaveTwitterFollowing()
         {
@@ -32,7 +38,7 @@ namespace Metrics.IIS.Controllers
 
         private async Task<IActionResult> GetTwitterFollowers()
         {
-            var result = await twitterService.GetTwitterFollowers(null, twusers.FirstOrDefault());
+            var result = await twitterService.GetTwitterFollowers(null, "funkysi1701");
             try
             {
                 var okMessage = result as OkObjectResult;
@@ -47,7 +53,7 @@ namespace Metrics.IIS.Controllers
 
         private async Task<IActionResult> GetTwitterFollowing()
         {
-            var result = await twitterService.GetTwitterFollowing(null, twusers.FirstOrDefault());
+            var result = await twitterService.GetTwitterFollowing(null, "funkysi1701");
             try
             {
                 var okMessage = result as OkObjectResult;
