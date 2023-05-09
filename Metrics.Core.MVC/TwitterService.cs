@@ -106,12 +106,11 @@ namespace Metrics.Core.MVC
         {
             var options = new ChromeOptions
             {
-                BinaryLocation = @"C:\Users\admin-sf\.cache\selenium\chromedriver\win32\112.0.5615.49\chromedriver.exe"
             };
 
             options.AddArguments("headless");
 
-            var chrome = new ChromeDriver(options);
+            var chrome = new ChromeDriver(@"C:\Users\admin-sf\.cache\selenium\chromedriver\win32\112.0.5615.49\", options);
             chrome.Navigate().GoToUrl($"https://twitter.com/{username}");
 
             return chrome.PageSource;
