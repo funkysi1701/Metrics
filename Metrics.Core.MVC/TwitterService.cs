@@ -110,7 +110,7 @@ namespace Metrics.Core.MVC
 
             options.AddArguments("headless");
 
-            var chrome = new ChromeDriver(@"C:\Users\admin-sf\.cache\selenium\chromedriver\win32\112.0.5615.49\", options);
+            var chrome = new ChromeDriver(@"C:\inetpub\sites\metrics-iis.funkysi1701.com\selenium-manager\windows", options);
             chrome.Navigate().GoToUrl($"https://twitter.com/{username}");
 
             return chrome.PageSource;
