@@ -106,7 +106,7 @@ namespace Metrics.Core.MVC
         {
             var options = new ChromeOptions
             {
-                BinaryLocation = @"C:\Program Files\Google\Chrome\Application\chrome.exe"
+                BinaryLocation = @"C:\Users\admin-sf\.cache\selenium\chromedriver\win32\112.0.5615.49\chromedriver.exe"
             };
 
             options.AddArguments("headless");
