@@ -1,11 +1,11 @@
 ﻿using HtmlAgilityPack;
+using Metrics.Core.MVC;
 using Metrics.Core.Service;
 using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OpenQA.Selenium.Chrome;
 
-namespace Metrics.Core.MVC
+namespace Metrics.IIS.Services
 {
     public class TwitterService
     {

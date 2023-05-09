@@ -1,5 +1,6 @@
 using Metrics.Core.MVC;
 using Metrics.Core.Service;
+using Metrics.IIS.Services;
 using Metrics.Model;
 
 var builder = WebApplication.CreateBuilder(args);
