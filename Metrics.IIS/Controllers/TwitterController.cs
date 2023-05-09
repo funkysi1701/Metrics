@@ -1,4 +1,4 @@
-using Metrics.Core.MVC;
+using Metrics.IIS.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Metrics.IIS.Controllers
