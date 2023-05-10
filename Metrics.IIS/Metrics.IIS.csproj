@@ -19,4 +19,10 @@
     <ProjectReference Include="..\Metrics.Core.MVC\Metrics.Core.MVC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="chromedriver.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
