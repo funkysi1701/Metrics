@@ -14,7 +14,6 @@ namespace Metrics.TimerFunction
 {
     public class Save
     {
-        private readonly TwitterService twitterService;
         private readonly MastodonService mastodonService;
         private readonly PowerService powerService;
         private readonly GithubService githubService;
@@ -25,7 +24,7 @@ namespace Metrics.TimerFunction
         private readonly List<string> twusers;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
+        public Save(PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
@@ -36,7 +35,6 @@ namespace Metrics.TimerFunction
             {
                 Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
-            this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
             this.devToService = devToService;
@@ -276,60 +274,6 @@ namespace Metrics.TimerFunction
             else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
                 await SaveBlog(log);
-            }
-        }
-
-        [FunctionName("SaveTwitterFollowers")]
-        public async Task SaveTwitterFollowers([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await GetTwitterFollowers(log);
-        }
-
-        [FunctionName("SaveTwitterFollowing")]
-        public async Task SaveTwitterFollowing([TimerTrigger("0 59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            await GetTwitterFollowing(log);
-        }
-
-        private async Task GetTwitterFollowers(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFollowers(log, user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
-        private async Task GetTwitterFollowing(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFollowing(log, user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
             }
         }
 
