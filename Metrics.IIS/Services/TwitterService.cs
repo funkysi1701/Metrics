@@ -1,7 +1,4 @@
 ﻿using HtmlAgilityPack;
-using Metrics.Core.MVC;
-using Metrics.Core.Service;
-using Metrics.Model.Enum;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium.Chrome;
@@ -10,13 +7,6 @@ namespace Metrics.IIS.Services
 {
     public class TwitterService
     {
-        private readonly MongoDataService Chart;
-
-        public TwitterService(MongoService mongoService)
-        {
-            Chart = new MongoDataService(mongoService);
-        }
-
         public async Task<IActionResult> GetTwitterFollowers(TelemetryClient telemetry, string username)
         {
             try
@@ -37,7 +27,7 @@ namespace Metrics.IIS.Services
                 }
 
                 telemetry?.TrackEvent($"{value} {username}");
-                return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
+                return new OkObjectResult(value);
             }
             catch (Exception e)
             {
@@ -66,7 +56,7 @@ namespace Metrics.IIS.Services
                 }
 
                 telemetry?.TrackEvent($"{value} {username}");
-                return await Chart.SaveData(value, MetricType.TwitterFollowing, username);
+                return new OkObjectResult(value);
             }
             catch (Exception e)
             {
@@ -112,7 +102,9 @@ namespace Metrics.IIS.Services
             options.AddArguments("headless");
 
             var chrome = new ChromeDriver(options);
-            chrome.Navigate().GoToUrl($"https://twitter.com/{username}");
+            chrome
+                .Navigate()
+                .GoToUrl($"https://twitter.com/{username}");
 
             return chrome.PageSource;
         }

@@ -1,4 +1,7 @@
+using Metrics.Core.MVC;
+using Metrics.Core.Service;
 using Metrics.IIS.Services;
+using Metrics.Model.Enum;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +13,14 @@ namespace Metrics.IIS.Controllers
     {
         private readonly TwitterService twitterService;
         private readonly TelemetryClient telemetry;
+        private readonly MongoDataService Chart;
+        private readonly string username = "funkysi1701";
 
-        public TwitterController(TwitterService twitterService, TelemetryClient telemetry)
+        public TwitterController(TwitterService twitterService, TelemetryClient telemetry, MongoService mongoService)
         {
             this.twitterService = twitterService;
             this.telemetry = telemetry;
+            Chart = new MongoDataService(mongoService);
         }
 
         /// <summary>
@@ -25,7 +31,23 @@ namespace Metrics.IIS.Controllers
         [HttpGet]
         public async Task<IActionResult> SaveTwitterFollowers()
         {
-            return await GetTwitterFollowers();
+            try
+            {
+                var result = await twitterService.GetTwitterFollowers(telemetry, username);
+                var ob = result as OkObjectResult;
+                var value = (decimal)ob.Value;
+                if (value > 0)
+                {
+                    return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
+                }
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                telemetry.TrackException(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -36,29 +58,17 @@ namespace Metrics.IIS.Controllers
         [HttpGet]
         public async Task<IActionResult> SaveTwitterFollowing()
         {
-            return await GetTwitterFollowing();
-        }
-
-        private async Task<IActionResult> GetTwitterFollowers()
-        {
             try
             {
-                var result = await twitterService.GetTwitterFollowers(telemetry, "funkysi1701");
-                return result;
-            }
-            catch (Exception e)
-            {
-                telemetry.TrackException(e);
-                throw;
-            }
-        }
+                var result = await twitterService.GetTwitterFollowing(telemetry, username);
+                var ob = result as OkObjectResult;
+                var value = (decimal)ob.Value;
+                if (value > 0)
+                {
+                    return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
+                }
 
-        private async Task<IActionResult> GetTwitterFollowing()
-        {
-            try
-            {
-                var result = await twitterService.GetTwitterFollowing(telemetry, "funkysi1701");
-                return result;
+                return NoContent();
             }
             catch (Exception e)
             {

@@ -29,7 +29,7 @@ namespace Metrics.Core.MVC
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
+                return new OkObjectResult(m.Value);
             }
             catch (Exception e)
             {
@@ -52,7 +52,7 @@ namespace Metrics.Core.MVC
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
+                return new OkObjectResult(m.Value);
             }
             catch (Exception e)
             {
