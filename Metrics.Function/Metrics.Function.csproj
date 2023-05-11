@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Metrics.Core.MVC\Metrics.Core.MVC.csproj" />
     <ProjectReference Include="..\Metrics.Core\Metrics.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

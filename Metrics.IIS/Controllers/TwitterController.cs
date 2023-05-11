@@ -1,5 +1,3 @@
-using Metrics.Core.MVC;
-using Metrics.Core.Service;
 using Metrics.IIS.Services;
 using Metrics.Model.Enum;
 using Microsoft.ApplicationInsights;
@@ -12,15 +10,15 @@ namespace Metrics.IIS.Controllers
     public class TwitterController : ControllerBase
     {
         private readonly TwitterService twitterService;
+        private readonly SaveDataService saveDataService;
         private readonly TelemetryClient telemetry;
-        private readonly MongoDataService Chart;
         private readonly string username = "funkysi1701";
 
-        public TwitterController(TwitterService twitterService, TelemetryClient telemetry, MongoService mongoService)
+        public TwitterController(TwitterService twitterService, TelemetryClient telemetry, SaveDataService saveDataService)
         {
             this.twitterService = twitterService;
+            this.saveDataService = saveDataService;
             this.telemetry = telemetry;
-            Chart = new MongoDataService(mongoService);
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace Metrics.IIS.Controllers
                 var value = (decimal)ob.Value;
                 if (value > 0)
                 {
-                    return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
+                    return await saveDataService.SaveData(value, MetricType.TwitterFollowers, username);
                 }
 
                 return NoContent();
@@ -65,7 +63,7 @@ namespace Metrics.IIS.Controllers
                 var value = (decimal)ob.Value;
                 if (value > 0)
                 {
-                    return await Chart.SaveData(value, MetricType.TwitterFollowers, username);
+                    return await saveDataService.SaveData(value, MetricType.TwitterFollowers, username);
                 }
 
                 return NoContent();

@@ -1,8 +1,4 @@
-using Metrics.Core.MVC;
-using Metrics.Core.Service;
 using Metrics.IIS.Services;
-using Metrics.Model;
-using Microsoft.ApplicationInsights;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddScoped<TwitterService>();
-builder.Services.Configure<MyMongoDatabaseSettings>(builder.Configuration);
-builder.Services.AddSingleton<MongoService>();
+builder.Services.AddScoped<SaveDataService>();
 
 var app = builder.Build();
 

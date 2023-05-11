@@ -26,6 +26,11 @@ namespace Metrics.IIS.Services
                     }
                 }
 
+                if(data.Count == 0)
+                {
+                    return new BadRequestObjectResult("No Data");
+                }
+
                 telemetry?.TrackEvent($"{value} {username}");
                 return new OkObjectResult(value);
             }
