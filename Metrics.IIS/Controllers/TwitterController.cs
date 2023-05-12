@@ -28,11 +28,11 @@ namespace Metrics.IIS.Controllers
         /// <param name="headless"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> SaveTwitterFollowers(bool headless, bool sandbox, bool timeout, int t)
+        public async Task<IActionResult> SaveTwitterFollowers(int t = 120)
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowers(telemetry, username, headless, sandbox, timeout, t);
+                var result = await twitterService.GetTwitterFollowers(telemetry, username, t);
                 if (result is BadRequestObjectResult)
                 {
                     return new BadRequestObjectResult("Error");
@@ -59,11 +59,11 @@ namespace Metrics.IIS.Controllers
         /// <remarks>SaveTwitterFollowing</remarks>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> SaveTwitterFollowing()
+        public async Task<IActionResult> SaveTwitterFollowing(int t = 120)
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowing(telemetry, username);
+                var result = await twitterService.GetTwitterFollowing(telemetry, username, t);
                 var ob = result as OkObjectResult;
                 var value = (decimal)ob.Value;
                 if (value > 0)
