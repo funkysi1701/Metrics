@@ -33,11 +33,16 @@ namespace Metrics.IIS.Controllers
             try
             {
                 var result = await twitterService.GetTwitterFollowers(telemetry, username, t);
-                if (result is BadRequestObjectResult)
+                if (result is not OkObjectResult ob)
                 {
-                    return new BadRequestObjectResult("Error");
+                    return result;
                 }
-                var ob = result as OkObjectResult;
+
+                if (ob == null || ob.Value == null)
+                {
+                    return NoContent();
+                }
+
                 var value = (decimal)ob.Value;
                 if (value > 0)
                 {
@@ -64,7 +69,16 @@ namespace Metrics.IIS.Controllers
             try
             {
                 var result = await twitterService.GetTwitterFollowing(telemetry, username, t);
-                var ob = result as OkObjectResult;
+                if (result is not OkObjectResult ob)
+                {
+                    return result;
+                }
+
+                if (ob == null || ob.Value == null)
+                {
+                    return NoContent();
+                }
+
                 var value = (decimal)ob.Value;
                 if (value > 0)
                 {

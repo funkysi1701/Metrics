@@ -26,7 +26,7 @@ namespace Metrics.IIS.Services
                     }
                 }
 
-                if (data.Count == 0)
+                if (data != null && data.Count == 0)
                 {
                     return new BadRequestObjectResult("No Data");
                 }
