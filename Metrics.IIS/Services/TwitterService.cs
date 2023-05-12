@@ -7,7 +7,7 @@ namespace Metrics.IIS.Services
 {
     public class TwitterService
     {
-        public async Task<IActionResult> GetTwitterFollowers(TelemetryClient telemetry, string username, int t)
+        public IActionResult GetTwitterFollowers(TelemetryClient telemetry, string username, int t)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Metrics.IIS.Services
             }
         }
 
-        public async Task<IActionResult> GetTwitterFollowing(TelemetryClient telemetry, string username, int t)
+        public IActionResult GetTwitterFollowing(TelemetryClient telemetry, string username, int t)
         {
             try
             {
@@ -100,12 +100,9 @@ namespace Metrics.IIS.Services
 
         private static string GetHtml(string username, int t)
         {
-            var options = new ChromeOptions
-            {
-            };
+            var options = new ChromeOptions();
 
             options.AddArguments("headless");
-
             options.AddArguments("--no-sandbox");
 
             var chrome = new ChromeDriver(options);

@@ -36,7 +36,7 @@ namespace Metrics.IIS.Controllers
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowers(telemetry, username, t);
+                var result = twitterService.GetTwitterFollowers(telemetry, username, t);
                 if (result is not OkObjectResult ob)
                 {
                     return result;
@@ -76,7 +76,7 @@ namespace Metrics.IIS.Controllers
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowing(telemetry, username, t);
+                var result = twitterService.GetTwitterFollowing(telemetry, username, t);
                 if (result is not OkObjectResult ob)
                 {
                     return result;
