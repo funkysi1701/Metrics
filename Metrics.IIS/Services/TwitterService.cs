@@ -7,11 +7,11 @@ namespace Metrics.IIS.Services
 {
     public class TwitterService
     {
-        public async Task<IActionResult> GetTwitterFollowers(TelemetryClient telemetry, string username)
+        public async Task<IActionResult> GetTwitterFollowers(TelemetryClient telemetry, string username, bool headless, bool sandbox, bool timeout, int t)
         {
             try
             {
-                var html = GetHtml(username);
+                var html = GetHtml(username, headless, sandbox, timeout, t);
                 var data = ParseHtmlUsingHtmlAgilityPack(html, "Followers");
                 decimal value = 0;
                 if (data != null && data.Count > 0)
@@ -45,7 +45,7 @@ namespace Metrics.IIS.Services
         {
             try
             {
-                var html = GetHtml(username);
+                var html = GetHtml(username, true, true, true, 120);
                 var data = ParseHtmlUsingHtmlAgilityPack(html, "Following");
                 decimal value = 0;
                 if (data != null && data.Count > 0)
@@ -98,17 +98,21 @@ namespace Metrics.IIS.Services
             return data;
         }
 
-        private static string GetHtml(string username)
+        private static string GetHtml(string username, bool headless, bool sandbox, bool timeout, int t)
         {
             var options = new ChromeOptions
             {
             };
+            if (headless)
+                options.AddArguments("headless");
 
-            options.AddArguments("headless");
+            if (sandbox)
+                options.AddArguments("--no-sandbox");
 
             var chrome = new ChromeDriver(options);
 
-            chrome.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
+            if (timeout)
+                chrome.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(t);
 
             chrome
                 .Navigate()

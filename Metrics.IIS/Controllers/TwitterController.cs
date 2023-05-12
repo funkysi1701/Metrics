@@ -25,14 +25,15 @@ namespace Metrics.IIS.Controllers
         /// SaveTwitterFollowers
         /// </summary>
         /// <remarks>SaveTwitterFollowers</remarks>
+        /// <param name="headless"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> SaveTwitterFollowers()
+        public async Task<IActionResult> SaveTwitterFollowers(bool headless, bool sandbox, bool timeout, int t)
         {
             try
             {
-                var result = await twitterService.GetTwitterFollowers(telemetry, username);
-                if(result is BadRequestObjectResult)
+                var result = await twitterService.GetTwitterFollowers(telemetry, username, headless, sandbox, timeout, t);
+                if (result is BadRequestObjectResult)
                 {
                     return new BadRequestObjectResult("Error");
                 }
