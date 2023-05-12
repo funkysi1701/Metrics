@@ -68,7 +68,7 @@ namespace Metrics.IIS.Controllers
                 var value = (decimal)ob.Value;
                 if (value > 0)
                 {
-                    return await saveDataService.SaveData(value, MetricType.TwitterFollowers, username);
+                    return await saveDataService.SaveData(value, MetricType.TwitterFollowing, username);
                 }
 
                 return NoContent();
