@@ -12,22 +12,26 @@ namespace Metrics.IIS.Controllers
         private readonly TwitterService twitterService;
         private readonly SaveDataService saveDataService;
         private readonly TelemetryClient telemetry;
-        private readonly string username = "funkysi1701";
+        private readonly string username;
 
-        public TwitterController(TwitterService twitterService, TelemetryClient telemetry, SaveDataService saveDataService)
+        public TwitterController(TwitterService twitterService, TelemetryClient telemetry, SaveDataService saveDataService, IConfiguration config)
         {
             this.twitterService = twitterService;
             this.saveDataService = saveDataService;
             this.telemetry = telemetry;
+            username = config.GetValue<string>("Username1");
         }
 
         /// <summary>
         /// SaveTwitterFollowers
         /// </summary>
         /// <remarks>SaveTwitterFollowers</remarks>
-        /// <param name="headless"></param>
+        /// <param name="t"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(double), 200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> SaveTwitterFollowers(int t = 120)
         {
             try
@@ -62,8 +66,12 @@ namespace Metrics.IIS.Controllers
         /// SaveTwitterFollowing
         /// </summary>
         /// <remarks>SaveTwitterFollowing</remarks>
+        /// <param name="t"></param>
         /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(double), 200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> SaveTwitterFollowing(int t = 120)
         {
             try

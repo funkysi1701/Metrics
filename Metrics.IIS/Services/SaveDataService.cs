@@ -29,6 +29,12 @@ namespace Metrics.IIS.Services
             }
 
             var ob = JsonConvert.DeserializeObject<OkObjectResult>(result);
+
+            if (ob == null || ob.Value == null)
+            {
+                return new BadRequestObjectResult("null value");
+            }
+
             var obvalue = (double)ob.Value;
 
             return new OkObjectResult(obvalue);
