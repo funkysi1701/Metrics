@@ -32,6 +32,10 @@ namespace Metrics.IIS.Controllers
             try
             {
                 var result = await twitterService.GetTwitterFollowers(telemetry, username);
+                if(result is BadRequestObjectResult)
+                {
+                    return new BadRequestObjectResult("Error");
+                }
                 var ob = result as OkObjectResult;
                 var value = (decimal)ob.Value;
                 if (value > 0)

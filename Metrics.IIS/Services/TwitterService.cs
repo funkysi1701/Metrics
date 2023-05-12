@@ -26,7 +26,7 @@ namespace Metrics.IIS.Services
                     }
                 }
 
-                if(data.Count == 0)
+                if (data.Count == 0)
                 {
                     return new BadRequestObjectResult("No Data");
                 }
@@ -107,6 +107,9 @@ namespace Metrics.IIS.Services
             options.AddArguments("headless");
 
             var chrome = new ChromeDriver(options);
+
+            chrome.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(120);
+
             chrome
                 .Navigate()
                 .GoToUrl($"https://twitter.com/{username}");
