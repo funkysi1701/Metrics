@@ -2,6 +2,7 @@ name: $(BuildDefinitionName)-$(SourceBranchName)-$(date:yyyyMMdd)$(Rev:.r)
 
 trigger:
 - main
+- test
 - develop
 - feature/*
 
