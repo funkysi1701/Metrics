@@ -1,35 +1,29 @@
 ﻿using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.Azure.Cosmos;
 
 namespace Metrics.Console
 {
     public static class KeyPress
     {
-        public static async Task CheckKey(string? type, Container containerOld, MongoService mongoService)
+        public static async Task CheckKey(MetricType type, Container containerOld, MongoService mongoService)
         {
-            if (int.TryParse(type, out int Mtype) && Mtype >= 0 && Mtype <= 22)
+            var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == type).OrderByDescending(x => x.Date).ToList();
+            System.Console.WriteLine($"Type = {type}");
+            foreach (var item in m)
             {
-                var m = containerOld.GetItemLinqQueryable<Metric>(true, null, new QueryRequestOptions { MaxItemCount = -1 }).Where(x => x.Type == Mtype).OrderByDescending(x => x.Date).ToList();
-                System.Console.WriteLine($"Type = {Mtype}");
-                foreach (var item in m)
+                try
                 {
-                    try
-                    {
-                        await mongoService.CreateAsync(item);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Console.WriteLine(ex.ToString().Substring(0, 200));
-                    }
-                    System.Console.WriteLine($"{item.Date?.ToString("yyyy-MM-dd HH:mm")} {item.Type}");
+                    await mongoService.CreateAsync(item);
                 }
-                System.Console.WriteLine($"Type = {Mtype}");
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine(ex.ToString().Substring(0, 200));
+                }
+                System.Console.WriteLine($"{item.Date?.ToString("yyyy-MM-dd HH:mm")} {item.Type}");
             }
-            else
-            {
-                Environment.Exit(1);
-            }
+            System.Console.WriteLine($"Type = {type}");
         }
     }
 }

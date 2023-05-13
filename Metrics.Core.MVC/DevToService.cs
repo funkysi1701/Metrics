@@ -1,6 +1,6 @@
-﻿using Metrics.Core.Enum;
-using Metrics.Core.Service;
+﻿using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -26,7 +26,7 @@ namespace Metrics.Core.MVC
             {
                 blogs.AddRange(await GetAllBlogs.GetAllOps(Configuration, 10, i));
             }
-            result = await Chart.SaveData(blogs.Count, (int)MetricType.OPSPosts, username);
+            result = await Chart.SaveData(blogs.Count, MetricType.OPSPosts, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -35,7 +35,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(blogs.Count(x => x.Published), (int)MetricType.OPSPublishedPosts, username);
+            result = await Chart.SaveData(blogs.Count(x => x.Published), MetricType.OPSPublishedPosts, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -53,7 +53,7 @@ namespace Metrics.Core.MVC
                 reactions += item.Positive_Reactions_Count;
                 comments += item.Comments_Count;
             }
-            result = await Chart.SaveData(views, (int)MetricType.OPSViews, username);
+            result = await Chart.SaveData(views, MetricType.OPSViews, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -62,7 +62,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(reactions, (int)MetricType.OPSReactions, username);
+            result = await Chart.SaveData(reactions, MetricType.OPSReactions, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -71,7 +71,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(comments, (int)MetricType.OPSComments, username);
+            result = await Chart.SaveData(comments, MetricType.OPSComments, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -89,7 +89,7 @@ namespace Metrics.Core.MVC
             IActionResult result = null;
 
             var blogs = await GetAllBlogs.GetAll(Configuration, 200, factory);
-            result = await Chart.SaveData(blogs.Count, (int)MetricType.DevToPosts, username);
+            result = await Chart.SaveData(blogs.Count, MetricType.DevToPosts, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -98,7 +98,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(blogs.Count(x => x.Published), (int)MetricType.DevToPublishedPosts, username);
+            result = await Chart.SaveData(blogs.Count(x => x.Published), MetricType.DevToPublishedPosts, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -116,7 +116,7 @@ namespace Metrics.Core.MVC
                 reactions += item.Positive_Reactions_Count;
                 comments += item.Comments_Count;
             }
-            result = await Chart.SaveData(views, (int)MetricType.DevToViews, username);
+            result = await Chart.SaveData(views, MetricType.DevToViews, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -125,7 +125,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(reactions, (int)MetricType.DevToReactions, username);
+            result = await Chart.SaveData(reactions, MetricType.DevToReactions, username);
             try
             {
                 _ = result as OkObjectResult;
@@ -134,7 +134,7 @@ namespace Metrics.Core.MVC
             {
                 return result;
             }
-            result = await Chart.SaveData(comments, (int)MetricType.DevToComments, username);
+            result = await Chart.SaveData(comments, MetricType.DevToComments, username);
             try
             {
                 _ = result as OkObjectResult;

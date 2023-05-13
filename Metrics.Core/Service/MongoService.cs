@@ -1,4 +1,5 @@
 ﻿using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -29,7 +30,7 @@ namespace Metrics.Core.Service
         public async Task<List<Metric>> GetAsync() =>
             await _collection.Find(_ => true).ToListAsync();
 
-        public async Task<List<Metric>> GetAsync(int? type, string username, int PageSize, int PageNum)
+        public async Task<List<Metric>> GetAsync(MetricType type, string username, int PageSize, int PageNum)
         {
             return await _collection
                 .Find(i => i.Type == type && i.Username == username)
@@ -39,7 +40,7 @@ namespace Metrics.Core.Service
                 .ToListAsync();
         }
 
-        public async Task<List<Metric>> GetAsync(int? type, string username, int PageSize, int PageNum, DateTime Date)
+        public async Task<List<Metric>> GetAsync(MetricType type, string username, int PageSize, int PageNum, DateTime Date)
         {
             return await _collection
                 .Find(i => i.Type == type && i.Username == username && i.Date > Date.AddDays(-1) && i.Date < Date.AddDays(1))

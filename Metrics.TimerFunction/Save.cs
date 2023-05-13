@@ -1,6 +1,6 @@
-﻿using Metrics.Core.Enum;
-using Metrics.Core.MVC;
+﻿using Metrics.Core.MVC;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +14,6 @@ namespace Metrics.TimerFunction
 {
     public class Save
     {
-        private readonly TwitterService twitterService;
         private readonly MastodonService mastodonService;
         private readonly PowerService powerService;
         private readonly GithubService githubService;
@@ -22,23 +21,15 @@ namespace Metrics.TimerFunction
         private readonly BlogService blogService;
         private readonly IConfiguration Configuration;
         private readonly List<string> ghusers;
-        private readonly List<string> twusers;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public Save(TwitterService twitterService, PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
+        public Save(PowerService powerService, GithubService githubService, DevToService devToService, BlogService blogService, IConfiguration Configuration, MastodonService mastodonService, IHttpClientFactory httpClientFactory)
         {
             this.Configuration = Configuration;
             ghusers = new List<string>
             {
                 Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701"
             };
-            twusers = new List<string>
-            {
-                Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701",
-                "zogface",
-                "juliankay"
-            };
-            this.twitterService = twitterService;
             this.powerService = powerService;
             this.githubService = githubService;
             this.devToService = devToService;
@@ -47,26 +38,8 @@ namespace Metrics.TimerFunction
             this.httpClientFactory = httpClientFactory;
         }
 
-        [FunctionName("SaveTwitterFollowers")]
-        public async Task Run2([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
-            {
-                await GetTwitterFollowers(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
-            {
-                await GetTwitterFollowers(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
-            {
-                await GetTwitterFollowers(log);
-            }
-        }
-
         [FunctionName("SaveMastodonFollowers")]
-        public async Task Run14([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveMastodonFollowers([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -84,7 +57,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveMastodonFollowing")]
-        public async Task Run15([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveMastodonFollowing([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -102,7 +75,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveFollowFriday")]
-        public async Task Run18([TimerTrigger("0 39,49,59 12 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveFollowFriday([TimerTrigger("0 39,49,59 12 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "Dev")
@@ -120,7 +93,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveMastodonToots")]
-        public async Task Run17([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveMastodonToots([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -134,47 +107,11 @@ namespace Metrics.TimerFunction
             else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
             {
                 await SaveMastodonToots(log);
-            }
-        }
-
-        [FunctionName("SaveTwitterFollowing")]
-        public async Task Run3([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
-            {
-                await SaveTwitterFollowing(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
-            {
-                await SaveTwitterFollowing(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
-            {
-                await SaveTwitterFollowing(log);
-            }
-        }
-
-        [FunctionName("SaveNumberOfTweets")]
-        public async Task Run4([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
-        {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-            if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
-            {
-                await SaveNumberOfTweets(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "test" && DateTime.Now.Minute == 49)
-            {
-                await SaveNumberOfTweets(log);
-            }
-            else if (Configuration.GetValue<string>("Env") == "prod" && DateTime.Now.Minute == 59)
-            {
-                await SaveNumberOfTweets(log);
             }
         }
 
         [FunctionName("SaveGas")]
-        public async Task Run5([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveGas([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -192,7 +129,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveElec")]
-        public async Task Run6([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveElec([TimerTrigger("0 39,49,59 */6 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -210,7 +147,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveCommits")]
-        public async Task Run7([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveCommits([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -228,7 +165,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveGitHubFollowers")]
-        public async Task Run8([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveGitHubFollowers([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -246,7 +183,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveGitHubFollowing")]
-        public async Task Run9([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveGitHubFollowing([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -264,7 +201,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveGitHubRepo")]
-        public async Task Run10([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveGitHubRepo([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -282,7 +219,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveGitHubStars")]
-        public async Task Run11([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveGitHubStars([TimerTrigger("0 39,49,59 */2 * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -300,7 +237,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveDevTo")]
-        public async Task Run12([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveDevTo([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -318,7 +255,7 @@ namespace Metrics.TimerFunction
         }
 
         [FunctionName("SaveBlog")]
-        public async Task Run13([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
+        public async Task SaveBlog([TimerTrigger("0 39,49,59 * * * *", RunOnStartup = false)] TimerInfo myTimer, ILogger log, ExecutionContext context)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
             if (Configuration.GetValue<string>("Env") == "dev" && DateTime.Now.Minute == 39)
@@ -453,11 +390,11 @@ namespace Metrics.TimerFunction
             var feedList = new List<SaveBlog>();
             if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
             {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = (int)MetricType.Blog });
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = MetricType.Blog });
             }
             if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
             {
-                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = (int)MetricType.OldBlog });
+                feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = MetricType.OldBlog });
             }
 
             foreach (var item in feedList)
@@ -524,63 +461,6 @@ namespace Metrics.TimerFunction
             }
         }
 
-        private async Task SaveNumberOfTweets(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetNumberOfTweets(user);
-                try
-                {
-                    if (result is OkObjectResult okMessage)
-                    {
-                        log.LogInformation(okMessage.Value.ToString());
-                    }
-                    else if (result is BadRequestObjectResult badMessage)
-                    {
-                        log.LogError(badMessage.Value.ToString());
-                    }
-                    else
-                    {
-                        log.LogError("Unknown result");
-                    }
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    if (result is BadRequestObjectResult badMessage)
-                    {
-                        log.LogError(badMessage.Value.ToString());
-                    }
-                    else
-                    {
-                        log.LogError("BadRequestObjectResult is null");
-                    }
-
-                    throw;
-                }
-            }
-        }
-
-        private async Task SaveTwitterFollowing(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFollowing(user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
-            }
-        }
-
         private async Task SaveFollowFriday(ILogger log)
         {
             try
@@ -591,26 +471,6 @@ namespace Metrics.TimerFunction
             {
                 log.LogError($"SaveFollowFriday {e.Message}");
                 throw;
-            }
-        }
-
-        private async Task GetTwitterFollowers(ILogger log)
-        {
-            foreach (var user in twusers)
-            {
-                var result = await twitterService.GetTwitterFollowers(log, user);
-                try
-                {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
-                }
             }
         }
 
