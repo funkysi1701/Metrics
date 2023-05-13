@@ -304,22 +304,6 @@ namespace Metrics.Pulumi
                             Value = config.RequireSecret("MastodonPass"),
                         },
                         new NameValuePairArgs{
-                            Name = "TWConsumerKey",
-                            Value = config.RequireSecret("TWConsumerKey"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWConsumerSecret",
-                            Value = config.RequireSecret("TWConsumerSecret"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWAccessToken",
-                            Value = config.RequireSecret("TWAccessToken"),
-                        },
-                        new NameValuePairArgs{
-                            Name = "TWAccessSecret",
-                            Value = config.RequireSecret("TWAccessSecret"),
-                        },
-                        new NameValuePairArgs{
                             Name = "GitHubToken",
                             Value = config.RequireSecret("GitHubToken"),
                         },

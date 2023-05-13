@@ -1,6 +1,7 @@
 ﻿using Metrics.Core.MVC;
 using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
@@ -35,11 +36,11 @@ namespace Metrics.Core.Tests.Core.MVC
         [Fact]
         public async Task Get_ReturnsOK()
         {
-            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<Metric>());
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(new List<Metric>());
 
-            var response = await service.Get(0, "username");
+            var response = await service.Get(MetricType.TwitterFollowers, "username");
 
-            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
             Assert.NotNull(response);
         }
 
@@ -52,12 +53,12 @@ namespace Metrics.Core.Tests.Core.MVC
                 new Metric()
             };
             response[0].Date = dt;
-            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
             _mongoService.Setup(x => x.RemoveAsync(It.IsAny<string>()));
 
-            await service.Delete(0, dt, "username");
+            await service.Delete(MetricType.TwitterFollowers, dt, "username");
 
-            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
             _mongoService.Verify(x => x.RemoveAsync(It.IsAny<string>()));
         }
 
@@ -70,12 +71,12 @@ namespace Metrics.Core.Tests.Core.MVC
                 new Metric()
             };
             response[0].Date = dt;
-            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
             _mongoService.Setup(x => x.RemoveAsync(It.IsAny<string>()));
 
-            await service.Delete(0, dt.AddDays(1), "username");
+            await service.Delete(MetricType.TwitterFollowers, dt.AddDays(1), "username");
 
-            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
             _mongoService.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never);
         }
 
@@ -88,12 +89,12 @@ namespace Metrics.Core.Tests.Core.MVC
                 new Metric()
             };
             response[0].Date = null;
-            _mongoService.Setup(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
+            _mongoService.Setup(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(response);
             _mongoService.Setup(x => x.RemoveAsync(It.IsAny<string>()));
 
-            await service.Delete(0, dt, "username");
+            await service.Delete(MetricType.TwitterFollowers, dt, "username");
 
-            _mongoService.Verify(x => x.GetAsync(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
+            _mongoService.Verify(x => x.GetAsync(It.IsAny<MetricType>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()));
             _mongoService.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never);
         }
 
@@ -103,7 +104,7 @@ namespace Metrics.Core.Tests.Core.MVC
             var dt = DateTime.Now;
             _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>()));
 
-            var response = await service.SaveData(0, 0, dt, "username");
+            var response = await service.SaveData(0, MetricType.TwitterFollowers, dt, "username");
 
             _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
 
@@ -116,7 +117,7 @@ namespace Metrics.Core.Tests.Core.MVC
             var dt = DateTime.Now;
             _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>())).Throws<Exception>();
 
-            var response = await service.SaveData(0, 0, dt, "username");
+            var response = await service.SaveData(0, MetricType.TwitterFollowers, dt, "username");
 
             _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
 
@@ -128,7 +129,7 @@ namespace Metrics.Core.Tests.Core.MVC
         {
             _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>()));
 
-            var response = await service.SaveData(0, 0, "username");
+            var response = await service.SaveData(0, MetricType.TwitterFollowers, "username");
 
             _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
 
@@ -140,7 +141,7 @@ namespace Metrics.Core.Tests.Core.MVC
         {
             _mongoService.Setup(x => x.CreateAsync(It.IsAny<Metric>())).Throws<Exception>();
 
-            var response = await service.SaveData(0, 0, "username");
+            var response = await service.SaveData(0, MetricType.TwitterFollowers, "username");
 
             _mongoService.Verify(x => x.CreateAsync(It.IsAny<Metric>()));
 

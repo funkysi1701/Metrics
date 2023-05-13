@@ -1,5 +1,6 @@
 ﻿using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Metrics.Core.MVC
@@ -13,7 +14,7 @@ namespace Metrics.Core.MVC
             _mongoService = mongoService;
         }
 
-        public async Task<IActionResult> SaveData(decimal value, int type, string username)
+        public async Task<IActionResult> SaveData(decimal value, MetricType type, string username)
         {
             var m = new Metric
             {
@@ -28,7 +29,7 @@ namespace Metrics.Core.MVC
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
+                return new OkObjectResult(m.Value);
             }
             catch (Exception e)
             {
@@ -36,7 +37,7 @@ namespace Metrics.Core.MVC
             }
         }
 
-        public async Task<IActionResult> SaveData(decimal value, int type, DateTime To, string username)
+        public async Task<IActionResult> SaveData(decimal value, MetricType type, DateTime To, string username)
         {
             var m = new Metric
             {
@@ -51,7 +52,7 @@ namespace Metrics.Core.MVC
             try
             {
                 await _mongoService.CreateAsync(m);
-                return new OkObjectResult("OK");
+                return new OkObjectResult(m.Value);
             }
             catch (Exception e)
             {
@@ -59,7 +60,7 @@ namespace Metrics.Core.MVC
             }
         }
 
-        public async Task Delete(int type, DateTime dt, string username)
+        public async Task Delete(MetricType type, DateTime dt, string username)
         {
             var m = await _mongoService.GetAsync(type, username, 1000, 0);
             m = m.Where(x => x.Date == dt).ToList();
@@ -69,7 +70,7 @@ namespace Metrics.Core.MVC
             }
         }
 
-        public async Task<List<Metric>> Get(int type, string username)
+        public async Task<List<Metric>> Get(MetricType type, string username)
         {
             return await _mongoService.GetAsync(type, username, 1000, 0);
         }

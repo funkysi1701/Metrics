@@ -1,4 +1,5 @@
 ﻿using Metrics.Core.Service;
+using Metrics.Model.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ namespace Metrics.Core.MVC
             Chart = new MongoDataService(mongoService);
         }
 
-        public async Task<IActionResult> GetBlogCount(ILogger log, string url, int Type)
+        public async Task<IActionResult> GetBlogCount(ILogger log, string url, MetricType Type)
         {
             var count = DOXML(url, log);
             return await Chart.SaveData(count, Type, Configuration.GetValue<string>("Username1") != string.Empty ? Configuration.GetValue<string>("Username1") : "funkysi1701");

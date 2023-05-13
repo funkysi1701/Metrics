@@ -1,6 +1,7 @@
 ﻿using Metrics.Console;
 using Metrics.Core.Service;
 using Metrics.Model;
+using Metrics.Model.Enum;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -36,10 +37,16 @@ if (type != null)
     {
         for (int i = 0; i < 23; i++)
         {
-            await KeyPress.CheckKey(i.ToString(), containerOld, mongoService);
+            await KeyPress.CheckKey((MetricType)i, containerOld, mongoService);
         }
     }
-    else await KeyPress.CheckKey(type, containerOld, mongoService);
+    else
+    {
+        if(int.TryParse(type, out int i))
+        {
+            await KeyPress.CheckKey((MetricType)i, containerOld, mongoService);
+        }
+    }
 }
 if (Environment.ProcessPath != null)
     System.Diagnostics.Process.Start(Environment.ProcessPath);

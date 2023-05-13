@@ -5,7 +5,10 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "DEVTOAPI": "",
     "DEVTOURL": "",
-    "RSSFeed": "https://www.funkysi1701.com/index.xml"
+    "RSSFeed": "https://www.funkysi1701.com/index.xml",
+    "DatabaseName": "Metrics",
+    "ConnectionString": "mongodb://localhost:27018/Metrics?retryWrites=true&w=majority",
+    "CollectionName": "Metrics"
   },
   "Host": {
     "LocalHttpPort": 7238,
