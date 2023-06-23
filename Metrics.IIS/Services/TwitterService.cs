@@ -18,7 +18,7 @@ namespace Metrics.IIS.Services
                 {
                     try
                     {
-                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Followers").Description);
+                        value = Convert.ToDecimal(data.Find(x => x.RepositoryName == "Followers").Description);
                     }
                     catch (Exception ex)
                     {
