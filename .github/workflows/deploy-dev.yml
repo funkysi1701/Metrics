@@ -49,21 +49,6 @@ jobs:
           popd
 
       - uses: pulumi/actions@v4
-        with:
-          command: refresh
-          stack-name: funkysi1701/metrics-pulumi/dev
-          upsert: true
-          comment-on-pr: true
-          work-dir: Metrics.Pulumi
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-
-      - uses: pulumi/actions@v4
         id: pulumi-up
         with:
           command: up
