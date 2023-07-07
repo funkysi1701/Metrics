@@ -52,7 +52,7 @@ namespace Metrics.IIS.Services
                 {
                     try
                     {
-                        value = Convert.ToDecimal(data.FirstOrDefault(x => x.RepositoryName == "Following").Description);
+                        value = Convert.ToDecimal(data.Find(x => x.RepositoryName == "Following").Description);
                     }
                     catch (Exception ex)
                     {
