@@ -396,21 +396,23 @@ namespace Metrics.TimerFunction
             {
                 feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = MetricType.OldBlog });
             }
-
-            foreach (var item in feedList)
+            if (Configuration.GetValue<string>("RSSFeed") != string.Empty || Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
             {
-                var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
-                try
+                foreach (var item in feedList)
                 {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
+                    var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
+                    try
+                    {
+                        var okMessage = result as OkObjectResult;
+                        log.LogInformation(okMessage.Value.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        log.LogError(e.Message);
+                        var badMessage = result as BadRequestObjectResult;
+                        log.LogError(badMessage.Value.ToString());
+                        throw;
+                    }
                 }
             }
         }
