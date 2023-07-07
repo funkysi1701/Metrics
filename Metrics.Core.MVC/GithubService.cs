@@ -113,7 +113,7 @@ namespace Metrics.Core.MVC
                     return result;
                 }
             }
-            else result = await Chart.SaveData(today.Count + sofar.Last().Value.Value, MetricType.GitHubCommits, username);
+            else result = await Chart.SaveData(today.Count + sofar[sofar.Count-1].Value.Value, MetricType.GitHubCommits, username);
             try
             {
                 _ = result as OkObjectResult;
