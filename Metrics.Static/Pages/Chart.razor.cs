@@ -112,7 +112,7 @@ namespace Metrics.Static.Pages
                         from s in dailyChart[0].OrderBy(x => x.Date)
                         group s by new
                         {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, 0, 0, 0, DateTimeKind.Utc)
                         } into g
                         select new
                         {
@@ -130,7 +130,7 @@ namespace Metrics.Static.Pages
                         from s in dailyChart[1].OrderBy(x => x.Date)
                         group s by new
                         {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                            Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, 0, 0, 0, DateTimeKind.Utc)
                         } into g
                         select new
                         {
@@ -171,7 +171,7 @@ namespace Metrics.Static.Pages
                         from s in monthlyChart[0].OrderBy(x => x.Date)
                         group s by new
                         {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1, 0, 0, 0, DateTimeKind.Utc)
                         } into g
                         select new
                         {
@@ -189,7 +189,7 @@ namespace Metrics.Static.Pages
                         from s in monthlyChart[1].OrderBy(x => x.Date)
                         group s by new
                         {
-                            Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                            Date = new DateTime(s.Date.Year, s.Date.Month, 1, 0, 0, 0, DateTimeKind.Utc)
                         } into g
                         select new
                         {
@@ -215,7 +215,7 @@ namespace Metrics.Static.Pages
                 from s in dailyChart[0].OrderBy(x => x.Date)
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, 0, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
@@ -233,7 +233,7 @@ namespace Metrics.Static.Pages
                 from s in dailyChart[1].OrderBy(x => x.Date)
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, 0, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
@@ -254,7 +254,7 @@ namespace Metrics.Static.Pages
                 from s in monthlyChart[0].OrderBy(x => x.Date)
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
@@ -266,7 +266,7 @@ namespace Metrics.Static.Pages
                 from s in preresult
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, 1, 0, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
@@ -284,7 +284,7 @@ namespace Metrics.Static.Pages
                 from s in monthlyChart[1].OrderBy(x => x.Date)
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, s.Date.Day, s.Date.Hour, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
@@ -296,7 +296,7 @@ namespace Metrics.Static.Pages
                 from s in preresult
                 group s by new
                 {
-                    Date = new DateTime(s.Date.Year, s.Date.Month, 1)
+                    Date = new DateTime(s.Date.Year, s.Date.Month, 1, 0, 0, 0, DateTimeKind.Utc)
                 } into g
                 select new
                 {
