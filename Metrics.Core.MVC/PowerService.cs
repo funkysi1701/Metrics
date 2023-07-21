@@ -48,7 +48,7 @@ namespace Metrics.Core.MVC
             var exist = await Chart.Get(type, Configuration.GetValue<string>("Username1"));
             foreach (var item in consumption)
             {
-                if (exist.Any(x => x.Date.Value == item.Start.UtcDateTime.Date))
+                if (exist.Exists(x => x.Date.Value == item.Start.UtcDateTime.Date))
                 {
                     await Chart.Delete(type, item.Start.UtcDateTime, Configuration.GetValue<string>("Username1"));
                 }
