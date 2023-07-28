@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -391,26 +392,41 @@ namespace Metrics.TimerFunction
             if (Configuration.GetValue<string>("RSSFeed") != string.Empty)
             {
                 feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("RSSFeed"), Type = MetricType.Blog });
+                foreach (var item in feedList.Where(x => x.Type == MetricType.Blog))
+                {
+                    var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
+                    try
+                    {
+                        var okMessage = result as OkObjectResult;
+                        log.LogInformation(okMessage.Value.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        log.LogError(e.Message);
+                        var badMessage = result as BadRequestObjectResult;
+                        log.LogError(badMessage.Value.ToString());
+                        throw;
+                    }
+                }
             }
             if (Configuration.GetValue<string>("OldRSSFeed") != string.Empty)
             {
                 feedList.Add(new SaveBlog() { Feed = Configuration.GetValue<string>("OldRSSFeed"), Type = MetricType.OldBlog });
-            }
-
-            foreach (var item in feedList)
-            {
-                var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
-                try
+                foreach (var item in feedList.Where(x => x.Type == MetricType.OldBlog))
                 {
-                    var okMessage = result as OkObjectResult;
-                    log.LogInformation(okMessage.Value.ToString());
-                }
-                catch (Exception e)
-                {
-                    log.LogError(e.Message);
-                    var badMessage = result as BadRequestObjectResult;
-                    log.LogError(badMessage.Value.ToString());
-                    throw;
+                    var result = await blogService.GetBlogCount(log, item.Feed, item.Type);
+                    try
+                    {
+                        var okMessage = result as OkObjectResult;
+                        log.LogInformation(okMessage.Value.ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        log.LogError(e.Message);
+                        var badMessage = result as BadRequestObjectResult;
+                        log.LogError(badMessage.Value.ToString());
+                        throw;
+                    }
                 }
             }
         }
