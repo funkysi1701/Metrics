@@ -34,7 +34,6 @@ namespace Metrics.Function
             try
             {
                 string Id = req.Query["Id"];
-                log.LogInformation($"Delete, Id: {Id}");
                 await DeleteMongo(Id);
                 return new OkObjectResult("ok");
             }

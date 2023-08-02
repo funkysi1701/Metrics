@@ -33,7 +33,6 @@ namespace Metrics.StaticFunction
             ILogger log)
         {
             string Id = req.Query["Id"];
-            log.LogInformation($"Delete, Id: {Id}");
             try
             {
                 if (Configuration.GetValue<bool>("DeleteEnabled"))
@@ -74,7 +73,6 @@ namespace Metrics.StaticFunction
             string result = await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
-                log.LogError($"Error {result} for Delete {Id}");
                 return null;
             }
 
