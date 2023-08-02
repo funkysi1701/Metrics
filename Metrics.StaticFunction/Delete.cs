@@ -37,7 +37,7 @@ namespace Metrics.StaticFunction
             {
                 if (Configuration.GetValue<bool>("DeleteEnabled"))
                 {
-                    var result = await DeleteCall(Id, log);
+                    var result = await DeleteCall(Id);
                     if (result == null)
                     {
                         log.LogError("Null Error in Delete::DeleteAsync");
@@ -66,11 +66,11 @@ namespace Metrics.StaticFunction
             };
         }
 
-        private async Task<string> DeleteCall(string Id, ILogger log)
+        private async Task<string> DeleteCall(string Id)
         {
             var client = CreateClient();
             using var httpResponse = await client.DeleteAsync($"{client.BaseAddress}api/Delete?Id={Id}");
-            string result = await httpResponse.Content.ReadAsStringAsync();
+            await httpResponse.Content.ReadAsStringAsync();
             if (!httpResponse.IsSuccessStatusCode)
             {
                 return null;
