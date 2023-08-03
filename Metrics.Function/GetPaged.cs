@@ -43,7 +43,6 @@ namespace Metrics.Function
                 string username = req.Query["username"];
                 int PageSize = int.Parse(req.Query["PageSize"]);
                 int PageNum = int.Parse(req.Query["PageNum"]);
-                log.LogInformation($"GetPaged, type: {type}, username: {username}, PageSize: {PageSize}, PageNum: {PageNum}");
                 var result = await GetMongo(type, username, PageSize, PageNum);
                 return new OkObjectResult(result);
             }

@@ -43,7 +43,6 @@ namespace Metrics.Function
                 string username = req.Query["username"];
                 int PageSize = int.Parse(req.Query["PageSize"]);
                 DateTime date = DateTime.Parse(req.Query["date"]);
-                log.LogInformation($"Get, type: {type}, username: {username}, PageSize: {PageSize}");
                 var result = await GetMongo(type, username, PageSize, 0, date);
                 return new OkObjectResult(result);
             }
