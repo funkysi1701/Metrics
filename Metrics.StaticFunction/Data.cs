@@ -41,7 +41,6 @@ namespace Metrics.StaticFunction
             MetricType type = (MetricType)int.Parse(req.Query["type"]);
             string username = req.Query["username"];
             string date = req.Query["date"];
-            log.LogInformation($"GetChart, type: {type}, username: {username}");
             try
             {
                 var result = await GetDetails(type, username, log, date);

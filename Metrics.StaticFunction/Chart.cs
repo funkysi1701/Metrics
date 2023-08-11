@@ -46,7 +46,6 @@ namespace Metrics.StaticFunction
             MyChartType day = (MyChartType)int.Parse(req.Query["day"]);
             int OffSet = int.Parse(req.Query["offset"]);
             string username = req.Query["username"];
-            log.LogInformation($"GetChart, type: {type}, day: {day}, offset: {OffSet}, username: {username}");
             try
             {
                 if ((type == MetricType.Gas || type == MetricType.Electricity) && day == MyChartType.Monthly)

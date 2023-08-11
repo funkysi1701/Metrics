@@ -41,7 +41,6 @@ namespace Metrics.Function
                 MetricType type = (MetricType)int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
                 int maxRecords = int.Parse(req.Query["maxRecords"]);
-                log.LogInformation($"Get, type: {type}, username: {username}, maxRecords: {maxRecords}");
                 var result = await GetMongo(type, username, maxRecords, 0);
                 return new OkObjectResult(result);
             }

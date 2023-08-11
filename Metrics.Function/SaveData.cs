@@ -40,7 +40,6 @@ namespace Metrics.Function
                 MetricType type = (MetricType)int.Parse(req.Query["type"]);
                 string username = req.Query["username"];
                 decimal value = decimal.Parse(req.Query["value"]);
-                log.LogInformation($"SaveData, type: {type}, username: {username}, Value: {value}");
                 var result = await Chart.SaveData(value, type, username);
                 return new OkObjectResult(result);
             }
