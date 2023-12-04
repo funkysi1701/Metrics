@@ -21,6 +21,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'          
       - name: Restore Dependencies
         run: dotnet restore Metrics.sln
       - name: Build
