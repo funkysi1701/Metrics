@@ -47,7 +47,7 @@ jobs:
           dotnet publish Metrics.StaticFunction/Metrics.StaticFunction.csproj --configuration Release
           popd
 
-      - uses: pulumi/actions@v4
+      - uses: pulumi/actions@v5
         id: pulumi-up
         with:
           command: up
