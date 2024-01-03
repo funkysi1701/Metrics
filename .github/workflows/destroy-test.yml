@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.x
-      - uses: pulumi/actions@v4
+      - uses: pulumi/actions@v5
         with:
           command: destroy
           stack-name: funkysi1701/metrics-pulumi/test

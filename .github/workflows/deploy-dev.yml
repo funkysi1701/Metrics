@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -48,7 +48,7 @@ jobs:
           dotnet publish Metrics.StaticFunction/Metrics.StaticFunction.csproj --configuration Release
           popd
 
-      - uses: pulumi/actions@v4
+      - uses: pulumi/actions@v5
         id: pulumi-up
         with:
           command: up
