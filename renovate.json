@@ -3,5 +3,31 @@
   "extends": [
     "config:base"
   ],
+  "packageRules": [
+        {
+            "matchDatasources": [
+                "nuget"
+            ],
+            "matchPackagePrefixes": [
+                "Audit.NET"
+            ],
+            "registryUrls": [
+                "https://api.nuget.org/v3/index.json"
+            ],
+            "groupName": "Audit.NET"
+        },
+        {
+            "matchDatasources": [
+                "nuget"
+            ],
+            "matchPackagePrefixes": [
+                "coverlet"
+            ],
+            "registryUrls": [
+                "https://api.nuget.org/v3/index.json"
+            ],
+            "groupName": "coverlet"
+        }
+    ],
   "assignees": ["funkysi1701"]
 }
