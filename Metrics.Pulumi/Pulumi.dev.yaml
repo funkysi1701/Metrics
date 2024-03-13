@@ -1,7 +1,7 @@
 config:
   azure:location: westeurope
   cloudflare:apiToken:
-    secure: AAABAKWHQ49lULQk+dyVGydy5PWxKiJtN19B9Jum5Fd9gXpmk/1tHFQAVoy9gTXMWWEcBVGDZHZQ20eQ8wc0nuu7GEav7RRS
+    secure: AAABAKDRkKwEJ+EZbWPATQw7ajAfk1+S90M7s74ZVeV0xk6jDO0suMGEzbSr5N9jvoOLPcAhyqTsUSuCUqhLwZ/q4GgBf/xU
   metrics-pulumi:AtlasApiKeyId:
     secure: AAABACnFgbEYy7Kv2z+KIr6wu6tSn5Vs3HdBJtEVV8ZepKzyQy2Lhw==
   metrics-pulumi:AtlasOrg:
