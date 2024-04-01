@@ -9,7 +9,7 @@
     <PackageReference Include="Pulumi.Azure" Version="5.70.0" />
     <PackageReference Include="Pulumi.AzureNative" Version="2.34.0" />
     <PackageReference Include="Pulumi.Cloudflare" Version="5.24.0" />
-    <PackageReference Include="Pulumi.Mongodbatlas" Version="3.14.2" />
+    <PackageReference Include="Pulumi.Mongodbatlas" Version="3.14.3" />
   </ItemGroup>
 
 </Project>
