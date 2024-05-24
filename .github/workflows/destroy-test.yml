@@ -5,7 +5,8 @@ name: Destroy - Test
 
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: '21,41 0 1 * *'
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '6.x' # set this to the dotnet version to use
